@@ -3,3 +3,4 @@ cosmo-gtk*
 *-stub
 obj
 headers/
+.cache/
