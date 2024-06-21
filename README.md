@@ -13,7 +13,7 @@ Within `stubs.tar.gz`, there are two folders, `glib-stub` and `gtk4-stub`, conta
 
 Please note that each stub defines global variables to contain references to the library functions, and should remain as defined within `main.c`.
 
-If you use Clangd, a script to generate `compile_flags.txt`, `gen_compile_flags.sh` is present. Run it with the path to cosmopolitan (should contain an include folder). The generated compile_flags.txt should be *mostly* functional.
+If you use Clangd, a script to generate `compile_flags.txt`, `gen_compile_flags.sh`, is present. Run it with the path to cosmopolitan (should contain an include folder). The generated compile_flags.txt should be *mostly* functional.
 
 ## Generating the Stub
 `generate.lua` in the root of this repository was used to generate the stub. If you can manage to make it work you can generate them yourself too. This requires lua >= 5.2 (for use of the goto keyword) [luafilesystem](https://github.com/lunarmodules/luafilesystem).
