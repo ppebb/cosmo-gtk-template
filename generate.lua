@@ -8,7 +8,7 @@ local function starts_with(str, start) return str:sub(1, #start) == start end
 --- @param str string
 --- @param ending string
 --- @return boolean
-local function ends_with(str, ending) return ending == "" or str:sub(-#ending) == ending end
+local function ends_with(str, ending) return ending == "" or str:sub(- #ending) == ending end
 
 --- @param str string
 --- @return boolean
@@ -224,13 +224,13 @@ local defs = {
                 clear_headers = false,
                 match_access = { "GDK_[A-Z0-9_]+" },
                 skip_dirs = { "a11y", "deprecated", "print" },
-                prefix = "gtk_", -- Function prefix, such as the gtk_ in gtk_init()
+                prefix = "gtk_",    -- Function prefix, such as the gtk_ in gtk_init()
                 trim_prefix = true, -- Remove the prefix from function names. This allows for them to be called as gtk->init() instead of gtk->gtk_init()
             },
             {
                 headers = "/usr/include/gtk-4.0/gdk/",
                 name = "gdk",
-                clear_headers = true,
+                clear_headers = false,
                 match_access = { "GDK_[A-Z0-9_]+" },
                 prefix = "gdk_",
                 trim_prefix = true,
@@ -245,7 +245,7 @@ local defs = {
             },
         },
     },
-    glib = { -- Includes gio, gmodule, gobject, girepository
+    glib = {                                   -- Includes gio, gmodule, gobject, girepository
         opts = {
             candidates = { "libglib-2.0.so" }, -- TODO: Windows, mac
             lib_headers = {
@@ -438,7 +438,7 @@ for lib_name, lib in pairs(defs) do
                         starts_with(line, "#")
                         or starts_with(line, "//")
                         or is_whitespace_or_nil(line) -- Only whitespace
-                        or line == "" -- Empty
+                        or line == ""                 -- Empty
                         or skip_next
                     then
                         skip_next = false
