@@ -23,6 +23,8 @@ Some options are configurable within the script, check the `defs` table.
 * `trim-prefix`: Within GTK's header files, functions are prefixed with `gtk_`, `gsk_`, or `gdk_`, enabling this option removes those prefixes so functions can be called as `gtk->init_window()` instead of `gtk->gtk_init_window()`
 * `skip_dirs`: List of directories to skip generating the stub for. This can be used to ignore GDK wayland or X11 if you don't need them, for example. These are relative to the directory within the stub containing the header files, so to ignore GDK X11 simply put "x11"
 
+As a warning, generating the stub will print a little under 70000 lines to your terminal, you may want to redirect them to a file, especially if something goes wrong.
+
 ## Dependencies
 All of the dependencies of GTK and GLib are required. See the Makefile if you are unsure.
 
