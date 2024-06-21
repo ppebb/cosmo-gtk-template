@@ -18,9 +18,10 @@ for arg in "${@}"; do
         printf "Patching header %s\n" "$(realpath "$header")"
 
         # Turn angle bracket includes to double quote includes
-        sed -i 's/#include <\([A-Za-z0-9\/\.]*\)>/#include "\1"/' "$header"
+        sed -i 's/#include <\([-A-Za-z0-9\/\.]*\)>/#include "\1"/' "$header"
 
         sed -i 's/pthread\.h/libc\/thread\/thread\.h/' "$header"
+
     done
 
     cd "$SCRIPT_DIR"

@@ -12,7 +12,7 @@
 
 #define LEN(X) sizeof(X) / sizeof(X[0])
 
-static void *try_find_::NAME::(void) {
+static void *try_find_::LIB_NAME::(void) {
     char *candidates[] = { ::CANDIDATES:: };
     void *lib = NULL;
 
@@ -33,21 +33,17 @@ static void *try_find_::NAME::(void) {
     return NULL;
 }
 
-void try_initialize_::NAME::(void) {
-    void *::NAME::_lib_ptr = try_find_::NAME::();
+void initialize_::LIB_NAME::(void) {
+    void *::LIB_NAME::_lib_ptr = try_find_::LIB_NAME::();
 
-    if (!::NAME::_lib_ptr) {
-        fprintf(stderr, "Unable to locate ::LIB_NAME::!");
+    if (!::LIB_NAME::_lib_ptr) {
+        fprintf(stderr, "Unable to locate ::LIB_NAME::, exiting!");
         exit(1);
     }
 
-    ::NAME:: = calloc(1, sizeof(*::NAME::));
-    *::NAME:: = (struct ::NAME::_syms) {
-        .lib = ::NAME::_lib_ptr,
-        // INIT_HERE
-        // INIT_ENDS_HERE
-    };
+// INIT_STRUCT_HERE
 
+    // Some syms are null and I don't feel like fixing them for now. Good luck if you happen to hit one...
     // for (size_t i = 0; i < (sizeof(struct ::NAME::_syms) / sizeof(void *)); ++i) {
     //     if (!((void **)::NAME::)[i]) {
     //         fprintf(stderr, "::NAME::[%zu] is NULL, check for errors\n", i);
@@ -57,7 +53,7 @@ void try_initialize_::NAME::(void) {
     // }
 }
 
-void close_::NAME::(void) {
+void close_::LIB_NAME::(void) {
     cosmo_dlclose(::NAME::->lib);
     free(::NAME::);
 }

@@ -2,11 +2,13 @@
 #include "gtk4-stub/gtk4_stub.h"
 
 struct gtk_syms *gtk;
+struct gdk_syms *gdk;
+struct gsk_syms *gsk;
 struct glib_syms *glib;
 
 int main(void) {
-    try_initialize_gtk();
-    try_initialize_glib();
+    initialize_gtk4();
+    initialize_glib();
 
     GtkWidget *window;
 
@@ -19,7 +21,7 @@ int main(void) {
     while (true)
         glib->main_context_iteration(NULL, true);
 
-    close_gtk();
+    close_gtk4();
     close_glib();
 
     return 0;
