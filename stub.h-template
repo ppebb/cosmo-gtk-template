@@ -1,0 +1,15 @@
+::LIB_HEADERS::
+
+struct ::NAME::_syms {
+    void *lib;
+    // SYMS_HERE
+    // SYMS_END_HERE
+};
+
+#ifndef SYMS_::NAME_UPPER::_H
+#define SYMS_::NAME_UPPER::_H
+extern struct ::NAME::_syms *::NAME::;
+#endif
+
+void try_initialize_::NAME::(void);
+void close_::NAME::(void);

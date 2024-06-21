@@ -1,0 +1,13 @@
+---
+BasedOnStyle: LLVM
+AlignAfterOpenBracket: "BlockIndent"
+AlignArrayOfStructures: "Left"
+IndentWidth: 4
+LineEnding: "LF"
+MaxEmptyLinesToKeep: 1
+ReflowComments: true
+RemoveBracesLLVM: true
+RemoveParentheses: "MultipleParentheses"
+RemoveSemicolon: true
+SortIncludes: "CaseInsensitive"
+---

@@ -1,0 +1,63 @@
+// Based on vkoskiv's cosmo-sdl-template under the MIT license.
+// See https://github.com/vkoskiv/cosmo-sdl-template/
+// See https://github.com/vkoskiv/cosmo-sdl-template/blob/master/LICENSE
+
+::STUB_HEADER::
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define _COSMO_SOURCE
+#include <libc/dlopen/dlfcn.h>
+
+#define LEN(X) sizeof(X) / sizeof(X[0])
+
+static void *try_find_::NAME::(void) {
+    char *candidates[] = { ::CANDIDATES:: };
+    void *lib = NULL;
+
+    for (size_t i = 0; i < LEN(candidates); ++i)
+        if ((lib = cosmo_dlopen(candidates[i], RTLD_LAZY)))
+            return lib;
+
+    printf(
+        "Unable to locate ::LIB_NAME:: library (%s), tried the following names: ",
+        cosmo_dlerror()
+    );
+
+    for (size_t i = 0; i < LEN(candidates); ++i)
+        printf("\"%s\"", candidates[i]);
+
+    printf("\n");
+
+    return NULL;
+}
+
+void try_initialize_::NAME::(void) {
+    void *::NAME::_lib_ptr = try_find_::NAME::();
+
+    if (!::NAME::_lib_ptr) {
+        fprintf(stderr, "Unable to locate ::LIB_NAME::!");
+        exit(1);
+    }
+
+    ::NAME:: = calloc(1, sizeof(*::NAME::));
+    *::NAME:: = (struct ::NAME::_syms) {
+        .lib = ::NAME::_lib_ptr,
+        // INIT_HERE
+        // INIT_ENDS_HERE
+    };
+
+    // for (size_t i = 0; i < (sizeof(struct ::NAME::_syms) / sizeof(void *)); ++i) {
+    //     if (!((void **)::NAME::)[i]) {
+    //         fprintf(stderr, "::NAME::[%zu] is NULL, check for errors\n", i);
+    //         free(::NAME::);
+    //         exit(1);
+    //     }
+    // }
+}
+
+void close_::NAME::(void) {
+    cosmo_dlclose(::NAME::->lib);
+    free(::NAME::);
+}
