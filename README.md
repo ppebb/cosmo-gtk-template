@@ -30,4 +30,7 @@ All of the dependencies of GTK and GLib are required. See the Makefile if you ar
 
 Depending on how you generated the stub, you will need Xlib and wayland-protocol headers. The Makefile will copy these headers into the headers directory
 
+## References
+This repository is based off of vkoskiv's [cosmo-sdl-template](https://github.com/vkoskiv/cosmo-sdl-template). The code used to stub GTK and GLib is largely the same.
+
 [^1]: Macros (as they don't reference the stub) are not usable, some functions may be missing, functions defined by macros are *definitely* missing. Most everything you need should be in here, and if something is missing let me know!
