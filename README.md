@@ -1,6 +1,6 @@
 # cosmo-gtk-template - Maximal GTK sample for Cosmopolitan
 
-This repository contains a full[^1] stub for GTK, GSK, GDK, GLib (including GIO, GObject, GModule, and GIRepository)
+This repository contains a full[^1] stub for GTK, GSK, GDK, GLib, GIO, GObject, GModule, and GIRepository
 
 ## Building
 * Run `make copy_headers` (once ever)
@@ -9,14 +9,14 @@ This repository contains a full[^1] stub for GTK, GSK, GDK, GLib (including GIO,
 Due to complications including headers present in /usr/include without accidentally including headers that conflict with cosmopolitan, some headers need to be copied out for this stub to build properly.
 
 ## Using the Stub
-Within `stubs.tar.gz`, there are two folders, `glib-stub` and `gtk4-stub`, containing the neccessary files to use GTK and GLib from cosmopolitan. Simply untar the archive.
+Within `stubs.tar.gz`, there are six folders, `gtk4-stub`, `glib-stub`, `gobject-stub`, `gio-stub`, `gmodule-stub`, and `gir-stub`, containing the neccessary files to use GTK and GLib from cosmopolitan. Simply untar the archive.
 
-Please note that each stub defines global variables to contain references to the library functions, and should remain as defined within `main.c`.
+Please note that each stub defines global variables to contain references to the library functions, and should remain as defined within `main.c`. The initialization functions called at the top of main and the close functions at the bottom should be called for any library you use.
 
 If you use Clangd, a script to generate `compile_flags.txt`, `gen_compile_flags.sh`, is present. Run it with the path to cosmopolitan (should contain an include folder). The generated compile_flags.txt should be *mostly* functional.
 
 ## Generating the Stub
-`generate.lua` in the root of this repository was used to generate the stub. If you can manage to make it work you can generate them yourself too. This requires lua >= 5.2 (for use of the goto keyword) [luafilesystem](https://github.com/lunarmodules/luafilesystem).
+`generate.lua` in the root of this repository was used to generate the stub. If you can manage to make it work you can generate them yourself too. This requires lua >= 5.2 (for use of the goto keyword) and [luafilesystem](https://github.com/lunarmodules/luafilesystem).
 
 Some options are configurable within the script, check the `defs` table.
 * `clear_headers`: Whether the headers copied into the stub should be removed and recopied each run
