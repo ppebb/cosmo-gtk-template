@@ -1,10 +1,12 @@
 # Taken from https://github.com/vkoskiv/cosmo-sdl-template/blob/master/Makefile
 
 CC=cosmocc
-CFLAGS=-Wall -Wextra -std=c99 -O0 -I./glib-stub/GLIB                           \
--I/usr/lib/glib-2.0/include -I/usr/include/gtk-4.0/ -I/usr/include/cairo       \
--I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/gdk-pixbuf-2.0 \
--I/usr/include/graphene-1.0 -I/usr/lib/graphene-1.0/include -DGTK_COMPILATION  \
+CFLAGS=-Wall -Wextra -std=c99 -O0 -Wno-deprecated-declarations                 \
+-I./glib-stub/GLIB -I./gobject-stub/GOBJECT/ -I./gio-stub/GIO/                 \
+-I./gmodule-stub/GMODULE -I./gir-stub/GIREPOSITORY -I/usr/lib/glib-2.0/include \
+-I/usr/include/gtk-4.0/ -I/usr/include/cairo -I/usr/include/pango-1.0          \
+-I/usr/include/harfbuzz  -I/usr/include/gdk-pixbuf-2.0                         \
+-I/usr/include/graphene-1.0  -I/usr/lib/graphene-1.0/include -DGTK_COMPILATION \
 -I./headers
 LDFLAGS=-ldl
 BIN=cosmo-gtk.com

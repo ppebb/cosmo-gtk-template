@@ -3,6 +3,7 @@
 // See https://github.com/vkoskiv/cosmo-sdl-template/blob/master/LICENSE
 
 ::STUB_HEADER::
+#include "../stub.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,31 +11,10 @@
 #define _COSMO_SOURCE
 #include <libc/dlopen/dlfcn.h>
 
-#define LEN(X) sizeof(X) / sizeof(X[0])
-
-static void *try_find_::LIB_NAME::(void) {
-    char *candidates[] = { ::CANDIDATES:: };
-    void *lib = NULL;
-
-    for (size_t i = 0; i < LEN(candidates); ++i)
-        if ((lib = cosmo_dlopen(candidates[i], RTLD_LAZY)))
-            return lib;
-
-    printf(
-        "Unable to locate ::LIB_NAME:: library (%s), tried the following names: ",
-        cosmo_dlerror()
-    );
-
-    for (size_t i = 0; i < LEN(candidates); ++i)
-        printf("\"%s\"", candidates[i]);
-
-    printf("\n");
-
-    return NULL;
-}
-
 void initialize_::LIB_NAME::(void) {
-    void *::LIB_NAME::_lib_ptr = try_find_::LIB_NAME::();
+    char* candidates[] = { ::CANDIDATES:: };
+
+    void *::LIB_NAME::_lib_ptr = try_find_lib(candidates, LEN(candidates));
 
     if (!::LIB_NAME::_lib_ptr) {
         fprintf(stderr, "Unable to locate ::LIB_NAME::, exiting!");
@@ -43,14 +23,6 @@ void initialize_::LIB_NAME::(void) {
 
 // INIT_STRUCT_HERE
 
-    // Some syms are null and I don't feel like fixing them for now. Good luck if you happen to hit one...
-    // for (size_t i = 0; i < (sizeof(struct ::NAME::_syms) / sizeof(void *)); ++i) {
-    //     if (!((void **)::NAME::)[i]) {
-    //         fprintf(stderr, "::NAME::[%zu] is NULL, check for errors\n", i);
-    //         free(::NAME::);
-    //         exit(1);
-    //     }
-    // }
 }
 
 void close_::LIB_NAME::(void) {

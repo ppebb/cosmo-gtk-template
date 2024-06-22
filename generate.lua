@@ -8,7 +8,7 @@ local function starts_with(str, start) return str:sub(1, #start) == start end
 --- @param str string
 --- @param ending string
 --- @return boolean
-local function ends_with(str, ending) return ending == "" or str:sub(- #ending) == ending end
+local function ends_with(str, ending) return ending == "" or str:sub(-#ending) == ending end
 
 --- @param str string
 --- @return boolean
@@ -211,6 +211,25 @@ local function remove_match(line, match)
     return ret
 end
 
+local function copy_headers(lib_name, source, dest, force)
+    -- Check source exists or else something is very wrong
+    if not file_exists(source:gsub("%*", "")) then
+        fprintf(io.stdout, "%s header path %s does not exist or does not have read access!\n", lib_name, source)
+        os.exit(1, true)
+    end
+
+    -- Copy headers if they are not already there
+    if force or not file_exists(dest) then
+        fprintf(io.stdout, "Copying %s header file(s) from %s into %s\n", lib_name, source, dest)
+        -- Unfortunately, luafilesystem does not have a copy function... this is
+        -- already platform specific so I don't care for now!
+
+        local _ = popen_and_wait(string.format('sh -c "cp -r %s %s"', source, dest))
+    else
+        fprintf(io.stdout, "Header files for %s already present at %s", lib_name, dest)
+    end
+end
+
 local defs = {
     gtk4 = {
         opts = {
@@ -219,16 +238,16 @@ local defs = {
         },
         stubs = {
             {
-                headers = "/usr/include/gtk-4.0/gtk/",
+                headers = "/usr/include/gtk-4.0/gtk/*",
                 name = "gtk",
                 clear_headers = false,
                 match_access = { "GDK_[A-Z0-9_]+" },
                 skip_dirs = { "a11y", "deprecated", "print" },
-                prefix = "gtk_",    -- Function prefix, such as the gtk_ in gtk_init()
+                prefix = "gtk_", -- Function prefix, such as the gtk_ in gtk_init()
                 trim_prefix = true, -- Remove the prefix from function names. This allows for them to be called as gtk->init() instead of gtk->gtk_init()
             },
             {
-                headers = "/usr/include/gtk-4.0/gdk/",
+                headers = "/usr/include/gtk-4.0/gdk/*",
                 name = "gdk",
                 clear_headers = false,
                 match_access = { "GDK_[A-Z0-9_]+" },
@@ -236,7 +255,7 @@ local defs = {
                 trim_prefix = true,
             },
             {
-                headers = "/usr/include/gtk-4.0/gsk/",
+                headers = "/usr/include/gtk-4.0/gsk/*",
                 name = "gsk",
                 clear_headers = false,
                 match_access = { "GDK_[A-Z0-9_]+" },
@@ -245,40 +264,113 @@ local defs = {
             },
         },
     },
-    glib = {                                   -- Includes gio, gmodule, gobject, girepository
+    glib = {
         opts = {
             candidates = { "libglib-2.0.so" }, -- TODO: Windows, mac
             lib_headers = {
                 "glib.h",
                 "glib-unix.h",
-                "glib/gstdio.h",
-                "gio/gio.h",
-                "girepository/girepository.h",
-                "girepository/girffi.h",
             },
         },
         stubs = {
             {
-                headers = "/usr/include/glib-2.0/",
+                headers = {
+                    { "/usr/include/glib-2.0/glib/", "glib/" },
+                    { "/usr/include/glib-2.0/glib.h", "glib.h" },
+                    { "/usr/include/glib-2.0/glib-unix.h", "glib-unix.h" },
+                },
                 name = "glib",
                 clear_headers = false,
                 match_access = {
                     "GLIB_[A-Z0-9_]+",
-                    "GIO_[A-Z0-9_]+",
-                    "GI_[A-Z0-9_]+",
-                    "GOBJECT_[A-Z0-9_]+",
-                    "G_MODULE_EXPORT[A-Z0-9_]*",
                     "G_NORETURN",
-                    "GMODULE_[A-Z0-9_]+",
                 },
-                skip_files = { "%.c$" },
-                -- Removed in favor of copying over headers in the makefile
-                -- extra_headers = {
-                --     { "/usr/include/ffi.h", "girepository/ffi.h" },
-                --     { "/usr/include/ffitarget.h", "girepository/ffitarget.h" },
-                -- },
                 fix_headers = { "" },
                 prefix = "g_",
+                trim_prefix = true,
+            },
+        },
+    },
+    gobject = {
+        opts = {
+            candidates = { "libgobject-2.0.so" },
+            lib_headers = { "glib.h", "glib-object.h" },
+        },
+        stubs = {
+            {
+                headers = {
+                    { "/usr/include/glib-2.0/gobject/", "gobject/" },
+                    { "/usr/include/glib-2.0/glib-object.h", "glib-object.h" },
+                },
+                name = "gobject",
+                clear_headers = false,
+                match_access = {
+                    "GOBJECT_[A-Z0-9_]+",
+                },
+                skip_files = { "%.c$" },
+                prefix = "g_",
+                trim_prefix = true,
+            },
+        },
+    },
+    gio = {
+        opts = {
+            candidates = { "libgio-2.0.so" },
+            lib_headers = { "glib.h", "gio/gio.h" },
+        },
+        stubs = {
+            {
+                headers = {
+                    { "/usr/include/glib-2.0/gio/", "gio/" },
+                },
+                name = "gio",
+                clear_headers = false,
+                match_access = {
+                    "GIO_[A-Z0-9_]+",
+                    "G_MODULE_EXPORT[A-Z0-9_]*",
+                    "GMODULE_[A-Z0-9_]+",
+                },
+                prefix = "g_",
+                trim_prefix = true,
+            },
+        },
+    },
+    gmodule = {
+        opts = {
+            candidates = { "libgmodule-2.0.so" },
+            lib_headers = { "glib.h", "gmodule.h" },
+        },
+        stubs = {
+            {
+                headers = {
+                    { "/usr/include/glib-2.0/gmodule/", "gmodule/" },
+                    { "/usr/include/glib-2.0/gmodule.h", "gmodule.h" },
+                },
+                name = "gmodule",
+                clear_headers = false,
+                match_access = {
+                    "G_MODULE_EXPORT[A-Z0-9_]*",
+                    "GMODULE_[A-Z0-9_]+",
+                },
+                prefix = "g_",
+                trim_prefix = true,
+            },
+        },
+    },
+    gir = {
+        opts = {
+            candidates = { "libgirepository-2.0.so" },
+            lib_headers = { "glib.h", "girepository/girepository.h", "girepository/girffi.h" },
+        },
+        stubs = {
+            {
+                headers = "/usr/include/glib-2.0/girepository/",
+                name = "girepository",
+                clear_headers = false,
+                match_access = {
+                    "GI_[A-Z0-9_]+",
+                },
+                prefix = "_gi",
                 trim_prefix = true,
             },
         },
@@ -367,40 +459,41 @@ for lib_name, lib in pairs(defs) do
     local stub_h_split = split(stub_h_copy, "\n")
 
     for _, stub_spec in ipairs(lib.stubs) do
-        local headers_path = stub_spec.headers
-        local headers_dest = path_combine(stub_dir, stub_spec.name:upper())
+        local headers = stub_spec.headers
+        -- Root dest directory
+        local headers_dir = path_combine(stub_dir, stub_spec.name:upper())
         local clear_headers = stub_spec.clear_headers
 
-        local names = {}
+        -- Clear headers if they exist and it's set to clear
+        if clear_headers and file_exists(headers_dir) then
+            -- luafilesystem also does not have recursive delete!!
+            fprintf(io.stdout, "Clearing directory %s\n", headers_dir)
+            local _ = popen_and_wait("rm -r " .. headers_dir)
+        end
 
-        if not file_exists(headers_path) then
+        local force = false
+        if not file_exists(headers_dir) then
+            assert(lfs.mkdir(headers_dir))
+            force = true
+        end
+
+        if type(headers) == "string" then
+            copy_headers(lib_name, headers, headers_dir, force)
+        elseif type(headers) == "table" then
+            for _, h in pairs(headers) do
+                local dest_f = path_combine(headers_dir, h[2])
+
+                copy_headers(lib_name, h[1], dest_f, force)
+            end
+        else
             fprintf(
-                io.stdout,
-                "%s header path %s does not exist or does not have read access!\n",
-                lib_name,
-                headers_path
+                io.stderr,
+                "Headers def is of type %s, please ensure it is properly formatted as a string or a table!\n",
+                type(headers)
             )
-            os.exit(1, true)
         end
 
-        -- Copy headers
-        do
-            -- Clear headers if they exist and it's set to clear
-            if clear_headers and file_exists(headers_dest) then
-                -- luafilesystem also does not have recursive delete!!
-                fprintf(io.stdout, "Clearing directory %s\n", headers_dest)
-                local _ = popen_and_wait("rm -r " .. headers_dest)
-            end
-
-            -- Copy headers if they are not already there
-            if not file_exists(headers_dest) then
-                fprintf(io.stdout, "Copying %s header files from %s into %s\n", lib_name, headers_path, headers_dest)
-                assert(lfs.mkdir(headers_dest))
-                -- Unfortunately, luafilesystem does not have a copy function... this is
-                -- already platform specific so I don't care for now!
-                local _ = popen_and_wait(string.format('sh -c "cp -r %s/* %s"', headers_path, headers_dest))
-            end
-        end
+        local names = {}
 
         -- Generation
         do
@@ -438,7 +531,7 @@ for lib_name, lib in pairs(defs) do
                         starts_with(line, "#")
                         or starts_with(line, "//")
                         or is_whitespace_or_nil(line) -- Only whitespace
-                        or line == ""                 -- Empty
+                        or line == "" -- Empty
                         or skip_next
                     then
                         skip_next = false
@@ -667,7 +760,7 @@ for lib_name, lib in pairs(defs) do
                         local fname_trimmed = stub_spec.trim_prefix and fname:gsub("^" .. stub_spec.prefix, "") or fname
 
                         local stub_c_line = string.format(
-                            '        .%s = cosmo_dlsym(%s, "%s"),',
+                            '        .%s = try_find_sym(%s, "%s"),',
                             fname_trimmed,
                             lib_name .. "_lib_ptr",
                             fname
@@ -705,32 +798,18 @@ for lib_name, lib in pairs(defs) do
                 end
             end
 
-            process_dir(headers_dest)
+            process_dir(headers_dir)
         end
 
-        -- Extra headers. Copy these after generation to avoid processing them too
-        -- if stub_spec.extra_headers then
-        --     fprintf(io.stdout, "Copying additional headers for %s if needed\n", lib_name)
-
-        --     for _, h in ipairs(stub_spec.extra_headers) do
-        --         local src = h[1]
-        --         local dest = path_combine(headers_dest, h[2])
-
-        --         if not file_exists(dest) then
-        --             popen_and_wait(string.format('sh -c "cp -r %s %s"', src, dest))
-        --         end
-        --     end
-        -- end
-
         if stub_spec.fix_headers then
-            local fixed_up_marker = path_combine(headers_dest, ".fixed_up")
+            local fixed_up_marker = path_combine(headers_dir, ".fixed_up")
             if not file_exists(fixed_up_marker) then
                 fprintf(io.stdout, "Fixing up headers for %s!\n", lib_name)
                 file_write(fixed_up_marker, "")
 
                 for _, dir in ipairs(stub_spec.fix_headers) do
                     print(
-                        popen_and_wait(string.format('sh -c "./patch_headers.sh %s"', path_combine(headers_dest, dir)))
+                        popen_and_wait(string.format('sh -c "./patch_headers.sh %s"', path_combine(headers_dir, dir)))
                     )
                 end
             end
