@@ -1,0 +1,31 @@
+// Based on vkoskiv's cosmo-sdl-template under the MIT license.
+// See https://github.com/vkoskiv/cosmo-sdl-template/
+// See https://github.com/vkoskiv/cosmo-sdl-template/blob/master/LICENSE
+
+::STUB_HEADER::
+#include "../stub.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define _COSMO_SOURCE
+#include <libc/dlopen/dlfcn.h>
+
+void initialize_::LIB_NAME::(void) {
+    char* candidates[] = { ::CANDIDATES:: };
+
+    void *::LIB_NAME::_lib_ptr = try_find_lib(candidates, LEN(candidates));
+
+    if (!::LIB_NAME::_lib_ptr) {
+        fprintf(stderr, "Unable to locate ::LIB_NAME::, exiting!");
+        exit(1);
+    }
+
+// INIT_STRUCT_HERE
+
+}
+
+void close_::LIB_NAME::(void) {
+    cosmo_dlclose(::NAME::->lib);
+    free(::NAME::);
+}

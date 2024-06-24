@@ -1,9 +1,9 @@
-#include "gio-stub/gio_stub.h"
-#include "gir-stub/gir_stub.h"
-#include "glib-stub/glib_stub.h"
-#include "gmodule-stub/gmodule_stub.h"
-#include "gobject-stub/gobject_stub.h"
-#include "gtk4-stub/gtk4_stub.h"
+#include "gio_stub.h"
+#include "gir_stub.h"
+#include "glib_stub.h"
+#include "gmodule_stub.h"
+#include "gobject_stub.h"
+#include "gtk4_stub.h"
 
 struct gtk_syms *gtk;
 struct gdk_syms *gdk;

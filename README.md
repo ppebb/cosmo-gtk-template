@@ -1,17 +1,11 @@
 # cosmo-gtk-template - Maximal GTK sample for Cosmopolitan
 
-This repository contains a full[^1] stub for GTK, GSK, GDK, GLib, GIO, GObject, GModule, and GIRepository
+This repository contains a full[^1] stub for GTK (and GSK, GDK), GLib, GIO, GObject, GModule, and GIRepository
 
-## Building
-* Run `make copy_headers` (once ever)
-* Run `make`
+## Using the Stubs
+The stubs folder contains six folders, one for each stub. The necessary headers to build are not present, so run `scripts/copy_headers.sh` to copy the requisite headers into the stubs.
 
-Due to complications including headers present in /usr/include without accidentally including headers that conflict with cosmopolitan, some headers need to be copied out for this stub to build properly.
-
-## Using the Stub
-Within `stubs.tar.gz`, there are six folders, `gtk4-stub`, `glib-stub`, `gobject-stub`, `gio-stub`, `gmodule-stub`, and `gir-stub`, containing the neccessary files to use GTK and GLib from cosmopolitan. Simply untar the archive.
-
-Please note that each stub defines global variables to contain references to the library functions, and should remain as defined within `main.c`. The initialization functions called at the top of main and the close functions at the bottom should be called for any library you use.
+Please note that each stub defines global variables to contain references to the library functions, and should remain as defined within `main.c`. The initialization functions called at the top of main and the close functions at the bottom should be called for any stub you use.
 
 If you use Clangd, a script to generate `compile_flags.txt`, `gen_compile_flags.sh`, is present. Run it with the path to cosmopolitan (should contain an include folder). The generated compile_flags.txt should be *mostly* functional.
 
@@ -28,7 +22,7 @@ As a warning, generating the stub will print a little under 70000 lines to your 
 ## Dependencies
 All of the dependencies of GTK and GLib are required. See the Makefile if you are unsure.
 
-Depending on how you generated the stub, you will need Xlib and wayland-protocol headers. The Makefile will copy these headers into the headers directory
+Depending on how you generated the stub, you will need Xlib and wayland-protocol headers.
 
 ## References
 This repository is based off of vkoskiv's [cosmo-sdl-template](https://github.com/vkoskiv/cosmo-sdl-template). The code used to stub GTK and GLib is largely the same.
