@@ -27,7 +27,7 @@ for entry in "${map[@]}"; do
     # was called from its own directory then they start with ./
     dest_p=${dest##*scripts/}
 
-    printf "Copying source \"%s\" to dest \"%s\"\n" "$source" "$dest_p"
+    printf "Copying source \"%s\" to dest \"%s\"\n" "$source" "$(realpath "$dest_p")"
 
     mkdir -p "$(dirname "$dest_p")"
 

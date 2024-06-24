@@ -1,6 +1,4 @@
 export map=(
-    "/usr/include/gtk-4.0/gtk/;scripts/../stubs/gtk4-stub/GTK/"
-    "/usr/include/gtk-4.0/gdk/;scripts/../stubs/gtk4-stub/GDK/"
     "/usr/include/wayland-client-core.h;scripts/../stubs/headers/wayland-client-core.h"
     "/usr/include/wayland-client-protocol.h;scripts/../stubs/headers/wayland-client-protocol.h"
     "/usr/include/wayland-client.h;scripts/../stubs/headers/wayland-client.h"
@@ -14,16 +12,6 @@ export map=(
     "/usr/include/wayland-util.h;scripts/../stubs/headers/wayland-util.h"
     "/usr/include/wayland-version.h;scripts/../stubs/headers/wayland-version.h"
     "/usr/include/X11;scripts/../stubs/headers/X11"
-    "/usr/include/gtk-4.0/gsk/;scripts/../stubs/gtk4-stub/GSK/"
-    "/usr/include/glib-2.0/gobject/;scripts/../stubs/gobject-stub/GOBJECT/gobject/"
-    "/usr/include/glib-2.0/glib-object.h;scripts/../stubs/gobject-stub/GOBJECT/glib-object.h"
-    "/usr/include/glib-2.0/gmodule/;scripts/../stubs/gmodule-stub/GMODULE/gmodule/"
-    "/usr/include/glib-2.0/gmodule.h;scripts/../stubs/gmodule-stub/GMODULE/gmodule.h"
-    "/usr/include/glib-2.0/girepository/;scripts/../stubs/gir-stub/GIREPOSITORY/girepository"
     "/usr/include/ffi.h;scripts/../stubs/headers/ffi.h"
     "/usr/include/ffitarget.h;scripts/../stubs/headers/ffitarget.h"
-    "/usr/include/glib-2.0/glib/;scripts/../stubs/glib-stub/GLIB/glib/"
-    "/usr/include/glib-2.0/glib.h;scripts/../stubs/glib-stub/GLIB/glib.h"
-    "/usr/include/glib-2.0/glib-unix.h;scripts/../stubs/glib-stub/GLIB/glib-unix.h"
-    "/usr/include/glib-2.0/gio/;scripts/../stubs/gio-stub/GIO/gio/"
 )

@@ -1,5 +1,5 @@
-#include "glib.h"
-#include "gio/gio.h"
+#include <glib.h>
+#include <gio/gio.h>
 
 #ifndef SYMS_GIO_H
 #define SYMS_GIO_H

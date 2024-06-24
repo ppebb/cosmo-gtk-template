@@ -1,5 +1,5 @@
-#include "glib.h"
-#include "glib-unix.h"
+#include <glib.h>
+#include <glib-unix.h>
 
 #ifndef SYMS_GLIB_H
 #define SYMS_GLIB_H

@@ -28,8 +28,10 @@ COMPILE_FLAGS_PATH="$SCRIPT_DIR/../compile_flags.txt"
 
 stubs=""
 
-for dir in ./stubs/*; do
-    stubs="$stubs\n-isystem$dir"
+for path in ./stubs/*; do
+    if [ -d "$path" ]; then
+        stubs="$stubs\n-isystem$path"
+    fi
 done
 
 echo -e """

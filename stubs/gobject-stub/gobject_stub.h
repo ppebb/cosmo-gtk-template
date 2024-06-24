@@ -1,5 +1,4 @@
-#include "glib.h"
-#include "glib-object.h"
+#include <glib-object.h>
 
 #ifndef SYMS_GOBJECT_H
 #define SYMS_GOBJECT_H

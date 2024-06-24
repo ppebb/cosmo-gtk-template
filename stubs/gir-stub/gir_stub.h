@@ -1,6 +1,5 @@
-#include "glib.h"
-#include "girepository/girepository.h"
-#include "girepository/girffi.h"
+#include <girepository/girepository.h>
+#include <girepository/girffi.h>
 
 #ifndef SYMS_GIR_H
 #define SYMS_GIR_H

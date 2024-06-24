@@ -1,15 +1,5 @@
 compile_flags.txt
 cosmo-gtk*
-
-stubs/gtk4-stub/GTK
-stubs/gtk4-stub/GDK
-stubs/gtk4-stub/GSK
-stubs/glib-stub/GLIB
-stubs/gobject-stub/GOBJECT
-stubs/gio-stub/GIO/
-stubs/gmodule-stub/GMODULE
-stubs/gir-stub/GIREPOSITORY/
-
 stubs/headers
 obj
 .cache/

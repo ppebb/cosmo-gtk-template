@@ -1,5 +1,4 @@
-#include "glib.h"
-#include "gmodule.h"
+#include <gmodule.h>
 
 #ifndef SYMS_GMODULE_H
 #define SYMS_GMODULE_H

@@ -3,7 +3,7 @@
 This repository contains a full[^1] stub for GTK (and GSK, GDK), GLib, GIO, GObject, GModule, and GIRepository
 
 ## Using the Stubs
-The stubs folder contains six folders, one for each stub. The necessary headers to build are not present, so run `scripts/copy_headers.sh` to copy the requisite headers into the stubs.
+The stubs folder contains six folders, one for each stub. The necessary headers to build are not present, so run `scripts/copy_headers.sh` to copy the requisite headers into the project.
 
 Please note that each stub defines global variables to contain references to the library functions, and should remain as defined within `main.c`. The initialization functions called at the top of main and the close functions at the bottom should be called for any stub you use.
 
