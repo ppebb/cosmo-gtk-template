@@ -1,6 +1,2 @@
 stubs/gtk4-stub/* linguist-vendored
 stubs/glib-stub/* linguist-vendored
-stubs/gobject-stub/* linguist-vendored
-stubs/gio-stub/* linguist-vendored
-stubs/gmodule-stub/* linguist-vendored
-stubs/gir-stub/* linguist-vendored

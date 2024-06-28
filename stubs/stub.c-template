@@ -11,21 +11,16 @@
 #define _COSMO_SOURCE
 #include <libc/dlopen/dlfcn.h>
 
-void initialize_::LIB_NAME::(void) {
-    char* candidates[] = { ::CANDIDATES:: };
+// C_STRUCT_DEFINITION
 
-    void *::LIB_NAME::_lib_ptr = try_find_lib(candidates, LEN(candidates));
+void initialize_::STUB_NAME::(void) {
+    // INIT_LIB_HERE
 
-    if (!::LIB_NAME::_lib_ptr) {
-        fprintf(stderr, "Unable to locate ::LIB_NAME::, exiting!");
-        exit(1);
-    }
-
-// INIT_STRUCT_HERE
-
+    // INIT_STRUCT_HERE
 }
 
-void close_::LIB_NAME::(void) {
-    cosmo_dlclose(::NAME::->lib);
-    free(::NAME::);
+void close_::STUB_NAME::(void) {
+    // FREE_LIB
+
+    // FREE_STRUCT
 }

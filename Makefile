@@ -10,26 +10,37 @@ LIBS_2_RAW=graphene-1.0 glib-2.0
 LIBS_2=$(addsuffix /include, $(addprefix -I/usr/lib/, $(LIBS_2_RAW)))
 
 CC=cosmocc
-CFLAGS=-Wall -Wextra -std=c99 -O0 -Wno-deprecated-declarations $(STUBS) $(LIBS) $(LIBS_2) -DGTK_COMPILATION
+CFLAGS=-Wall -Wextra -std=c99 -O0 -Wno-deprecated-declarations $(STUBS) $(LIBS) $(LIBS_2)
 LDFLAGS=-ldl
 BIN=cosmo-gtk.com
+PROCDIR=proc
 OBJDIR=obj
 
-# Finds all c files but excludes the stubs directory
-SRCS=$(shell find . -name "*.c" -not -path '*/headers/*')
+# Finds all c files but excludes the headers directory
+SRCS=$(shell find . -name "*.c" -not -path '*/headers/*' -and -not -path '*/$(PROCDIR)/*')
 OBJS=$(patsubst %.c, $(OBJDIR)/%.o, $(SRCS))
 
+.PHONY: all
 all: $(BIN)
 
-$(OBJDIR)/%.o: %.c $(OBJDIR)
+$(PROCDIR) $(OBJDIR):
+	@mkdir -p $@
+
+.PRECIOUS: $(PROCDIR)/%.c
+$(PROCDIR)/%.c: %.c $(PROCDIR)
+	@mkdir -p '$(@D)'
+	@echo "CC -E -P $<; processing$(patsubst %.c, %.i, $<)"
+	$(shell $(CC) $(CFLAGS) -E $< | scripts/postproc.sh $(@:$(PROCDIR)/%=%) $@)
+
+$(OBJDIR)/%.o: $(PROCDIR)/%.c $(OBJDIR)
 	@mkdir -p '$(@D)'
 	@echo "CC $<"
-	@$(CC) $(CFLAGS) -c $< -o $@
-$(OBJDIR):
-	mkdir -p $@
+	@$(CC) $(CFLAGS) -o $@ -c $<
+
 $(BIN): $(OBJS) $(OBJDIR)
 	@echo "LD $@"
 	@$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
+.PHONY: clean
 clean:
-	rm -rf obj/* cosmo-gtk.*
+	rm -rf $(PROCDIR) $(OBJDIR) cosmo-gtk.*

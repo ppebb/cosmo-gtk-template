@@ -1,13 +1,11 @@
 ::LIB_HEADERS::
 
-#ifndef SYMS_::LIB_NAME_UPPER::_H
-#define SYMS_::LIB_NAME_UPPER::_H
-
+#ifndef SYMS_::STUB_NAME_UPPER::_H
+#define SYMS_::STUB_NAME_UPPER::_H
 // DEFINE_STRUCT_HERE
-
 
 // DEFINE_STRUCT_VAR_HERE
 #endif
 
-void initialize_::LIB_NAME::(void);
-void close_::LIB_NAME::(void);
+void initialize_::STUB_NAME::(void);
+void close_::STUB_NAME::(void);

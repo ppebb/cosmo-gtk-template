@@ -1,5 +1,6 @@
 compile_flags.txt
 cosmo-gtk*
 stubs/headers
-obj
+proc/
+obj/
 .cache/
