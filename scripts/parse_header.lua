@@ -1,14 +1,7 @@
 local utils = require("scripts.utils")
 
 local M = {}
-
-local count = 1
-local names = {}
-
-function M.reset()
-    count = 1
-    names = {}
-end
+M.__index = M
 
 --- @class func
 --- @field ret string
@@ -20,12 +13,12 @@ end
 --- @param prefix string
 --- @param trim_prefix boolean
 --- @return func[]|nil
-function M.process_header(path, match_access, prefix, trim_prefix)
+function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
     local ret = {}
 
-    utils.fprintf(io.stdout, "\27[36mProcessing header %s, header number %s\n\27[0m", path, count)
+    utils.fprintf(io.stdout, "\27[36mProcessing header %s, header number %s\n\27[0m", path, self.count)
     -- fprintf(io.stdout, "Processing header %s, header number %s\n", path, count)
-    count = count + 1
+    self.count = self.count + 1
 
     local header_split = utils.split(assert(utils.file_read(path)), "\n")
     local start = utils.find_in_table_str(header_split, "G_BEGIN_DECLS")
@@ -45,6 +38,10 @@ function M.process_header(path, match_access, prefix, trim_prefix)
 
     for i = start + 1, stop - 1 do
         local line = header_split[i]
+
+        if line:match("^#define [A-Z]+_TYPE_") then
+            collected[#collected + 1] = line
+        end
 
         -- Skip comments and #defines
         if
@@ -137,10 +134,25 @@ function M.process_header(path, match_access, prefix, trim_prefix)
     collected = utils.transform(collected, function(_, v) return v:gsub("%s+", " ") end)
 
     --- @param _line string
-    --- @return string, string, string
+    --- @return string, string, string, boolean|nil
     local function crack_line(_line)
         local ret_type, fname, args
         local line = _line
+
+        if line:match("^#define [A-Z]+_TYPE_") then
+            local type_func = line:match("^#define [A-Z]+_TYPE_[A-Z_0-9]+[ ]*%(([a-z_0-9]+)[ ]*%(%)%)")
+
+            if type_func then
+                return "GType", type_func, "void"
+            else
+                utils.fprintf(
+                    io.stderr,
+                    "Matched type function declaration %s but could not resolve the function name\n",
+                    line
+                )
+                return "", "", "", true
+            end
+        end
 
         -- Would be nice not to just eat stuff off of the end of the
         -- line, but if it has parentheses then it'd break so I'll just
@@ -154,6 +166,7 @@ function M.process_header(path, match_access, prefix, trim_prefix)
         line = utils.remove_match(line, " G_GNUC_ALLOC_SIZE2[ ]*%([0-9, ]*%)")
         line = utils.remove_match(line, " G_ANALYZER_NORETURN")
         line = utils.remove_match(line, " G_GNUC_WARN_UNUSED_RESULT")
+        line = utils.remove_match(line, " G_GNUC_PURE")
 
         local line_split = utils.split(line, " ")
 
@@ -239,21 +252,33 @@ function M.process_header(path, match_access, prefix, trim_prefix)
             or v:match("GIO_[A-Z]*_TYPE_IN")
             or v:match("GLIB_VAR")
             or v:match("GOBJECT_VAR")
-            -- Broken ass function I'm not fixing my fragile parser for
-            or v:match("g_win32_get_system_data_dirs_for_module")
+            or utils.matches_any(v, skip_funcs)
         then
             goto continue
         end
 
         if not utils.is_whitespace_or_nil(v) then
             print(v)
-            local ret_type, fname, args = crack_line(v)
+            local ret_type, fname, args, err = crack_line(v)
+
+            if err then
+                goto continue
+            end
 
             utils.fprintf(io.stdout, "ret: %s\nname: %s\nargs: %s\n\n", ret_type, fname, args)
 
-            assert(not utils.is_whitespace_or_nil(ret_type))
-            assert(not utils.is_whitespace_or_nil(fname))
-            assert(not utils.is_whitespace_or_nil(args))
+            assert(
+                not utils.is_whitespace_or_nil(ret_type),
+                string.format("ret_type (%s) is whitespace or nil for line %s\n", ret_type, v)
+            )
+            assert(
+                not utils.is_whitespace_or_nil(fname),
+                string.format("fname (%s) is whitespace or nil for line %s\n", fname, v)
+            )
+            assert(
+                not utils.is_whitespace_or_nil(args),
+                string.format("args (%s) is whitespace or nil for line %s\n", args, v)
+            )
 
             -- Someone put parenthesis around their function name...
             if fname:find("%)") then
@@ -264,11 +289,11 @@ function M.process_header(path, match_access, prefix, trim_prefix)
                 fname = fname:gsub("%(", "")
             end
 
-            if utils.tbl_contains(names, fname) then
+            if utils.tbl_keys_contains(self.names_to_args, fname) then
                 utils.fprintf(io.stderr, "Duplicate name %s found in header %s\n", fname, path)
                 goto continue
             else
-                table.insert(names, fname)
+                self.names_to_args[fname] = args
             end
 
             if ret_type:find("static inline ") then
@@ -286,6 +311,15 @@ function M.process_header(path, match_access, prefix, trim_prefix)
     end
 
     return ret
+end
+
+function M.new()
+    local ret = {}
+
+    ret.count = 1
+    ret.names_to_args = {}
+
+    return setmetatable(ret, M)
 end
 
 return M

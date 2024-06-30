@@ -23,16 +23,10 @@ OBJS=$(patsubst %.c, $(OBJDIR)/%.o, $(SRCS))
 .PHONY: all
 all: $(BIN)
 
-$(PROCDIR) $(OBJDIR):
+$(OBJDIR):
 	@mkdir -p $@
 
-.PRECIOUS: $(PROCDIR)/%.c
-$(PROCDIR)/%.c: %.c $(PROCDIR)
-	@mkdir -p '$(@D)'
-	@echo "CC -E -P $<; processing$(patsubst %.c, %.i, $<)"
-	$(shell $(CC) $(CFLAGS) -E $< | scripts/postproc.sh $(@:$(PROCDIR)/%=%) $@)
-
-$(OBJDIR)/%.o: $(PROCDIR)/%.c $(OBJDIR)
+$(OBJDIR)/%.o: %.c $(OBJDIR)
 	@mkdir -p '$(@D)'
 	@echo "CC $<"
 	@$(CC) $(CFLAGS) -o $@ -c $<

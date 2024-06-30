@@ -145,6 +145,19 @@ function M.tbl_contains(tbl, value)
     return false
 end
 
+--- @param tbl table
+--- @param value any
+--- @return boolean
+function M.tbl_keys_contains(tbl, key)
+    for k, _ in pairs(tbl) do
+        if k == key then
+            return true
+        end
+    end
+
+    return false
+end
+
 function M.get_script_dir()
     local str = debug.getinfo(2, "S").source:sub(2)
     return str:match("(.*/)")
@@ -188,7 +201,7 @@ end
 
 --- @param segment string
 --- @param matches string[]
---- @return boolean
+--- @return boolean, string|nil
 function M.matches_any(segment, matches)
     if not matches then
         return false
@@ -196,11 +209,11 @@ function M.matches_any(segment, matches)
 
     for _, match in ipairs(matches) do
         if segment:find(match) then
-            return true
+            return true, match
         end
     end
 
-    return false
+    return false, nil
 end
 
 --- @param line string

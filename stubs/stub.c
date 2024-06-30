@@ -1,5 +1,5 @@
 #include "stub.h"
-#include "libc/dlopen/dlfcn.h"
+#include <libc/dlopen/dlfcn.h>
 #include <stdio.h>
 
 void *try_find_lib(char **candidates, int len) {

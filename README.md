@@ -3,9 +3,9 @@
 This repository contains a full[^1] stub for GTK (and GSK, GDK), GLib, GIO, GObject, GModule, and GIRepository
 
 ## Using the Stubs
-The stubs folder contains six folders, one for each stub. The necessary headers to build are not present, so run `scripts/copy_headers.sh` to copy the requisite headers into the project.
+The stub contains two folders, one for GLib and one for GTK located in the `stubs` folder. The necessary headers to build are not present, so run `scripts/copy_headers.sh` to copy the requisite headers into the `stubs` folder.
 
-You should be able to write code as if the stub wasn't even present. During compilation any function calls to the libraries are redirected to the stub (handled by `scripts/postproc.sh`) after macros are expanded by the preprocessor, allowing any GTK and GLib macros to be used as well (Suggestions for improving this redirection would be appreciated as it's a bit of a bodge currently).
+Simply copy the `stubs` folder into your project and import `glib_stub.h` or `gtk_stub.h`.
 
 If you use Clangd, a script to generate `compile_flags.txt`, `gen_compile_flags.sh`, is present. Run it with the path to cosmopolitan (should contain an include folder). The generated compile_flags.txt should be *mostly* functional.
 
@@ -22,4 +22,4 @@ Depending on how you generated the stub, you will need Xlib and wayland-protocol
 ## References
 This repository is based off of vkoskiv's [cosmo-sdl-template](https://github.com/vkoskiv/cosmo-sdl-template). The code used to stub GTK and GLib is largely the same.
 
-[^1]: If anything is missing let me know!
+[^1]: Certain functions making use of variadic arguments do not have an equivalent function which takes a `va_list`. As a result the arguments passed using `...` cannot be forwarded to the stubbed function.

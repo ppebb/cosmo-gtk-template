@@ -21,10 +21,7 @@ if not utils.file_exists(extra_headers_dir) then
 end
 
 local _ = stub.new(stubs_root, "gtk4")
-    :with_struct("gtk")
     :with_shared_object("gtk", { "libgtk-4.so" })
-    -- :with_struct("gdk")
-    -- :with_struct("gsk")
     :with_lib_headers({
         "gtk/gtk.h",
         "gtk/a11y/gtkatspi.h",
@@ -49,20 +46,15 @@ local _ = stub.new(stubs_root, "gtk4")
     }, extra_headers_dir)
     :set_trim_prefix(false)
     :set_match_access({ "GDK_[A-Z0-9_]+" })
-    :split()
-    :use_struct("gtk")
-    -- :set_prefix("gtk_")
+    :set_prefix("gtk_")
     :process_headers({ "/usr/include/gtk-4.0/gtk/" })
-    -- :use_struct("gdk")
-    -- :set_prefix("gdk_")
+    :set_prefix("gdk_")
     :process_headers({ "/usr/include/gtk-4.0/gdk/" })
-    -- :use_struct("gsk")
-    -- :set_prefix("gsk_")
+    :set_prefix("gsk_")
     :process_headers({ "/usr/include/gtk-4.0/gsk/" })
     :write()
 
 local _ = stub.new(stubs_root, "glib")
-    :with_struct("glib")
     :with_shared_object("glib", { "libglib-2.0.so" })
     :with_shared_object("gobject", { "libgobject-2.0.so" })
     :with_shared_object("gio", { "libgio-2.0.so" })
@@ -83,12 +75,27 @@ local _ = stub.new(stubs_root, "glib")
     }, extra_headers_dir)
     :set_prefix("g_")
     :set_trim_prefix(false)
-    :split()
-    :use_struct("glib")
     :use_shared_object("glib")
     :set_match_access({
         "GLIB_[A-Z0-9_]+",
         "G_NORETURN",
+    })
+    :set_skip_funcs({
+        "g_win32_get_system_data_dirs_for_module",
+        "g_signal_new ",
+        "g_chmod",
+        "g_open",
+        "g_creat",
+        "g_rename",
+        "g_mkdir",
+        "g_stat",
+        "g_lstat",
+        "g_remove",
+        "g_fopen",
+        "g_freopen",
+        "g_fsync",
+        "g_utime",
+        "alloca",
     })
     :process_headers({
         "/usr/include/glib-2.0/glib/",
@@ -99,7 +106,7 @@ local _ = stub.new(stubs_root, "glib")
     :set_match_access({ "GOBJECT_[A-Z0-9_]+" })
     :process_headers({ "/usr/include/glib-2.0/gobject/" })
     :use_shared_object("gio")
-    :set_skip_files({})
+    :set_skip_files(nil)
     :set_match_access({
         "GIO_[A-Z0-9_]+",
         "G_MODULE_EXPORT[A-Z0-9_]*",
