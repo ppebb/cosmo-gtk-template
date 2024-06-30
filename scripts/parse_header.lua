@@ -41,6 +41,8 @@ function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
 
         if line:match("^#define [A-Z]+_TYPE_") then
             collected[#collected + 1] = line
+            collected[#collected + 1] = ""
+            goto continue
         end
 
         -- Skip comments and #defines

@@ -356,6 +356,7 @@ static struct gtk4Funcs {
     const char * (*ptr_gtk_file_chooser_get_choice)(GtkFileChooser *chooser, const char *id);
     GType (*ptr_gtk_file_chooser_dialog_get_type)(void);
     GType (*ptr_gtk_file_chooser_native_get_type)(void);
+    GtkFileChooserNative* (*ptr_gtk_file_chooser_native_new)(const char *title, GtkWindow *parent, GtkFileChooserAction action, const char *accept_label, const char *cancel_label);
     const char* (*ptr_gtk_file_chooser_native_get_accept_label)(GtkFileChooserNative *self);
     void (*ptr_gtk_file_chooser_native_set_accept_label)(GtkFileChooserNative *self, const char *accept_label);
     const char* (*ptr_gtk_file_chooser_native_get_cancel_label)(GtkFileChooserNative *self);
@@ -564,6 +565,7 @@ static struct gtk4Funcs {
     GType (*ptr_gtk_tree_iter_get_type)(void);
     GType (*ptr_gtk_tree_path_get_type)(void);
     GType (*ptr_gtk_tree_row_reference_get_type)(void);
+    GtkTreePath* (*ptr_gtk_tree_path_new)(void);
     GtkTreePath* (*ptr_gtk_tree_path_new_from_string)(const char *path);
     GtkTreePath* (*ptr_gtk_tree_path_new_from_indicesv)(int *indices, gsize length);
     char* (*ptr_gtk_tree_path_to_string)(GtkTreePath *path);
@@ -903,6 +905,7 @@ static struct gtk4Funcs {
     PangoLayout* (*ptr_gtk_print_context_create_pango_layout)(GtkPrintContext *context);
     void (*ptr_gtk_print_context_set_cairo_context)(GtkPrintContext *context, cairo_t *cr, double dpi_x, double dpi_y);
     GType (*ptr_gtk_print_operation_get_type)(void);
+    GQuark (*ptr_gtk_print_error_quark)(void);
     GtkPrintOperation * (*ptr_gtk_print_operation_new)(void);
     void (*ptr_gtk_print_operation_set_default_page_setup)(GtkPrintOperation *op, GtkPageSetup *default_page_setup);
     GtkPageSetup * (*ptr_gtk_print_operation_get_default_page_setup)(GtkPrintOperation *op);
@@ -1017,6 +1020,7 @@ static struct gtk4Funcs {
     GVariant* (*ptr_gtk_print_settings_to_gvariant)(GtkPrintSettings *settings);
     GtkPrintSettings* (*ptr_gtk_print_settings_new_from_gvariant)(GVariant *variant);
     GType (*ptr_gtk_at_spi_socket_get_type)(void);
+    GtkAccessible * (*ptr_gtk_at_spi_socket_new)(const char *bus_name, const char *object_path, GError **error);
     const char * (*ptr_gtk_at_spi_socket_get_bus_name)(GtkAtSpiSocket *self);
     const char * (*ptr_gtk_at_spi_socket_get_object_path)(GtkAtSpiSocket *self);
     GType (*ptr_gtk_about_dialog_get_type)(void);
@@ -1062,6 +1066,7 @@ static struct gtk4Funcs {
     char * (*ptr_gtk_accelerator_get_label_with_keycode)(GdkDisplay *display, guint accelerator_key, guint keycode, GdkModifierType accelerator_mods);
     GdkModifierType (*ptr_gtk_accelerator_get_default_mod_mask)(void);
     gboolean (*ptr_gtk_accelerator_valid)(guint keyval, GdkModifierType modifiers);
+    GType (*ptr_gtk_accessible_get_type)(void);
     gboolean (*ptr_gtk_accessible_get_platform_state)(GtkAccessible *self, GtkAccessiblePlatformState state);
     GtkAccessible * (*ptr_gtk_accessible_get_accessible_parent)(GtkAccessible *self);
     void (*ptr_gtk_accessible_set_accessible_parent)(GtkAccessible *self, GtkAccessible *parent, GtkAccessible *next_sibling);
@@ -1084,6 +1089,8 @@ static struct gtk4Funcs {
     GtkAccessibleList * (*ptr_gtk_accessible_list_new_from_list)(GList *list);
     GtkAccessibleList * (*ptr_gtk_accessible_list_new_from_array)(GtkAccessible **accessibles, gsize n_accessibles);
     void (*ptr_gtk_accessible_announce)(GtkAccessible *self, const char *message, GtkAccessibleAnnouncementPriority priority);
+    GType (*ptr_gtk_accessible_range_get_type)(void);
+    GType (*ptr_gtk_accessible_text_get_type)(void);
     void (*ptr_gtk_accessible_text_update_selection_bound)(GtkAccessibleText *self);
     void (*ptr_gtk_accessible_text_update_contents)(GtkAccessibleText *self, GtkAccessibleTextContentChange change, unsigned int start, unsigned int end);
     GType (*ptr_gtk_actionable_get_type)(void);
@@ -1170,9 +1177,11 @@ static struct gtk4Funcs {
     void (*ptr_gtk_aspect_frame_set_child)(GtkAspectFrame *self, GtkWidget *child);
     GtkWidget* (*ptr_gtk_aspect_frame_get_child)(GtkAspectFrame *self);
     GType (*ptr_gtk_at_context_get_type)(void);
+    GtkAccessible * (*ptr_gtk_at_context_get_accessible)(GtkATContext *self);
     GtkAccessibleRole (*ptr_gtk_at_context_get_accessible_role)(GtkATContext *self);
     GtkATContext * (*ptr_gtk_at_context_create)(GtkAccessibleRole accessible_role, GtkAccessible *accessible, GdkDisplay *display);
     GType (*ptr_gtk_bin_layout_get_type)(void);
+    GtkLayoutManager * (*ptr_gtk_bin_layout_new)(void);
     GType (*ptr_gtk_bitset_get_type)(void);
     GtkBitset * (*ptr_gtk_bitset_ref)(GtkBitset *self);
     void (*ptr_gtk_bitset_unref)(GtkBitset *self);
@@ -1211,6 +1220,7 @@ static struct gtk4Funcs {
     guint (*ptr_gtk_bitset_iter_get_value)(const GtkBitsetIter *iter);
     gboolean (*ptr_gtk_bitset_iter_is_valid)(const GtkBitsetIter *iter);
     GType (*ptr_gtk_bookmark_list_get_type)(void);
+    GtkBookmarkList * (*ptr_gtk_bookmark_list_new)(const char *filename, const char *attributes);
     const char * (*ptr_gtk_bookmark_list_get_filename)(GtkBookmarkList *self);
     void (*ptr_gtk_bookmark_list_set_attributes)(GtkBookmarkList *self, const char *attributes);
     const char * (*ptr_gtk_bookmark_list_get_attributes)(GtkBookmarkList *self);
@@ -1218,6 +1228,7 @@ static struct gtk4Funcs {
     int (*ptr_gtk_bookmark_list_get_io_priority)(GtkBookmarkList *self);
     gboolean (*ptr_gtk_bookmark_list_is_loading)(GtkBookmarkList *self);
     GType (*ptr_gtk_bool_filter_get_type)(void);
+    GtkBoolFilter * (*ptr_gtk_bool_filter_new)(GtkExpression *expression);
     GtkExpression * (*ptr_gtk_bool_filter_get_expression)(GtkBoolFilter *self);
     void (*ptr_gtk_bool_filter_set_expression)(GtkBoolFilter *self, GtkExpression *expression);
     gboolean (*ptr_gtk_bool_filter_get_invert)(GtkBoolFilter *self);
@@ -1242,6 +1253,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_box_insert_child_after)(GtkBox *box, GtkWidget *child, GtkWidget *sibling);
     void (*ptr_gtk_box_reorder_child_after)(GtkBox *box, GtkWidget *child, GtkWidget *sibling);
     GType (*ptr_gtk_box_layout_get_type)(void);
+    GtkLayoutManager * (*ptr_gtk_box_layout_new)(GtkOrientation orientation);
     void (*ptr_gtk_box_layout_set_homogeneous)(GtkBoxLayout *box_layout, gboolean homogeneous);
     gboolean (*ptr_gtk_box_layout_get_homogeneous)(GtkBoxLayout *box_layout);
     void (*ptr_gtk_box_layout_set_spacing)(GtkBoxLayout *box_layout, guint spacing);
@@ -1258,6 +1270,7 @@ static struct gtk4Funcs {
     GPtrArray* (*ptr_gtk_buildable_parse_context_get_element_stack)(GtkBuildableParseContext *context);
     void (*ptr_gtk_buildable_parse_context_get_position)(GtkBuildableParseContext *context, int *line_number, int *char_number);
     GType (*ptr_gtk_builder_get_type)(void);
+    GQuark (*ptr_gtk_builder_error_quark)(void);
     GtkBuilder* (*ptr_gtk_builder_new)(void);
     gboolean (*ptr_gtk_builder_add_from_file)(GtkBuilder *builder, const char *filename, GError **error);
     gboolean (*ptr_gtk_builder_add_from_resource)(GtkBuilder *builder, const char *resource_path, GError **error);
@@ -1288,7 +1301,9 @@ static struct gtk4Funcs {
     GBytes * (*ptr_gtk_builder_list_item_factory_get_bytes)(GtkBuilderListItemFactory *self);
     const char * (*ptr_gtk_builder_list_item_factory_get_resource)(GtkBuilderListItemFactory *self);
     GtkBuilderScope * (*ptr_gtk_builder_list_item_factory_get_scope)(GtkBuilderListItemFactory *self);
+    GType (*ptr_gtk_builder_scope_get_type)(void);
     GType (*ptr_gtk_builder_cscope_get_type)(void);
+    GtkBuilderScope * (*ptr_gtk_builder_cscope_new)(void);
     void (*ptr_gtk_builder_cscope_add_callback_symbol)(GtkBuilderCScope *self, const char *callback_name, GCallback callback_symbol);
     GCallback (*ptr_gtk_builder_cscope_lookup_callback_symbol)(GtkBuilderCScope *self, const char *callback_name);
     GType (*ptr_gtk_button_get_type)(void);
@@ -1341,6 +1356,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_center_box_set_shrink_center_last)(GtkCenterBox *self, gboolean shrink_center_last);
     gboolean (*ptr_gtk_center_box_get_shrink_center_last)(GtkCenterBox *self);
     GType (*ptr_gtk_center_layout_get_type)(void);
+    GtkLayoutManager * (*ptr_gtk_center_layout_new)(void);
     void (*ptr_gtk_center_layout_set_orientation)(GtkCenterLayout *self, GtkOrientation orientation);
     GtkOrientation (*ptr_gtk_center_layout_get_orientation)(GtkCenterLayout *self);
     void (*ptr_gtk_center_layout_set_baseline_position)(GtkCenterLayout *self, GtkBaselinePosition baseline_position);
@@ -1369,6 +1385,7 @@ static struct gtk4Funcs {
     GtkWidget * (*ptr_gtk_check_button_get_child)(GtkCheckButton *button);
     void (*ptr_gtk_check_button_set_child)(GtkCheckButton *button, GtkWidget *child);
     GType (*ptr_gtk_color_dialog_get_type)(void);
+    GtkColorDialog* (*ptr_gtk_color_dialog_new)(void);
     const char * (*ptr_gtk_color_dialog_get_title)(GtkColorDialog *self);
     void (*ptr_gtk_color_dialog_set_title)(GtkColorDialog *self, const char *title);
     gboolean (*ptr_gtk_color_dialog_get_modal)(GtkColorDialog *self);
@@ -1378,6 +1395,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_color_dialog_choose_rgba)(GtkColorDialog *self, GtkWindow *parent, const GdkRGBA *initial_color, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
     GdkRGBA * (*ptr_gtk_color_dialog_choose_rgba_finish)(GtkColorDialog *self, GAsyncResult *result, GError **error);
     GType (*ptr_gtk_color_dialog_button_get_type)(void);
+    GtkWidget * (*ptr_gtk_color_dialog_button_new)(GtkColorDialog *dialog);
     GtkColorDialog* (*ptr_gtk_color_dialog_button_get_dialog)(GtkColorDialogButton *self);
     void (*ptr_gtk_color_dialog_button_set_dialog)(GtkColorDialogButton *self, GtkColorDialog *dialog);
     const GdkRGBA * (*ptr_gtk_color_dialog_button_get_rgba)(GtkColorDialogButton *self);
@@ -1412,12 +1430,14 @@ static struct gtk4Funcs {
     GtkListItemFactory * (*ptr_gtk_column_view_get_header_factory)(GtkColumnView *self);
     void (*ptr_gtk_column_view_scroll_to)(GtkColumnView *self, guint pos, GtkColumnViewColumn *column, GtkListScrollFlags flags, GtkScrollInfo *scroll);
     GType (*ptr_gtk_column_view_cell_get_type)(void);
+    gpointer (*ptr_gtk_column_view_cell_get_item)(GtkColumnViewCell *self);
     guint (*ptr_gtk_column_view_cell_get_position)(GtkColumnViewCell *self);
     gboolean (*ptr_gtk_column_view_cell_get_selected)(GtkColumnViewCell *self);
     gboolean (*ptr_gtk_column_view_cell_get_focusable)(GtkColumnViewCell *self);
     void (*ptr_gtk_column_view_cell_set_focusable)(GtkColumnViewCell *self, gboolean focusable);
     void (*ptr_gtk_column_view_cell_set_child)(GtkColumnViewCell *self, GtkWidget *child);
     GtkWidget * (*ptr_gtk_column_view_cell_get_child)(GtkColumnViewCell *self);
+    GType (*ptr_gtk_column_view_column_get_type)(void);
     GtkColumnViewColumn * (*ptr_gtk_column_view_column_new)(const char *title, GtkListItemFactory *factory);
     GtkColumnView * (*ptr_gtk_column_view_column_get_column_view)(GtkColumnViewColumn *self);
     void (*ptr_gtk_column_view_column_set_factory)(GtkColumnViewColumn *self, GtkListItemFactory *factory);
@@ -1439,6 +1459,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_column_view_column_set_id)(GtkColumnViewColumn *self, const char *id);
     const char * (*ptr_gtk_column_view_column_get_id)(GtkColumnViewColumn *self);
     GType (*ptr_gtk_column_view_row_get_type)(void);
+    gpointer (*ptr_gtk_column_view_row_get_item)(GtkColumnViewRow *self);
     guint (*ptr_gtk_column_view_row_get_position)(GtkColumnViewRow *self);
     gboolean (*ptr_gtk_column_view_row_get_selected)(GtkColumnViewRow *self);
     gboolean (*ptr_gtk_column_view_row_get_selectable)(GtkColumnViewRow *self);
@@ -1452,10 +1473,13 @@ static struct gtk4Funcs {
     const char * (*ptr_gtk_column_view_row_get_accessible_label)(GtkColumnViewRow *self);
     void (*ptr_gtk_column_view_row_set_accessible_label)(GtkColumnViewRow *self, const char *label);
     GType (*ptr_gtk_column_view_sorter_get_type)(void);
+    GtkColumnViewColumn * (*ptr_gtk_column_view_sorter_get_primary_sort_column)(GtkColumnViewSorter *self);
     GtkSortType (*ptr_gtk_column_view_sorter_get_primary_sort_order)(GtkColumnViewSorter *self);
     guint (*ptr_gtk_column_view_sorter_get_n_sort_columns)(GtkColumnViewSorter *self);
     GtkColumnViewColumn * (*ptr_gtk_column_view_sorter_get_nth_sort_column)(GtkColumnViewSorter *self, guint position, GtkSortType *sort_order);
+    GType (*ptr_gtk_constraint_target_get_type)(void);
     GType (*ptr_gtk_constraint_get_type)(void);
+    GtkConstraint * (*ptr_gtk_constraint_new)(gpointer target, GtkConstraintAttribute target_attribute, GtkConstraintRelation relation, gpointer source, GtkConstraintAttribute source_attribute, double multiplier, double constant, int strength);
     GtkConstraint * (*ptr_gtk_constraint_new_constant)(gpointer target, GtkConstraintAttribute target_attribute, GtkConstraintRelation relation, double constant, int strength);
     GtkConstraintTarget * (*ptr_gtk_constraint_get_target)(GtkConstraint *constraint);
     GtkConstraintAttribute (*ptr_gtk_constraint_get_target_attribute)(GtkConstraint *constraint);
@@ -1469,6 +1493,7 @@ static struct gtk4Funcs {
     gboolean (*ptr_gtk_constraint_is_attached)(GtkConstraint *constraint);
     gboolean (*ptr_gtk_constraint_is_constant)(GtkConstraint *constraint);
     GType (*ptr_gtk_constraint_guide_get_type)(void);
+    GtkConstraintGuide * (*ptr_gtk_constraint_guide_new)(void);
     void (*ptr_gtk_constraint_guide_set_min_size)(GtkConstraintGuide *guide, int width, int height);
     void (*ptr_gtk_constraint_guide_get_min_size)(GtkConstraintGuide *guide, int *width, int *height);
     void (*ptr_gtk_constraint_guide_set_nat_size)(GtkConstraintGuide *guide, int width, int height);
@@ -1481,6 +1506,7 @@ static struct gtk4Funcs {
     const char * (*ptr_gtk_constraint_guide_get_name)(GtkConstraintGuide *guide);
     GType (*ptr_gtk_constraint_layout_get_type)(void);
     GType (*ptr_gtk_constraint_layout_child_get_type)(void);
+    GQuark (*ptr_gtk_constraint_vfl_parser_error_quark)(void);
     GtkLayoutManager * (*ptr_gtk_constraint_layout_new)(void);
     void (*ptr_gtk_constraint_layout_add_constraint)(GtkConstraintLayout *layout, GtkConstraint *constraint);
     void (*ptr_gtk_constraint_layout_remove_constraint)(GtkConstraintLayout *layout, GtkConstraint *constraint);
@@ -1501,14 +1527,18 @@ static struct gtk4Funcs {
     void (*ptr_gtk_css_provider_load_from_resource)(GtkCssProvider *css_provider, const char *resource_path);
     void (*ptr_gtk_css_provider_load_named)(GtkCssProvider *provider, const char *name, const char *variant);
     GType (*ptr_gtk_custom_filter_get_type)(void);
+    GtkCustomFilter * (*ptr_gtk_custom_filter_new)(GtkCustomFilterFunc match_func, gpointer user_data, GDestroyNotify user_destroy);
     void (*ptr_gtk_custom_filter_set_filter_func)(GtkCustomFilter *self, GtkCustomFilterFunc match_func, gpointer user_data, GDestroyNotify user_destroy);
     GType (*ptr_gtk_custom_layout_get_type)(void);
+    GtkLayoutManager * (*ptr_gtk_custom_layout_new)(GtkCustomRequestModeFunc request_mode, GtkCustomMeasureFunc measure, GtkCustomAllocateFunc allocate);
     GType (*ptr_gtk_custom_sorter_get_type)(void);
+    GtkCustomSorter * (*ptr_gtk_custom_sorter_new)(GCompareDataFunc sort_func, gpointer user_data, GDestroyNotify user_destroy);
     void (*ptr_gtk_custom_sorter_set_sort_func)(GtkCustomSorter *self, GCompareDataFunc sort_func, gpointer user_data, GDestroyNotify user_destroy);
     void (*ptr_gtk_set_debug_flags)(GtkDebugFlags flags);
     GtkDebugFlags (*ptr_gtk_get_debug_flags)(void);
     GQuark (*ptr_gtk_dialog_error_quark)(void);
     GType (*ptr_gtk_directory_list_get_type)(void);
+    GtkDirectoryList * (*ptr_gtk_directory_list_new)(const char *attributes, GFile *file);
     void (*ptr_gtk_directory_list_set_file)(GtkDirectoryList *self, GFile *file);
     GFile * (*ptr_gtk_directory_list_get_file)(GtkDirectoryList *self);
     void (*ptr_gtk_directory_list_set_attributes)(GtkDirectoryList *self, const char *attributes);
@@ -1520,6 +1550,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_directory_list_set_monitored)(GtkDirectoryList *self, gboolean monitored);
     gboolean (*ptr_gtk_directory_list_get_monitored)(GtkDirectoryList *self);
     GType (*ptr_gtk_drag_icon_get_type)(void);
+    GtkWidget * (*ptr_gtk_drag_icon_get_for_drag)(GdkDrag *drag);
     void (*ptr_gtk_drag_icon_set_child)(GtkDragIcon *self, GtkWidget *child);
     GtkWidget * (*ptr_gtk_drag_icon_get_child)(GtkDragIcon *self);
     void (*ptr_gtk_drag_icon_set_from_paintable)(GdkDrag *drag, GdkPaintable *paintable, int hot_x, int hot_y);
@@ -1547,6 +1578,7 @@ static struct gtk4Funcs {
     GdkDrop * (*ptr_gtk_drop_controller_motion_get_drop)(GtkDropControllerMotion *self);
     gboolean (*ptr_gtk_drop_controller_motion_is_pointer)(GtkDropControllerMotion *self);
     GType (*ptr_gtk_drop_down_get_type)(void);
+    GtkWidget * (*ptr_gtk_drop_down_new)(GListModel *model, GtkExpression *expression);
     GtkWidget * (*ptr_gtk_drop_down_new_from_strings)(const char * const * strings);
     void (*ptr_gtk_drop_down_set_model)(GtkDropDown *self, GListModel *model);
     GListModel * (*ptr_gtk_drop_down_get_model)(GtkDropDown *self);
@@ -1616,6 +1648,7 @@ static struct gtk4Funcs {
     gboolean (*ptr_gtk_editable_delegate_get_property)(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
     gboolean (*ptr_gtk_editable_delegate_get_accessible_platform_state)(GtkEditable *editable, GtkAccessiblePlatformState state);
     GType (*ptr_gtk_editable_label_get_type)(void);
+    GtkWidget * (*ptr_gtk_editable_label_new)(const char *str);
     gboolean (*ptr_gtk_editable_label_get_editing)(GtkEditableLabel *self);
     void (*ptr_gtk_editable_label_start_editing)(GtkEditableLabel *self);
     void (*ptr_gtk_editable_label_stop_editing)(GtkEditableLabel *self, gboolean commit);
@@ -1780,6 +1813,7 @@ static struct gtk4Funcs {
     GType (*ptr_gtk_param_expression_get_type)(void);
     GParamSpec * (*ptr_gtk_param_spec_expression)(const char *name, const char *nick, const char *blurb, GParamFlags flags);
     GType (*ptr_gtk_file_dialog_get_type)(void);
+    GtkFileDialog * (*ptr_gtk_file_dialog_new)(void);
     const char * (*ptr_gtk_file_dialog_get_title)(GtkFileDialog *self);
     void (*ptr_gtk_file_dialog_set_title)(GtkFileDialog *self, const char *title);
     gboolean (*ptr_gtk_file_dialog_get_modal)(GtkFileDialog *self);
@@ -1818,6 +1852,7 @@ static struct gtk4Funcs {
     GVariant * (*ptr_gtk_file_filter_to_gvariant)(GtkFileFilter *filter);
     GtkFileFilter * (*ptr_gtk_file_filter_new_from_gvariant)(GVariant *variant);
     GType (*ptr_gtk_file_launcher_get_type)(void);
+    GtkFileLauncher * (*ptr_gtk_file_launcher_new)(GFile *file);
     GFile * (*ptr_gtk_file_launcher_get_file)(GtkFileLauncher *self);
     void (*ptr_gtk_file_launcher_set_file)(GtkFileLauncher *self, GFile *file);
     gboolean (*ptr_gtk_file_launcher_get_always_ask)(GtkFileLauncher *self);
@@ -1829,9 +1864,11 @@ static struct gtk4Funcs {
     void (*ptr_gtk_file_launcher_open_containing_folder)(GtkFileLauncher *self, GtkWindow *parent, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
     gboolean (*ptr_gtk_file_launcher_open_containing_folder_finish)(GtkFileLauncher *self, GAsyncResult *result, GError **error);
     GType (*ptr_gtk_filter_get_type)(void);
+    gboolean (*ptr_gtk_filter_match)(GtkFilter *self, gpointer item);
     GtkFilterMatch (*ptr_gtk_filter_get_strictness)(GtkFilter *self);
     void (*ptr_gtk_filter_changed)(GtkFilter *self, GtkFilterChange change);
     GType (*ptr_gtk_filter_list_model_get_type)(void);
+    GtkFilterListModel * (*ptr_gtk_filter_list_model_new)(GListModel *model, GtkFilter *filter);
     void (*ptr_gtk_filter_list_model_set_filter)(GtkFilterListModel *self, GtkFilter *filter);
     GtkFilter * (*ptr_gtk_filter_list_model_get_filter)(GtkFilterListModel *self);
     void (*ptr_gtk_filter_list_model_set_model)(GtkFilterListModel *self, GListModel *model);
@@ -1849,9 +1886,11 @@ static struct gtk4Funcs {
     GskTransform * (*ptr_gtk_fixed_get_child_transform)(GtkFixed *fixed, GtkWidget *widget);
     GType (*ptr_gtk_fixed_layout_get_type)(void);
     GType (*ptr_gtk_fixed_layout_child_get_type)(void);
+    GtkLayoutManager * (*ptr_gtk_fixed_layout_new)(void);
     void (*ptr_gtk_fixed_layout_child_set_transform)(GtkFixedLayoutChild *child, GskTransform *transform);
     GskTransform * (*ptr_gtk_fixed_layout_child_get_transform)(GtkFixedLayoutChild *child);
     GType (*ptr_gtk_flatten_list_model_get_type)(void);
+    GtkFlattenListModel * (*ptr_gtk_flatten_list_model_new)(GListModel *model);
     void (*ptr_gtk_flatten_list_model_set_model)(GtkFlattenListModel *self, GListModel *model);
     GListModel * (*ptr_gtk_flatten_list_model_get_model)(GtkFlattenListModel *self);
     GListModel * (*ptr_gtk_flatten_list_model_get_model_for_item)(GtkFlattenListModel *self, guint position);
@@ -1899,6 +1938,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_flow_box_set_sort_func)(GtkFlowBox *box, GtkFlowBoxSortFunc sort_func, gpointer user_data, GDestroyNotify destroy);
     void (*ptr_gtk_flow_box_invalidate_sort)(GtkFlowBox *box);
     GType (*ptr_gtk_font_dialog_get_type)(void);
+    GtkFontDialog * (*ptr_gtk_font_dialog_new)(void);
     const char * (*ptr_gtk_font_dialog_get_title)(GtkFontDialog *self);
     void (*ptr_gtk_font_dialog_set_title)(GtkFontDialog *self, const char *title);
     gboolean (*ptr_gtk_font_dialog_get_modal)(GtkFontDialog *self);
@@ -1918,6 +1958,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_font_dialog_choose_font_and_features)(GtkFontDialog *self, GtkWindow *parent, PangoFontDescription *initial_value, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
     gboolean (*ptr_gtk_font_dialog_choose_font_and_features_finish)(GtkFontDialog *self, GAsyncResult *result, PangoFontDescription **font_desc, char **font_features, PangoLanguage **language, GError **error);
     GType (*ptr_gtk_font_dialog_button_get_type)(void);
+    GtkWidget * (*ptr_gtk_font_dialog_button_new)(GtkFontDialog *dialog);
     GtkFontDialog * (*ptr_gtk_font_dialog_button_get_dialog)(GtkFontDialogButton *self);
     void (*ptr_gtk_font_dialog_button_set_dialog)(GtkFontDialogButton *self, GtkFontDialog *dialog);
     GtkFontLevel (*ptr_gtk_font_dialog_button_get_level)(GtkFontDialogButton *self);
@@ -2022,6 +2063,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_gl_area_set_error)(GtkGLArea *area, const GError *error);
     GError * (*ptr_gtk_gl_area_get_error)(GtkGLArea *area);
     GType (*ptr_gtk_graphics_offload_get_type)(void);
+    GtkWidget * (*ptr_gtk_graphics_offload_new)(GtkWidget *child);
     void (*ptr_gtk_graphics_offload_set_child)(GtkGraphicsOffload *self, GtkWidget *child);
     GtkWidget * (*ptr_gtk_graphics_offload_get_child)(GtkGraphicsOffload *self);
     void (*ptr_gtk_graphics_offload_set_enabled)(GtkGraphicsOffload *self, GtkGraphicsOffloadEnabled enabled);
@@ -2052,6 +2094,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_grid_query_child)(GtkGrid *grid, GtkWidget *child, int *column, int *row, int *width, int *height);
     GType (*ptr_gtk_grid_layout_get_type)(void);
     GType (*ptr_gtk_grid_layout_child_get_type)(void);
+    GtkLayoutManager * (*ptr_gtk_grid_layout_new)(void);
     void (*ptr_gtk_grid_layout_set_row_homogeneous)(GtkGridLayout *grid, gboolean homogeneous);
     gboolean (*ptr_gtk_grid_layout_get_row_homogeneous)(GtkGridLayout *grid);
     void (*ptr_gtk_grid_layout_set_row_spacing)(GtkGridLayout *grid, guint spacing);
@@ -2102,6 +2145,7 @@ static struct gtk4Funcs {
     const char* (*ptr_gtk_header_bar_get_decoration_layout)(GtkHeaderBar *bar);
     GType (*ptr_gtk_icon_paintable_get_type)(void);
     GType (*ptr_gtk_icon_theme_get_type)(void);
+    GQuark (*ptr_gtk_icon_theme_error_quark)(void);
     GtkIconTheme* (*ptr_gtk_icon_theme_new)(void);
     GtkIconTheme* (*ptr_gtk_icon_theme_get_for_display)(GdkDisplay *display);
     GdkDisplay * (*ptr_gtk_icon_theme_get_display)(GtkIconTheme *self);
@@ -2171,6 +2215,7 @@ static struct gtk4Funcs {
     const char * (*ptr_gtk_im_multicontext_get_context_id)(GtkIMMulticontext *context);
     void (*ptr_gtk_im_multicontext_set_context_id)(GtkIMMulticontext *context, const char *context_id);
     GType (*ptr_gtk_inscription_get_type)(void);
+    GtkWidget * (*ptr_gtk_inscription_new)(const char *text);
     const char * (*ptr_gtk_inscription_get_text)(GtkInscription *self);
     void (*ptr_gtk_inscription_set_text)(GtkInscription *self, const char *text);
     PangoAttrList * (*ptr_gtk_inscription_get_attributes)(GtkInscription *self);
@@ -2245,8 +2290,10 @@ static struct gtk4Funcs {
     void (*ptr_gtk_label_set_tabs)(GtkLabel *self, PangoTabArray *tabs);
     PangoTabArray * (*ptr_gtk_label_get_tabs)(GtkLabel *self);
     GType (*ptr_gtk_layout_child_get_type)(void);
+    GtkLayoutManager * (*ptr_gtk_layout_child_get_layout_manager)(GtkLayoutChild *layout_child);
     GtkWidget * (*ptr_gtk_layout_child_get_child_widget)(GtkLayoutChild *layout_child);
     GType (*ptr_gtk_layout_manager_get_type)(void);
+    void (*ptr_gtk_layout_manager_measure)(GtkLayoutManager *manager, GtkWidget *widget, GtkOrientation orientation, int for_size, int *minimum, int *natural, int *minimum_baseline, int *natural_baseline);
     void (*ptr_gtk_layout_manager_allocate)(GtkLayoutManager *manager, GtkWidget *widget, int width, int height, int baseline);
     GtkSizeRequestMode (*ptr_gtk_layout_manager_get_request_mode)(GtkLayoutManager *manager);
     GtkWidget * (*ptr_gtk_layout_manager_get_widget)(GtkLayoutManager *manager);
@@ -2324,12 +2371,14 @@ static struct gtk4Funcs {
     void (*ptr_gtk_list_box_set_show_separators)(GtkListBox *box, gboolean show_separators);
     gboolean (*ptr_gtk_list_box_get_show_separators)(GtkListBox *box);
     GType (*ptr_gtk_list_header_get_type)(void);
+    gpointer (*ptr_gtk_list_header_get_item)(GtkListHeader *self);
     guint (*ptr_gtk_list_header_get_start)(GtkListHeader *self);
     guint (*ptr_gtk_list_header_get_end)(GtkListHeader *self);
     guint (*ptr_gtk_list_header_get_n_items)(GtkListHeader *self);
     void (*ptr_gtk_list_header_set_child)(GtkListHeader *self, GtkWidget *child);
     GtkWidget * (*ptr_gtk_list_header_get_child)(GtkListHeader *self);
     GType (*ptr_gtk_list_item_get_type)(void);
+    gpointer (*ptr_gtk_list_item_get_item)(GtkListItem *self);
     guint (*ptr_gtk_list_item_get_position)(GtkListItem *self);
     gboolean (*ptr_gtk_list_item_get_selected)(GtkListItem *self);
     gboolean (*ptr_gtk_list_item_get_selectable)(GtkListItem *self);
@@ -2371,14 +2420,17 @@ static struct gtk4Funcs {
     GtkTextDirection (*ptr_gtk_get_locale_direction)(void);
     void (*ptr_gtk_init)(void);
     GType (*ptr_gtk_map_list_model_get_type)(void);
+    GtkMapListModel * (*ptr_gtk_map_list_model_new)(GListModel *model, GtkMapListModelMapFunc map_func, gpointer user_data, GDestroyNotify user_destroy);
     void (*ptr_gtk_map_list_model_set_map_func)(GtkMapListModel *self, GtkMapListModelMapFunc map_func, gpointer user_data, GDestroyNotify user_destroy);
     void (*ptr_gtk_map_list_model_set_model)(GtkMapListModel *self, GListModel *model);
     GListModel * (*ptr_gtk_map_list_model_get_model)(GtkMapListModel *self);
     gboolean (*ptr_gtk_map_list_model_has_map)(GtkMapListModel *self);
     GType (*ptr_gtk_media_controls_get_type)(void);
+    GtkWidget* (*ptr_gtk_media_controls_new)(GtkMediaStream *stream);
     GtkMediaStream* (*ptr_gtk_media_controls_get_media_stream)(GtkMediaControls *controls);
     void (*ptr_gtk_media_controls_set_media_stream)(GtkMediaControls *controls, GtkMediaStream *stream);
     GType (*ptr_gtk_media_file_get_type)(void);
+    GtkMediaStream * (*ptr_gtk_media_file_new)(void);
     GtkMediaStream * (*ptr_gtk_media_file_new_for_filename)(const char *filename);
     GtkMediaStream * (*ptr_gtk_media_file_new_for_resource)(const char *resource_path);
     GtkMediaStream * (*ptr_gtk_media_file_new_for_file)(GFile *file);
@@ -2391,6 +2443,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_media_file_set_input_stream)(GtkMediaFile *self, GInputStream *stream);
     GInputStream * (*ptr_gtk_media_file_get_input_stream)(GtkMediaFile *self);
     GType (*ptr_gtk_media_stream_get_type)(void);
+    gboolean (*ptr_gtk_media_stream_is_prepared)(GtkMediaStream *self);
     const GError * (*ptr_gtk_media_stream_get_error)(GtkMediaStream *self);
     gboolean (*ptr_gtk_media_stream_has_audio)(GtkMediaStream *self);
     gboolean (*ptr_gtk_media_stream_has_video)(GtkMediaStream *self);
@@ -2460,21 +2513,28 @@ static struct gtk4Funcs {
     void (*ptr_gtk_mount_operation_set_display)(GtkMountOperation *op, GdkDisplay *display);
     GdkDisplay * (*ptr_gtk_mount_operation_get_display)(GtkMountOperation *op);
     GType (*ptr_gtk_multi_filter_get_type)(void);
+    void (*ptr_gtk_multi_filter_append)(GtkMultiFilter *self, GtkFilter *filter);
     void (*ptr_gtk_multi_filter_remove)(GtkMultiFilter *self, guint position);
     GType (*ptr_gtk_any_filter_get_type)(void);
+    GtkAnyFilter * (*ptr_gtk_any_filter_new)(void);
     GType (*ptr_gtk_every_filter_get_type)(void);
+    GtkEveryFilter * (*ptr_gtk_every_filter_new)(void);
     GType (*ptr_gtk_multi_selection_get_type)(void);
+    GtkMultiSelection * (*ptr_gtk_multi_selection_new)(GListModel *model);
     GListModel * (*ptr_gtk_multi_selection_get_model)(GtkMultiSelection *self);
     void (*ptr_gtk_multi_selection_set_model)(GtkMultiSelection *self, GListModel *model);
     GType (*ptr_gtk_multi_sorter_get_type)(void);
+    GtkMultiSorter * (*ptr_gtk_multi_sorter_new)(void);
     void (*ptr_gtk_multi_sorter_append)(GtkMultiSorter *self, GtkSorter *sorter);
     void (*ptr_gtk_multi_sorter_remove)(GtkMultiSorter *self, guint position);
+    GType (*ptr_gtk_native_get_type)(void);
     void (*ptr_gtk_native_unrealize)(GtkNative *self);
     GtkNative * (*ptr_gtk_native_get_for_surface)(GdkSurface *surface);
     GdkSurface* (*ptr_gtk_native_get_surface)(GtkNative *self);
     GskRenderer* (*ptr_gtk_native_get_renderer)(GtkNative *self);
     void (*ptr_gtk_native_get_surface_transform)(GtkNative *self, double *x, double *y);
     GType (*ptr_gtk_native_dialog_get_type)(void);
+    void (*ptr_gtk_native_dialog_show)(GtkNativeDialog *self);
     void (*ptr_gtk_native_dialog_hide)(GtkNativeDialog *self);
     void (*ptr_gtk_native_dialog_destroy)(GtkNativeDialog *self);
     gboolean (*ptr_gtk_native_dialog_get_visible)(GtkNativeDialog *self);
@@ -2485,6 +2545,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_native_dialog_set_transient_for)(GtkNativeDialog *self, GtkWindow *parent);
     GtkWindow * (*ptr_gtk_native_dialog_get_transient_for)(GtkNativeDialog *self);
     GType (*ptr_gtk_no_selection_get_type)(void);
+    GtkNoSelection * (*ptr_gtk_no_selection_new)(GListModel *model);
     GListModel * (*ptr_gtk_no_selection_get_model)(GtkNoSelection *self);
     void (*ptr_gtk_no_selection_set_model)(GtkNoSelection *self, GListModel *model);
     GType (*ptr_gtk_notebook_get_type)(void);
@@ -2536,6 +2597,7 @@ static struct gtk4Funcs {
     GtkWidget* (*ptr_gtk_notebook_page_get_child)(GtkNotebookPage *page);
     GListModel* (*ptr_gtk_notebook_get_pages)(GtkNotebook *notebook);
     GType (*ptr_gtk_numeric_sorter_get_type)(void);
+    GtkNumericSorter * (*ptr_gtk_numeric_sorter_new)(GtkExpression *expression);
     GtkExpression * (*ptr_gtk_numeric_sorter_get_expression)(GtkNumericSorter *self);
     void (*ptr_gtk_numeric_sorter_set_expression)(GtkNumericSorter *self, GtkExpression *expression);
     GtkSortType (*ptr_gtk_numeric_sorter_get_sort_order)(GtkNumericSorter *self);
@@ -2555,6 +2617,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_overlay_set_clip_overlay)(GtkOverlay *overlay, GtkWidget *widget, gboolean clip_overlay);
     GType (*ptr_gtk_overlay_layout_get_type)(void);
     GType (*ptr_gtk_overlay_layout_child_get_type)(void);
+    GtkLayoutManager * (*ptr_gtk_overlay_layout_new)(void);
     void (*ptr_gtk_overlay_layout_child_set_measure)(GtkOverlayLayoutChild *child, gboolean measure);
     gboolean (*ptr_gtk_overlay_layout_child_get_measure)(GtkOverlayLayoutChild *child);
     void (*ptr_gtk_overlay_layout_child_set_clip_overlay)(GtkOverlayLayoutChild *child, gboolean clip_overlay);
@@ -2588,7 +2651,9 @@ static struct gtk4Funcs {
     void (*ptr_gtk_password_entry_set_extra_menu)(GtkPasswordEntry *entry, GMenuModel *model);
     GMenuModel * (*ptr_gtk_password_entry_get_extra_menu)(GtkPasswordEntry *entry);
     GType (*ptr_gtk_password_entry_buffer_get_type)(void);
+    GtkEntryBuffer * (*ptr_gtk_password_entry_buffer_new)(void);
     GType (*ptr_gtk_picture_get_type)(void);
+    GtkWidget* (*ptr_gtk_picture_new)(void);
     GtkWidget* (*ptr_gtk_picture_new_for_paintable)(GdkPaintable *paintable);
     GtkWidget* (*ptr_gtk_picture_new_for_pixbuf)(GdkPixbuf *pixbuf);
     GtkWidget* (*ptr_gtk_picture_new_for_file)(GFile *file);
@@ -2652,6 +2717,7 @@ static struct gtk4Funcs {
     GtkPrintSettings * (*ptr_gtk_print_setup_get_print_settings)(GtkPrintSetup *setup);
     GtkPageSetup * (*ptr_gtk_print_setup_get_page_setup)(GtkPrintSetup *setup);
     GType (*ptr_gtk_print_dialog_get_type)(void);
+    GtkPrintDialog* (*ptr_gtk_print_dialog_new)(void);
     const char * (*ptr_gtk_print_dialog_get_title)(GtkPrintDialog *self);
     void (*ptr_gtk_print_dialog_set_title)(GtkPrintDialog *self, const char *title);
     const char * (*ptr_gtk_print_dialog_get_accept_label)(GtkPrintDialog *self);
@@ -2708,6 +2774,7 @@ static struct gtk4Funcs {
     int (*ptr_gtk_range_get_round_digits)(GtkRange *range);
     GType (*ptr_gtk_recent_info_get_type)(void);
     GType (*ptr_gtk_recent_manager_get_type)(void);
+    GQuark (*ptr_gtk_recent_manager_error_quark)(void);
     GtkRecentManager* (*ptr_gtk_recent_manager_new)(void);
     GtkRecentManager* (*ptr_gtk_recent_manager_get_default)(void);
     gboolean (*ptr_gtk_recent_manager_add_item)(GtkRecentManager *manager, const char *uri);
@@ -2754,6 +2821,7 @@ static struct gtk4Funcs {
     GtkRevealerTransitionType (*ptr_gtk_revealer_get_transition_type)(GtkRevealer *revealer);
     void (*ptr_gtk_revealer_set_child)(GtkRevealer *revealer, GtkWidget *child);
     GtkWidget * (*ptr_gtk_revealer_get_child)(GtkRevealer *revealer);
+    GType (*ptr_gtk_root_get_type)(void);
     void (*ptr_gtk_root_set_focus)(GtkRoot *self, GtkWidget *focus);
     GtkWidget * (*ptr_gtk_root_get_focus)(GtkRoot *self);
     GType (*ptr_gtk_scale_get_type)(void);
@@ -2863,10 +2931,13 @@ static struct gtk4Funcs {
     GtkInputPurpose (*ptr_gtk_search_entry_get_input_purpose)(GtkSearchEntry *entry);
     void (*ptr_gtk_search_entry_set_input_hints)(GtkSearchEntry *entry, GtkInputHints hints);
     GtkInputHints (*ptr_gtk_search_entry_get_input_hints)(GtkSearchEntry *entry);
+    GType (*ptr_gtk_section_model_get_type)(void);
     void (*ptr_gtk_section_model_sections_changed)(GtkSectionModel *self, guint position, guint n_items);
     GType (*ptr_gtk_selection_filter_model_get_type)(void);
+    GtkSelectionFilterModel * (*ptr_gtk_selection_filter_model_new)(GtkSelectionModel *model);
     void (*ptr_gtk_selection_filter_model_set_model)(GtkSelectionFilterModel *self, GtkSelectionModel *model);
     GtkSelectionModel * (*ptr_gtk_selection_filter_model_get_model)(GtkSelectionFilterModel *self);
+    GType (*ptr_gtk_selection_model_get_type)(void);
     GtkBitset * (*ptr_gtk_selection_model_get_selection)(GtkSelectionModel *model);
     GtkBitset * (*ptr_gtk_selection_model_get_selection_in_range)(GtkSelectionModel *model, guint position, guint n_items);
     gboolean (*ptr_gtk_selection_model_select_item)(GtkSelectionModel *model, guint position, gboolean unselect_rest);
@@ -2884,6 +2955,7 @@ static struct gtk4Funcs {
     GtkSettings* (*ptr_gtk_settings_get_for_display)(GdkDisplay *display);
     void (*ptr_gtk_settings_reset_property)(GtkSettings *settings, const char *name);
     GType (*ptr_gtk_shortcut_get_type)(void);
+    GtkShortcut * (*ptr_gtk_shortcut_new)(GtkShortcutTrigger *trigger, GtkShortcutAction *action);
     GtkShortcutTrigger * (*ptr_gtk_shortcut_get_trigger)(GtkShortcut *self);
     void (*ptr_gtk_shortcut_set_trigger)(GtkShortcut *self, GtkShortcutTrigger *trigger);
     GtkShortcutAction * (*ptr_gtk_shortcut_get_action)(GtkShortcut *self);
@@ -2891,16 +2963,23 @@ static struct gtk4Funcs {
     GVariant * (*ptr_gtk_shortcut_get_arguments)(GtkShortcut *self);
     void (*ptr_gtk_shortcut_set_arguments)(GtkShortcut *self, GVariant *args);
     GType (*ptr_gtk_shortcut_action_get_type)(void);
+    char * (*ptr_gtk_shortcut_action_to_string)(GtkShortcutAction *self);
     GtkShortcutAction * (*ptr_gtk_shortcut_action_parse_string)(const char * string);
     void (*ptr_gtk_shortcut_action_print)(GtkShortcutAction *self, GString *string);
     gboolean (*ptr_gtk_shortcut_action_activate)(GtkShortcutAction *self, GtkShortcutActionFlags flags, GtkWidget *widget, GVariant *args);
     GType (*ptr_gtk_nothing_action_get_type)(void);
+    GtkShortcutAction * (*ptr_gtk_nothing_action_get)(void);
     GType (*ptr_gtk_callback_action_get_type)(void);
+    GtkShortcutAction * (*ptr_gtk_callback_action_new)(GtkShortcutFunc callback, gpointer data, GDestroyNotify destroy);
     GType (*ptr_gtk_mnemonic_action_get_type)(void);
+    GtkShortcutAction * (*ptr_gtk_mnemonic_action_get)(void);
     GType (*ptr_gtk_activate_action_get_type)(void);
+    GtkShortcutAction * (*ptr_gtk_activate_action_get)(void);
     GType (*ptr_gtk_signal_action_get_type)(void);
+    GtkShortcutAction * (*ptr_gtk_signal_action_new)(const char *signal_name);
     const char * (*ptr_gtk_signal_action_get_signal_name)(GtkSignalAction *self);
     GType (*ptr_gtk_named_action_get_type)(void);
+    GtkShortcutAction * (*ptr_gtk_named_action_new)(const char *name);
     const char * (*ptr_gtk_named_action_get_action_name)(GtkNamedAction *self);
     GType (*ptr_gtk_shortcut_controller_get_type)(void);
     GtkEventController * (*ptr_gtk_shortcut_controller_new)(void);
@@ -2917,6 +2996,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_shortcut_label_set_accelerator)(GtkShortcutLabel *self, const char *accelerator);
     const char* (*ptr_gtk_shortcut_label_get_disabled_text)(GtkShortcutLabel *self);
     void (*ptr_gtk_shortcut_label_set_disabled_text)(GtkShortcutLabel *self, const char *disabled_text);
+    GType (*ptr_gtk_shortcut_manager_get_type)(void);
     GType (*ptr_gtk_shortcuts_group_get_type)(void);
     void (*ptr_gtk_shortcuts_group_add_shortcut)(GtkShortcutsGroup *self, GtkShortcutsShortcut *shortcut);
     GType (*ptr_gtk_shortcuts_section_get_type)(void);
@@ -2925,6 +3005,7 @@ static struct gtk4Funcs {
     GType (*ptr_gtk_shortcuts_window_get_type)(void);
     void (*ptr_gtk_shortcuts_window_add_section)(GtkShortcutsWindow *self, GtkShortcutsSection *section);
     GType (*ptr_gtk_shortcut_trigger_get_type)(void);
+    GtkShortcutTrigger * (*ptr_gtk_shortcut_trigger_parse_string)(const char *string);
     char * (*ptr_gtk_shortcut_trigger_to_string)(GtkShortcutTrigger *self);
     void (*ptr_gtk_shortcut_trigger_print)(GtkShortcutTrigger *self, GString *string);
     char * (*ptr_gtk_shortcut_trigger_to_label)(GtkShortcutTrigger *self, GdkDisplay *display);
@@ -2934,17 +3015,22 @@ static struct gtk4Funcs {
     int (*ptr_gtk_shortcut_trigger_compare)(gconstpointer trigger1, gconstpointer trigger2);
     GdkKeyMatch (*ptr_gtk_shortcut_trigger_trigger)(GtkShortcutTrigger *self, GdkEvent *event, gboolean enable_mnemonics);
     GType (*ptr_gtk_never_trigger_get_type)(void);
+    GtkShortcutTrigger * (*ptr_gtk_never_trigger_get)(void);
     GType (*ptr_gtk_keyval_trigger_get_type)(void);
+    GtkShortcutTrigger * (*ptr_gtk_keyval_trigger_new)(guint keyval, GdkModifierType modifiers);
     GdkModifierType (*ptr_gtk_keyval_trigger_get_modifiers)(GtkKeyvalTrigger *self);
     guint (*ptr_gtk_keyval_trigger_get_keyval)(GtkKeyvalTrigger *self);
     GType (*ptr_gtk_mnemonic_trigger_get_type)(void);
+    GtkShortcutTrigger * (*ptr_gtk_mnemonic_trigger_new)(guint keyval);
     guint (*ptr_gtk_mnemonic_trigger_get_keyval)(GtkMnemonicTrigger *self);
     GType (*ptr_gtk_alternative_trigger_get_type)(void);
+    GtkShortcutTrigger * (*ptr_gtk_alternative_trigger_new)(GtkShortcutTrigger *first, GtkShortcutTrigger *second);
     GtkShortcutTrigger * (*ptr_gtk_alternative_trigger_get_first)(GtkAlternativeTrigger *self);
     GtkShortcutTrigger * (*ptr_gtk_alternative_trigger_get_second)(GtkAlternativeTrigger *self);
     GType (*ptr_gtk_signal_list_item_factory_get_type)(void);
     GtkListItemFactory * (*ptr_gtk_signal_list_item_factory_new)(void);
     GType (*ptr_gtk_single_selection_get_type)(void);
+    GtkSingleSelection * (*ptr_gtk_single_selection_new)(GListModel *model);
     GListModel * (*ptr_gtk_single_selection_get_model)(GtkSingleSelection *self);
     void (*ptr_gtk_single_selection_set_model)(GtkSingleSelection *self, GListModel *model);
     guint (*ptr_gtk_single_selection_get_selected)(GtkSingleSelection *self);
@@ -2963,12 +3049,14 @@ static struct gtk4Funcs {
     GSList * (*ptr_gtk_size_group_get_widgets)(GtkSizeGroup *size_group);
     int (*ptr_gtk_distribute_natural_allocation)(int extra_space, guint n_requested_sizes, GtkRequestedSize *sizes);
     GType (*ptr_gtk_slice_list_model_get_type)(void);
+    GtkSliceListModel * (*ptr_gtk_slice_list_model_new)(GListModel *model, guint offset, guint size);
     void (*ptr_gtk_slice_list_model_set_model)(GtkSliceListModel *self, GListModel *model);
     GListModel * (*ptr_gtk_slice_list_model_get_model)(GtkSliceListModel *self);
     void (*ptr_gtk_slice_list_model_set_offset)(GtkSliceListModel *self, guint offset);
     guint (*ptr_gtk_slice_list_model_get_offset)(GtkSliceListModel *self);
     void (*ptr_gtk_slice_list_model_set_size)(GtkSliceListModel *self, guint size);
     guint (*ptr_gtk_slice_list_model_get_size)(GtkSliceListModel *self);
+    GType (*ptr_gtk_snapshot_get_type)(void);
     GtkSnapshot * (*ptr_gtk_snapshot_new)(void);
     GskRenderNode * (*ptr_gtk_snapshot_free_to_node)(GtkSnapshot *snapshot);
     GdkPaintable * (*ptr_gtk_snapshot_free_to_paintable)(GtkSnapshot *snapshot, const graphene_size_t *size);
@@ -3017,9 +3105,11 @@ static struct gtk4Funcs {
     void (*ptr_gtk_snapshot_append_fill)(GtkSnapshot *snapshot, GskPath *path, GskFillRule fill_rule, const GdkRGBA *color);
     void (*ptr_gtk_snapshot_append_stroke)(GtkSnapshot *snapshot, GskPath *path, const GskStroke *stroke, const GdkRGBA *color);
     GType (*ptr_gtk_sorter_get_type)(void);
+    GtkOrdering (*ptr_gtk_sorter_compare)(GtkSorter *self, gpointer item1, gpointer item2);
     GtkSorterOrder (*ptr_gtk_sorter_get_order)(GtkSorter *self);
     void (*ptr_gtk_sorter_changed)(GtkSorter *self, GtkSorterChange change);
     GType (*ptr_gtk_sort_list_model_get_type)(void);
+    GtkSortListModel * (*ptr_gtk_sort_list_model_new)(GListModel *model, GtkSorter *sorter);
     void (*ptr_gtk_sort_list_model_set_sorter)(GtkSortListModel *self, GtkSorter *sorter);
     GtkSorter * (*ptr_gtk_sort_list_model_get_sorter)(GtkSortListModel *self);
     void (*ptr_gtk_sort_list_model_set_section_sorter)(GtkSortListModel *self, GtkSorter *sorter);
@@ -3112,6 +3202,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_stack_switcher_set_stack)(GtkStackSwitcher *switcher, GtkStack *stack);
     GtkStack * (*ptr_gtk_stack_switcher_get_stack)(GtkStackSwitcher *switcher);
     GType (*ptr_gtk_string_filter_get_type)(void);
+    GtkStringFilter * (*ptr_gtk_string_filter_new)(GtkExpression *expression);
     const char * (*ptr_gtk_string_filter_get_search)(GtkStringFilter *self);
     void (*ptr_gtk_string_filter_set_search)(GtkStringFilter *self, const char *search);
     GtkExpression * (*ptr_gtk_string_filter_get_expression)(GtkStringFilter *self);
@@ -3121,14 +3212,17 @@ static struct gtk4Funcs {
     GtkStringFilterMatchMode (*ptr_gtk_string_filter_get_match_mode)(GtkStringFilter *self);
     void (*ptr_gtk_string_filter_set_match_mode)(GtkStringFilter *self, GtkStringFilterMatchMode mode);
     GType (*ptr_gtk_string_object_get_type)(void);
+    GtkStringObject * (*ptr_gtk_string_object_new)(const char *string);
     const char * (*ptr_gtk_string_object_get_string)(GtkStringObject *self);
     GType (*ptr_gtk_string_list_get_type)(void);
+    GtkStringList * (*ptr_gtk_string_list_new)(const char * const *strings);
     void (*ptr_gtk_string_list_append)(GtkStringList *self, const char *string);
     void (*ptr_gtk_string_list_take)(GtkStringList *self, char *string);
     void (*ptr_gtk_string_list_remove)(GtkStringList *self, guint position);
     void (*ptr_gtk_string_list_splice)(GtkStringList *self, guint position, guint n_removals, const char * const *additions);
     const char * (*ptr_gtk_string_list_get_string)(GtkStringList *self, guint position);
     GType (*ptr_gtk_string_sorter_get_type)(void);
+    GtkStringSorter * (*ptr_gtk_string_sorter_new)(GtkExpression *expression);
     GtkExpression * (*ptr_gtk_string_sorter_get_expression)(GtkStringSorter *self);
     void (*ptr_gtk_string_sorter_set_expression)(GtkStringSorter *self, GtkExpression *expression);
     gboolean (*ptr_gtk_string_sorter_get_ignore_case)(GtkStringSorter *self);
@@ -3143,6 +3237,7 @@ static struct gtk4Funcs {
     gboolean (*ptr_gtk_switch_get_active)(GtkSwitch *self);
     void (*ptr_gtk_switch_set_state)(GtkSwitch *self, gboolean state);
     gboolean (*ptr_gtk_switch_get_state)(GtkSwitch *self);
+    GType (*ptr_gtk_symbolic_paintable_get_type)(void);
     gboolean (*ptr_gtk_test_accessible_has_property)(GtkAccessible *accessible, GtkAccessibleProperty property);
     gboolean (*ptr_gtk_test_accessible_has_relation)(GtkAccessible *accessible, GtkAccessibleRelation relation);
     gboolean (*ptr_gtk_test_accessible_has_state)(GtkAccessible *accessible, GtkAccessibleState state);
@@ -3263,6 +3358,7 @@ static struct gtk4Funcs {
     GtkWidget** (*ptr_gtk_text_child_anchor_get_widgets)(GtkTextChildAnchor *anchor, guint *out_len);
     gboolean (*ptr_gtk_text_child_anchor_get_deleted)(GtkTextChildAnchor *anchor);
     GType (*ptr_gtk_text_iter_get_type)(void);
+    GtkTextBuffer* (*ptr_gtk_text_iter_get_buffer)(const GtkTextIter *iter);
     GtkTextIter* (*ptr_gtk_text_iter_copy)(const GtkTextIter *iter);
     void (*ptr_gtk_text_iter_free)(GtkTextIter *iter);
     void (*ptr_gtk_text_iter_assign)(GtkTextIter *iter, const GtkTextIter *other);
@@ -3463,6 +3559,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_tooltip_set_custom)(GtkTooltip *tooltip, GtkWidget *custom_widget);
     void (*ptr_gtk_tooltip_set_tip_area)(GtkTooltip *tooltip, const GdkRectangle *rect);
     GType (*ptr_gtk_tree_expander_get_type)(void);
+    GtkWidget * (*ptr_gtk_tree_expander_new)(void);
     GtkWidget * (*ptr_gtk_tree_expander_get_child)(GtkTreeExpander *self);
     void (*ptr_gtk_tree_expander_set_child)(GtkTreeExpander *self, GtkWidget *child);
     gpointer (*ptr_gtk_tree_expander_get_item)(GtkTreeExpander *self);
@@ -3476,6 +3573,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_tree_expander_set_hide_expander)(GtkTreeExpander *self, gboolean hide_expander);
     GType (*ptr_gtk_tree_list_model_get_type)(void);
     GType (*ptr_gtk_tree_list_row_get_type)(void);
+    GtkTreeListModel * (*ptr_gtk_tree_list_model_new)(GListModel *root, gboolean passthrough, gboolean autoexpand, GtkTreeListModelCreateModelFunc create_func, gpointer user_data, GDestroyNotify user_destroy);
     GListModel * (*ptr_gtk_tree_list_model_get_model)(GtkTreeListModel *self);
     gboolean (*ptr_gtk_tree_list_model_get_passthrough)(GtkTreeListModel *self);
     void (*ptr_gtk_tree_list_model_set_autoexpand)(GtkTreeListModel *self, gboolean autoexpand);
@@ -3492,6 +3590,7 @@ static struct gtk4Funcs {
     GtkTreeListRow * (*ptr_gtk_tree_list_row_get_parent)(GtkTreeListRow *self);
     GtkTreeListRow * (*ptr_gtk_tree_list_row_get_child_row)(GtkTreeListRow *self, guint position);
     GType (*ptr_gtk_tree_list_row_sorter_get_type)(void);
+    GtkTreeListRowSorter * (*ptr_gtk_tree_list_row_sorter_new)(GtkSorter *sorter);
     GtkSorter * (*ptr_gtk_tree_list_row_sorter_get_sorter)(GtkTreeListRowSorter *self);
     void (*ptr_gtk_tree_list_row_sorter_set_sorter)(GtkTreeListRowSorter *self, GtkSorter *sorter);
     GType (*ptr_gtk_assistant_page_type_get_type)(void);
@@ -3616,6 +3715,7 @@ static struct gtk4Funcs {
     GType (*ptr_gtk_print_operation_action_get_type)(void);
     GType (*ptr_gtk_print_error_get_type)(void);
     GType (*ptr_gtk_uri_launcher_get_type)(void);
+    GtkUriLauncher * (*ptr_gtk_uri_launcher_new)(const char *uri);
     const char * (*ptr_gtk_uri_launcher_get_uri)(GtkUriLauncher *self);
     void (*ptr_gtk_uri_launcher_set_uri)(GtkUriLauncher *self, const char *uri);
     void (*ptr_gtk_uri_launcher_launch)(GtkUriLauncher *self, GtkWindow *parent, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
@@ -3627,6 +3727,7 @@ static struct gtk4Funcs {
     const char * (*ptr_gtk_check_version)(guint required_major, guint required_minor, guint required_micro);
     guint (*ptr_gtk_get_major_version)(void);
     GType (*ptr_gtk_video_get_type)(void);
+    GtkWidget * (*ptr_gtk_video_new)(void);
     GtkWidget * (*ptr_gtk_video_new_for_media_stream)(GtkMediaStream *stream);
     GtkWidget * (*ptr_gtk_video_new_for_file)(GFile *file);
     GtkWidget * (*ptr_gtk_video_new_for_filename)(const char *filename);
@@ -3836,6 +3937,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_widget_class_set_accessible_role)(GtkWidgetClass *widget_class, GtkAccessibleRole accessible_role);
     GtkAccessibleRole (*ptr_gtk_widget_class_get_accessible_role)(GtkWidgetClass *widget_class);
     GType (*ptr_gtk_widget_paintable_get_type)(void);
+    GdkPaintable * (*ptr_gtk_widget_paintable_new)(GtkWidget *widget);
     GtkWidget * (*ptr_gtk_widget_paintable_get_widget)(GtkWidgetPaintable *self);
     void (*ptr_gtk_widget_paintable_set_widget)(GtkWidgetPaintable *self, GtkWidget *widget);
     GType (*ptr_gtk_window_get_type)(void);
@@ -3902,6 +4004,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_window_set_handle_menubar_accel)(GtkWindow *window, gboolean handle_menubar_accel);
     gboolean (*ptr_gtk_window_get_handle_menubar_accel)(GtkWindow *window);
     GType (*ptr_gtk_window_controls_get_type)(void);
+    GtkWidget * (*ptr_gtk_window_controls_new)(GtkPackType side);
     GtkPackType (*ptr_gtk_window_controls_get_side)(GtkWindowControls *self);
     void (*ptr_gtk_window_controls_set_side)(GtkWindowControls *self, GtkPackType side);
     const char * (*ptr_gtk_window_controls_get_decoration_layout)(GtkWindowControls *self);
@@ -3913,6 +4016,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_window_group_remove_window)(GtkWindowGroup *window_group, GtkWindow *window);
     GList * (*ptr_gtk_window_group_list_windows)(GtkWindowGroup *window_group);
     GType (*ptr_gtk_window_handle_get_type)(void);
+    GtkWidget * (*ptr_gtk_window_handle_new)(void);
     GtkWidget * (*ptr_gtk_window_handle_get_child)(GtkWindowHandle *self);
     void (*ptr_gtk_window_handle_set_child)(GtkWindowHandle *self, GtkWidget *child);
     GType (*ptr_gdk_broadway_cursor_get_type)(void);
@@ -4071,6 +4175,7 @@ static struct gtk4Funcs {
     void (*ptr_gdk_content_deserialize_async)(GInputStream *stream, const char *mime_type, GType type, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
     gboolean (*ptr_gdk_content_deserialize_finish)(GAsyncResult *result, GValue *value, GError **error);
     GType (*ptr_gdk_content_formats_get_type)(void);
+    const char * (*ptr_gdk_intern_mime_type)(const char *string);
     GdkContentFormats * (*ptr_gdk_content_formats_new)(const char **mime_types, guint n_mime_types);
     GdkContentFormats * (*ptr_gdk_content_formats_new_for_gtype)(GType type);
     GdkContentFormats * (*ptr_gdk_content_formats_parse)(const char *string);
@@ -4210,6 +4315,7 @@ static struct gtk4Funcs {
     GType (*ptr_gdk_dmabuf_texture_get_type)(void);
     GQuark (*ptr_gdk_dmabuf_error_quark)(void);
     GType (*ptr_gdk_dmabuf_texture_builder_get_type)(void);
+    GdkDmabufTextureBuilder* (*ptr_gdk_dmabuf_texture_builder_new)(void);
     GdkDisplay * (*ptr_gdk_dmabuf_texture_builder_get_display)(GdkDmabufTextureBuilder *self);
     void (*ptr_gdk_dmabuf_texture_builder_set_display)(GdkDmabufTextureBuilder *self, GdkDisplay *display);
     unsigned int (*ptr_gdk_dmabuf_texture_builder_get_width)(GdkDmabufTextureBuilder *self);
@@ -4248,6 +4354,7 @@ static struct gtk4Funcs {
     void (*ptr_gdk_drag_set_hotspot)(GdkDrag *drag, int hot_x, int hot_y);
     GdkContentProvider * (*ptr_gdk_drag_get_content)(GdkDrag *drag);
     GdkSurface * (*ptr_gdk_drag_get_surface)(GdkDrag *drag);
+    GType (*ptr_gdk_drag_surface_get_type)(void);
     GType (*ptr_gdk_drag_surface_size_get_type)(void);
     void (*ptr_gdk_drag_surface_size_set_size)(GdkDragSurfaceSize *size, int width, int height);
     GType (*ptr_gdk_draw_context_get_type)(void);
@@ -4386,6 +4493,7 @@ static struct gtk4Funcs {
     gint64 (*ptr_gdk_frame_timings_get_predicted_presentation_time)(GdkFrameTimings *timings);
     GType (*ptr_gdk_frame_timings_get_type)(void);
     GType (*ptr_gdk_gl_context_get_type)(void);
+    GQuark (*ptr_gdk_gl_error_quark)(void);
     GdkDisplay * (*ptr_gdk_gl_context_get_display)(GdkGLContext *context);
     GdkSurface * (*ptr_gdk_gl_context_get_surface)(GdkGLContext *context);
     GdkGLContext * (*ptr_gdk_gl_context_get_shared_context)(GdkGLContext *context);
@@ -4411,6 +4519,7 @@ static struct gtk4Funcs {
     GdkTexture * (*ptr_gdk_gl_texture_new)(GdkGLContext *context, guint id, int width, int height, GDestroyNotify destroy, gpointer data);
     void (*ptr_gdk_gl_texture_release)(GdkGLTexture *self);
     GType (*ptr_gdk_gl_texture_builder_get_type)(void);
+    GdkGLTextureBuilder * (*ptr_gdk_gl_texture_builder_new)(void);
     GdkGLContext * (*ptr_gdk_gl_texture_builder_get_context)(GdkGLTextureBuilder *self);
     void (*ptr_gdk_gl_texture_builder_set_context)(GdkGLTextureBuilder *self, GdkGLContext *context);
     guint (*ptr_gdk_gl_texture_builder_get_id)(GdkGLTextureBuilder *self);
@@ -4439,6 +4548,7 @@ static struct gtk4Funcs {
     guint32 (*ptr_gdk_keyval_to_unicode)(guint keyval);
     guint (*ptr_gdk_unicode_to_keyval)(guint32 wc);
     const char* (*ptr_gdk_keyval_name)(guint keyval);
+    GType (*ptr_gdk_memory_texture_get_type)(void);
     GdkTexture * (*ptr_gdk_memory_texture_new)(int width, int height, GdkMemoryFormat format, GBytes *bytes, gsize stride);
     GType (*ptr_gdk_monitor_get_type)(void);
     GdkDisplay * (*ptr_gdk_monitor_get_display)(GdkMonitor *monitor);
@@ -4454,6 +4564,7 @@ static struct gtk4Funcs {
     GdkSubpixelLayout (*ptr_gdk_monitor_get_subpixel_layout)(GdkMonitor *monitor);
     gboolean (*ptr_gdk_monitor_is_valid)(GdkMonitor *monitor);
     const char * (*ptr_gdk_monitor_get_description)(GdkMonitor *monitor);
+    GType (*ptr_gdk_paintable_get_type)(void);
     GdkPaintable * (*ptr_gdk_paintable_get_current_image)(GdkPaintable *paintable);
     GdkPaintableFlags (*ptr_gdk_paintable_get_flags)(GdkPaintable *paintable);
     int (*ptr_gdk_paintable_get_intrinsic_width)(GdkPaintable *paintable);
@@ -4465,6 +4576,7 @@ static struct gtk4Funcs {
     GdkPaintable * (*ptr_gdk_paintable_new_empty)(int intrinsic_width, int intrinsic_height);
     cairo_region_t* (*ptr_gdk_pango_layout_get_clip_region)(PangoLayout *layout, int x_origin, int y_origin, const int *index_ranges, int n_ranges);
     cairo_region_t* (*ptr_gdk_pango_layout_line_get_clip_region)(PangoLayoutLine *line, int x_origin, int y_origin, const int *index_ranges, int n_ranges);
+    GType (*ptr_gdk_popup_get_type)(void);
     GdkGravity (*ptr_gdk_popup_get_surface_anchor)(GdkPopup *popup);
     GdkGravity (*ptr_gdk_popup_get_rect_anchor)(GdkPopup *popup);
     GdkSurface * (*ptr_gdk_popup_get_parent)(GdkPopup *popup);
@@ -4540,6 +4652,7 @@ static struct gtk4Funcs {
     GdkGLContext * (*ptr_gdk_surface_create_gl_context)(GdkSurface *surface, GError **error);
     GdkVulkanContext * (*ptr_gdk_surface_create_vulkan_context)(GdkSurface *surface, GError **error);
     GType (*ptr_gdk_texture_get_type)(void);
+    GQuark (*ptr_gdk_texture_error_quark)(void);
     GdkTexture * (*ptr_gdk_texture_new_for_pixbuf)(GdkPixbuf *pixbuf);
     GdkTexture * (*ptr_gdk_texture_new_from_resource)(const char *resource_path);
     GdkTexture * (*ptr_gdk_texture_new_from_file)(GFile *file, GError **error);
@@ -4563,6 +4676,7 @@ static struct gtk4Funcs {
     GdkMemoryFormat (*ptr_gdk_texture_downloader_get_format)(const GdkTextureDownloader *self);
     void (*ptr_gdk_texture_downloader_download_into)(const GdkTextureDownloader *self, guchar *data, gsize stride);
     GBytes * (*ptr_gdk_texture_downloader_download_bytes)(const GdkTextureDownloader *self, gsize *out_stride);
+    GType (*ptr_gdk_toplevel_get_type)(void);
     gboolean (*ptr_gdk_toplevel_minimize)(GdkToplevel *toplevel);
     gboolean (*ptr_gdk_toplevel_lower)(GdkToplevel *toplevel);
     void (*ptr_gdk_toplevel_focus)(GdkToplevel *toplevel, guint32 timestamp);
@@ -4600,6 +4714,7 @@ static struct gtk4Funcs {
     void (*ptr_gdk_toplevel_size_set_min_size)(GdkToplevelSize *size, int min_width, int min_height);
     void (*ptr_gdk_toplevel_size_set_shadow_width)(GdkToplevelSize *size, int left, int right, int top, int bottom);
     GType (*ptr_gdk_vulkan_context_get_type)(void);
+    GQuark (*ptr_gdk_vulkan_error_quark)(void);
     GType (*ptr_gsk_broadway_renderer_get_type)(void);
     GskRenderer * (*ptr_gsk_broadway_renderer_new)(void);
     GType (*ptr_gsk_gl_renderer_get_type)(void);
@@ -4626,6 +4741,7 @@ static struct gtk4Funcs {
     GType (*ptr_gsk_path_foreach_flags_get_type)(void);
     GType (*ptr_gsk_shader_args_builder_get_type)(void);
     GType (*ptr_gsk_gl_shader_get_type)(void);
+    GskGLShader * (*ptr_gsk_gl_shader_new_from_bytes)(GBytes *sourcecode);
     GskGLShader * (*ptr_gsk_gl_shader_new_from_resource)(const char *resource_path);
     gboolean (*ptr_gsk_gl_shader_compile)(GskGLShader *shader, GskRenderer *renderer, GError **error);
     GBytes * (*ptr_gsk_gl_shader_get_source)(GskGLShader *shader);
@@ -5309,6 +5425,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_file_chooser_get_choice = cosmo_dlsym(gtk, "gtk_file_chooser_get_choice");
     stub_funcs.ptr_gtk_file_chooser_dialog_get_type = cosmo_dlsym(gtk, "gtk_file_chooser_dialog_get_type");
     stub_funcs.ptr_gtk_file_chooser_native_get_type = cosmo_dlsym(gtk, "gtk_file_chooser_native_get_type");
+    stub_funcs.ptr_gtk_file_chooser_native_new = cosmo_dlsym(gtk, "gtk_file_chooser_native_new");
     stub_funcs.ptr_gtk_file_chooser_native_get_accept_label = cosmo_dlsym(gtk, "gtk_file_chooser_native_get_accept_label");
     stub_funcs.ptr_gtk_file_chooser_native_set_accept_label = cosmo_dlsym(gtk, "gtk_file_chooser_native_set_accept_label");
     stub_funcs.ptr_gtk_file_chooser_native_get_cancel_label = cosmo_dlsym(gtk, "gtk_file_chooser_native_get_cancel_label");
@@ -5517,6 +5634,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_tree_iter_get_type = cosmo_dlsym(gtk, "gtk_tree_iter_get_type");
     stub_funcs.ptr_gtk_tree_path_get_type = cosmo_dlsym(gtk, "gtk_tree_path_get_type");
     stub_funcs.ptr_gtk_tree_row_reference_get_type = cosmo_dlsym(gtk, "gtk_tree_row_reference_get_type");
+    stub_funcs.ptr_gtk_tree_path_new = cosmo_dlsym(gtk, "gtk_tree_path_new");
     stub_funcs.ptr_gtk_tree_path_new_from_string = cosmo_dlsym(gtk, "gtk_tree_path_new_from_string");
     stub_funcs.ptr_gtk_tree_path_new_from_indicesv = cosmo_dlsym(gtk, "gtk_tree_path_new_from_indicesv");
     stub_funcs.ptr_gtk_tree_path_to_string = cosmo_dlsym(gtk, "gtk_tree_path_to_string");
@@ -5856,6 +5974,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_print_context_create_pango_layout = cosmo_dlsym(gtk, "gtk_print_context_create_pango_layout");
     stub_funcs.ptr_gtk_print_context_set_cairo_context = cosmo_dlsym(gtk, "gtk_print_context_set_cairo_context");
     stub_funcs.ptr_gtk_print_operation_get_type = cosmo_dlsym(gtk, "gtk_print_operation_get_type");
+    stub_funcs.ptr_gtk_print_error_quark = cosmo_dlsym(gtk, "gtk_print_error_quark");
     stub_funcs.ptr_gtk_print_operation_new = cosmo_dlsym(gtk, "gtk_print_operation_new");
     stub_funcs.ptr_gtk_print_operation_set_default_page_setup = cosmo_dlsym(gtk, "gtk_print_operation_set_default_page_setup");
     stub_funcs.ptr_gtk_print_operation_get_default_page_setup = cosmo_dlsym(gtk, "gtk_print_operation_get_default_page_setup");
@@ -5970,6 +6089,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_print_settings_to_gvariant = cosmo_dlsym(gtk, "gtk_print_settings_to_gvariant");
     stub_funcs.ptr_gtk_print_settings_new_from_gvariant = cosmo_dlsym(gtk, "gtk_print_settings_new_from_gvariant");
     stub_funcs.ptr_gtk_at_spi_socket_get_type = cosmo_dlsym(gtk, "gtk_at_spi_socket_get_type");
+    stub_funcs.ptr_gtk_at_spi_socket_new = cosmo_dlsym(gtk, "gtk_at_spi_socket_new");
     stub_funcs.ptr_gtk_at_spi_socket_get_bus_name = cosmo_dlsym(gtk, "gtk_at_spi_socket_get_bus_name");
     stub_funcs.ptr_gtk_at_spi_socket_get_object_path = cosmo_dlsym(gtk, "gtk_at_spi_socket_get_object_path");
     stub_funcs.ptr_gtk_about_dialog_get_type = cosmo_dlsym(gtk, "gtk_about_dialog_get_type");
@@ -6015,6 +6135,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_accelerator_get_label_with_keycode = cosmo_dlsym(gtk, "gtk_accelerator_get_label_with_keycode");
     stub_funcs.ptr_gtk_accelerator_get_default_mod_mask = cosmo_dlsym(gtk, "gtk_accelerator_get_default_mod_mask");
     stub_funcs.ptr_gtk_accelerator_valid = cosmo_dlsym(gtk, "gtk_accelerator_valid");
+    stub_funcs.ptr_gtk_accessible_get_type = cosmo_dlsym(gtk, "gtk_accessible_get_type");
     stub_funcs.ptr_gtk_accessible_get_platform_state = cosmo_dlsym(gtk, "gtk_accessible_get_platform_state");
     stub_funcs.ptr_gtk_accessible_get_accessible_parent = cosmo_dlsym(gtk, "gtk_accessible_get_accessible_parent");
     stub_funcs.ptr_gtk_accessible_set_accessible_parent = cosmo_dlsym(gtk, "gtk_accessible_set_accessible_parent");
@@ -6037,6 +6158,8 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_accessible_list_new_from_list = cosmo_dlsym(gtk, "gtk_accessible_list_new_from_list");
     stub_funcs.ptr_gtk_accessible_list_new_from_array = cosmo_dlsym(gtk, "gtk_accessible_list_new_from_array");
     stub_funcs.ptr_gtk_accessible_announce = cosmo_dlsym(gtk, "gtk_accessible_announce");
+    stub_funcs.ptr_gtk_accessible_range_get_type = cosmo_dlsym(gtk, "gtk_accessible_range_get_type");
+    stub_funcs.ptr_gtk_accessible_text_get_type = cosmo_dlsym(gtk, "gtk_accessible_text_get_type");
     stub_funcs.ptr_gtk_accessible_text_update_selection_bound = cosmo_dlsym(gtk, "gtk_accessible_text_update_selection_bound");
     stub_funcs.ptr_gtk_accessible_text_update_contents = cosmo_dlsym(gtk, "gtk_accessible_text_update_contents");
     stub_funcs.ptr_gtk_actionable_get_type = cosmo_dlsym(gtk, "gtk_actionable_get_type");
@@ -6123,9 +6246,11 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_aspect_frame_set_child = cosmo_dlsym(gtk, "gtk_aspect_frame_set_child");
     stub_funcs.ptr_gtk_aspect_frame_get_child = cosmo_dlsym(gtk, "gtk_aspect_frame_get_child");
     stub_funcs.ptr_gtk_at_context_get_type = cosmo_dlsym(gtk, "gtk_at_context_get_type");
+    stub_funcs.ptr_gtk_at_context_get_accessible = cosmo_dlsym(gtk, "gtk_at_context_get_accessible");
     stub_funcs.ptr_gtk_at_context_get_accessible_role = cosmo_dlsym(gtk, "gtk_at_context_get_accessible_role");
     stub_funcs.ptr_gtk_at_context_create = cosmo_dlsym(gtk, "gtk_at_context_create");
     stub_funcs.ptr_gtk_bin_layout_get_type = cosmo_dlsym(gtk, "gtk_bin_layout_get_type");
+    stub_funcs.ptr_gtk_bin_layout_new = cosmo_dlsym(gtk, "gtk_bin_layout_new");
     stub_funcs.ptr_gtk_bitset_get_type = cosmo_dlsym(gtk, "gtk_bitset_get_type");
     stub_funcs.ptr_gtk_bitset_ref = cosmo_dlsym(gtk, "gtk_bitset_ref");
     stub_funcs.ptr_gtk_bitset_unref = cosmo_dlsym(gtk, "gtk_bitset_unref");
@@ -6164,6 +6289,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_bitset_iter_get_value = cosmo_dlsym(gtk, "gtk_bitset_iter_get_value");
     stub_funcs.ptr_gtk_bitset_iter_is_valid = cosmo_dlsym(gtk, "gtk_bitset_iter_is_valid");
     stub_funcs.ptr_gtk_bookmark_list_get_type = cosmo_dlsym(gtk, "gtk_bookmark_list_get_type");
+    stub_funcs.ptr_gtk_bookmark_list_new = cosmo_dlsym(gtk, "gtk_bookmark_list_new");
     stub_funcs.ptr_gtk_bookmark_list_get_filename = cosmo_dlsym(gtk, "gtk_bookmark_list_get_filename");
     stub_funcs.ptr_gtk_bookmark_list_set_attributes = cosmo_dlsym(gtk, "gtk_bookmark_list_set_attributes");
     stub_funcs.ptr_gtk_bookmark_list_get_attributes = cosmo_dlsym(gtk, "gtk_bookmark_list_get_attributes");
@@ -6171,6 +6297,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_bookmark_list_get_io_priority = cosmo_dlsym(gtk, "gtk_bookmark_list_get_io_priority");
     stub_funcs.ptr_gtk_bookmark_list_is_loading = cosmo_dlsym(gtk, "gtk_bookmark_list_is_loading");
     stub_funcs.ptr_gtk_bool_filter_get_type = cosmo_dlsym(gtk, "gtk_bool_filter_get_type");
+    stub_funcs.ptr_gtk_bool_filter_new = cosmo_dlsym(gtk, "gtk_bool_filter_new");
     stub_funcs.ptr_gtk_bool_filter_get_expression = cosmo_dlsym(gtk, "gtk_bool_filter_get_expression");
     stub_funcs.ptr_gtk_bool_filter_set_expression = cosmo_dlsym(gtk, "gtk_bool_filter_set_expression");
     stub_funcs.ptr_gtk_bool_filter_get_invert = cosmo_dlsym(gtk, "gtk_bool_filter_get_invert");
@@ -6195,6 +6322,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_box_insert_child_after = cosmo_dlsym(gtk, "gtk_box_insert_child_after");
     stub_funcs.ptr_gtk_box_reorder_child_after = cosmo_dlsym(gtk, "gtk_box_reorder_child_after");
     stub_funcs.ptr_gtk_box_layout_get_type = cosmo_dlsym(gtk, "gtk_box_layout_get_type");
+    stub_funcs.ptr_gtk_box_layout_new = cosmo_dlsym(gtk, "gtk_box_layout_new");
     stub_funcs.ptr_gtk_box_layout_set_homogeneous = cosmo_dlsym(gtk, "gtk_box_layout_set_homogeneous");
     stub_funcs.ptr_gtk_box_layout_get_homogeneous = cosmo_dlsym(gtk, "gtk_box_layout_get_homogeneous");
     stub_funcs.ptr_gtk_box_layout_set_spacing = cosmo_dlsym(gtk, "gtk_box_layout_set_spacing");
@@ -6211,6 +6339,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_buildable_parse_context_get_element_stack = cosmo_dlsym(gtk, "gtk_buildable_parse_context_get_element_stack");
     stub_funcs.ptr_gtk_buildable_parse_context_get_position = cosmo_dlsym(gtk, "gtk_buildable_parse_context_get_position");
     stub_funcs.ptr_gtk_builder_get_type = cosmo_dlsym(gtk, "gtk_builder_get_type");
+    stub_funcs.ptr_gtk_builder_error_quark = cosmo_dlsym(gtk, "gtk_builder_error_quark");
     stub_funcs.ptr_gtk_builder_new = cosmo_dlsym(gtk, "gtk_builder_new");
     stub_funcs.ptr_gtk_builder_add_from_file = cosmo_dlsym(gtk, "gtk_builder_add_from_file");
     stub_funcs.ptr_gtk_builder_add_from_resource = cosmo_dlsym(gtk, "gtk_builder_add_from_resource");
@@ -6241,7 +6370,9 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_builder_list_item_factory_get_bytes = cosmo_dlsym(gtk, "gtk_builder_list_item_factory_get_bytes");
     stub_funcs.ptr_gtk_builder_list_item_factory_get_resource = cosmo_dlsym(gtk, "gtk_builder_list_item_factory_get_resource");
     stub_funcs.ptr_gtk_builder_list_item_factory_get_scope = cosmo_dlsym(gtk, "gtk_builder_list_item_factory_get_scope");
+    stub_funcs.ptr_gtk_builder_scope_get_type = cosmo_dlsym(gtk, "gtk_builder_scope_get_type");
     stub_funcs.ptr_gtk_builder_cscope_get_type = cosmo_dlsym(gtk, "gtk_builder_cscope_get_type");
+    stub_funcs.ptr_gtk_builder_cscope_new = cosmo_dlsym(gtk, "gtk_builder_cscope_new");
     stub_funcs.ptr_gtk_builder_cscope_add_callback_symbol = cosmo_dlsym(gtk, "gtk_builder_cscope_add_callback_symbol");
     stub_funcs.ptr_gtk_builder_cscope_lookup_callback_symbol = cosmo_dlsym(gtk, "gtk_builder_cscope_lookup_callback_symbol");
     stub_funcs.ptr_gtk_button_get_type = cosmo_dlsym(gtk, "gtk_button_get_type");
@@ -6294,6 +6425,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_center_box_set_shrink_center_last = cosmo_dlsym(gtk, "gtk_center_box_set_shrink_center_last");
     stub_funcs.ptr_gtk_center_box_get_shrink_center_last = cosmo_dlsym(gtk, "gtk_center_box_get_shrink_center_last");
     stub_funcs.ptr_gtk_center_layout_get_type = cosmo_dlsym(gtk, "gtk_center_layout_get_type");
+    stub_funcs.ptr_gtk_center_layout_new = cosmo_dlsym(gtk, "gtk_center_layout_new");
     stub_funcs.ptr_gtk_center_layout_set_orientation = cosmo_dlsym(gtk, "gtk_center_layout_set_orientation");
     stub_funcs.ptr_gtk_center_layout_get_orientation = cosmo_dlsym(gtk, "gtk_center_layout_get_orientation");
     stub_funcs.ptr_gtk_center_layout_set_baseline_position = cosmo_dlsym(gtk, "gtk_center_layout_set_baseline_position");
@@ -6322,6 +6454,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_check_button_get_child = cosmo_dlsym(gtk, "gtk_check_button_get_child");
     stub_funcs.ptr_gtk_check_button_set_child = cosmo_dlsym(gtk, "gtk_check_button_set_child");
     stub_funcs.ptr_gtk_color_dialog_get_type = cosmo_dlsym(gtk, "gtk_color_dialog_get_type");
+    stub_funcs.ptr_gtk_color_dialog_new = cosmo_dlsym(gtk, "gtk_color_dialog_new");
     stub_funcs.ptr_gtk_color_dialog_get_title = cosmo_dlsym(gtk, "gtk_color_dialog_get_title");
     stub_funcs.ptr_gtk_color_dialog_set_title = cosmo_dlsym(gtk, "gtk_color_dialog_set_title");
     stub_funcs.ptr_gtk_color_dialog_get_modal = cosmo_dlsym(gtk, "gtk_color_dialog_get_modal");
@@ -6331,6 +6464,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_color_dialog_choose_rgba = cosmo_dlsym(gtk, "gtk_color_dialog_choose_rgba");
     stub_funcs.ptr_gtk_color_dialog_choose_rgba_finish = cosmo_dlsym(gtk, "gtk_color_dialog_choose_rgba_finish");
     stub_funcs.ptr_gtk_color_dialog_button_get_type = cosmo_dlsym(gtk, "gtk_color_dialog_button_get_type");
+    stub_funcs.ptr_gtk_color_dialog_button_new = cosmo_dlsym(gtk, "gtk_color_dialog_button_new");
     stub_funcs.ptr_gtk_color_dialog_button_get_dialog = cosmo_dlsym(gtk, "gtk_color_dialog_button_get_dialog");
     stub_funcs.ptr_gtk_color_dialog_button_set_dialog = cosmo_dlsym(gtk, "gtk_color_dialog_button_set_dialog");
     stub_funcs.ptr_gtk_color_dialog_button_get_rgba = cosmo_dlsym(gtk, "gtk_color_dialog_button_get_rgba");
@@ -6365,12 +6499,14 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_column_view_get_header_factory = cosmo_dlsym(gtk, "gtk_column_view_get_header_factory");
     stub_funcs.ptr_gtk_column_view_scroll_to = cosmo_dlsym(gtk, "gtk_column_view_scroll_to");
     stub_funcs.ptr_gtk_column_view_cell_get_type = cosmo_dlsym(gtk, "gtk_column_view_cell_get_type");
+    stub_funcs.ptr_gtk_column_view_cell_get_item = cosmo_dlsym(gtk, "gtk_column_view_cell_get_item");
     stub_funcs.ptr_gtk_column_view_cell_get_position = cosmo_dlsym(gtk, "gtk_column_view_cell_get_position");
     stub_funcs.ptr_gtk_column_view_cell_get_selected = cosmo_dlsym(gtk, "gtk_column_view_cell_get_selected");
     stub_funcs.ptr_gtk_column_view_cell_get_focusable = cosmo_dlsym(gtk, "gtk_column_view_cell_get_focusable");
     stub_funcs.ptr_gtk_column_view_cell_set_focusable = cosmo_dlsym(gtk, "gtk_column_view_cell_set_focusable");
     stub_funcs.ptr_gtk_column_view_cell_set_child = cosmo_dlsym(gtk, "gtk_column_view_cell_set_child");
     stub_funcs.ptr_gtk_column_view_cell_get_child = cosmo_dlsym(gtk, "gtk_column_view_cell_get_child");
+    stub_funcs.ptr_gtk_column_view_column_get_type = cosmo_dlsym(gtk, "gtk_column_view_column_get_type");
     stub_funcs.ptr_gtk_column_view_column_new = cosmo_dlsym(gtk, "gtk_column_view_column_new");
     stub_funcs.ptr_gtk_column_view_column_get_column_view = cosmo_dlsym(gtk, "gtk_column_view_column_get_column_view");
     stub_funcs.ptr_gtk_column_view_column_set_factory = cosmo_dlsym(gtk, "gtk_column_view_column_set_factory");
@@ -6392,6 +6528,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_column_view_column_set_id = cosmo_dlsym(gtk, "gtk_column_view_column_set_id");
     stub_funcs.ptr_gtk_column_view_column_get_id = cosmo_dlsym(gtk, "gtk_column_view_column_get_id");
     stub_funcs.ptr_gtk_column_view_row_get_type = cosmo_dlsym(gtk, "gtk_column_view_row_get_type");
+    stub_funcs.ptr_gtk_column_view_row_get_item = cosmo_dlsym(gtk, "gtk_column_view_row_get_item");
     stub_funcs.ptr_gtk_column_view_row_get_position = cosmo_dlsym(gtk, "gtk_column_view_row_get_position");
     stub_funcs.ptr_gtk_column_view_row_get_selected = cosmo_dlsym(gtk, "gtk_column_view_row_get_selected");
     stub_funcs.ptr_gtk_column_view_row_get_selectable = cosmo_dlsym(gtk, "gtk_column_view_row_get_selectable");
@@ -6405,10 +6542,13 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_column_view_row_get_accessible_label = cosmo_dlsym(gtk, "gtk_column_view_row_get_accessible_label");
     stub_funcs.ptr_gtk_column_view_row_set_accessible_label = cosmo_dlsym(gtk, "gtk_column_view_row_set_accessible_label");
     stub_funcs.ptr_gtk_column_view_sorter_get_type = cosmo_dlsym(gtk, "gtk_column_view_sorter_get_type");
+    stub_funcs.ptr_gtk_column_view_sorter_get_primary_sort_column = cosmo_dlsym(gtk, "gtk_column_view_sorter_get_primary_sort_column");
     stub_funcs.ptr_gtk_column_view_sorter_get_primary_sort_order = cosmo_dlsym(gtk, "gtk_column_view_sorter_get_primary_sort_order");
     stub_funcs.ptr_gtk_column_view_sorter_get_n_sort_columns = cosmo_dlsym(gtk, "gtk_column_view_sorter_get_n_sort_columns");
     stub_funcs.ptr_gtk_column_view_sorter_get_nth_sort_column = cosmo_dlsym(gtk, "gtk_column_view_sorter_get_nth_sort_column");
+    stub_funcs.ptr_gtk_constraint_target_get_type = cosmo_dlsym(gtk, "gtk_constraint_target_get_type");
     stub_funcs.ptr_gtk_constraint_get_type = cosmo_dlsym(gtk, "gtk_constraint_get_type");
+    stub_funcs.ptr_gtk_constraint_new = cosmo_dlsym(gtk, "gtk_constraint_new");
     stub_funcs.ptr_gtk_constraint_new_constant = cosmo_dlsym(gtk, "gtk_constraint_new_constant");
     stub_funcs.ptr_gtk_constraint_get_target = cosmo_dlsym(gtk, "gtk_constraint_get_target");
     stub_funcs.ptr_gtk_constraint_get_target_attribute = cosmo_dlsym(gtk, "gtk_constraint_get_target_attribute");
@@ -6422,6 +6562,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_constraint_is_attached = cosmo_dlsym(gtk, "gtk_constraint_is_attached");
     stub_funcs.ptr_gtk_constraint_is_constant = cosmo_dlsym(gtk, "gtk_constraint_is_constant");
     stub_funcs.ptr_gtk_constraint_guide_get_type = cosmo_dlsym(gtk, "gtk_constraint_guide_get_type");
+    stub_funcs.ptr_gtk_constraint_guide_new = cosmo_dlsym(gtk, "gtk_constraint_guide_new");
     stub_funcs.ptr_gtk_constraint_guide_set_min_size = cosmo_dlsym(gtk, "gtk_constraint_guide_set_min_size");
     stub_funcs.ptr_gtk_constraint_guide_get_min_size = cosmo_dlsym(gtk, "gtk_constraint_guide_get_min_size");
     stub_funcs.ptr_gtk_constraint_guide_set_nat_size = cosmo_dlsym(gtk, "gtk_constraint_guide_set_nat_size");
@@ -6434,6 +6575,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_constraint_guide_get_name = cosmo_dlsym(gtk, "gtk_constraint_guide_get_name");
     stub_funcs.ptr_gtk_constraint_layout_get_type = cosmo_dlsym(gtk, "gtk_constraint_layout_get_type");
     stub_funcs.ptr_gtk_constraint_layout_child_get_type = cosmo_dlsym(gtk, "gtk_constraint_layout_child_get_type");
+    stub_funcs.ptr_gtk_constraint_vfl_parser_error_quark = cosmo_dlsym(gtk, "gtk_constraint_vfl_parser_error_quark");
     stub_funcs.ptr_gtk_constraint_layout_new = cosmo_dlsym(gtk, "gtk_constraint_layout_new");
     stub_funcs.ptr_gtk_constraint_layout_add_constraint = cosmo_dlsym(gtk, "gtk_constraint_layout_add_constraint");
     stub_funcs.ptr_gtk_constraint_layout_remove_constraint = cosmo_dlsym(gtk, "gtk_constraint_layout_remove_constraint");
@@ -6454,14 +6596,18 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_css_provider_load_from_resource = cosmo_dlsym(gtk, "gtk_css_provider_load_from_resource");
     stub_funcs.ptr_gtk_css_provider_load_named = cosmo_dlsym(gtk, "gtk_css_provider_load_named");
     stub_funcs.ptr_gtk_custom_filter_get_type = cosmo_dlsym(gtk, "gtk_custom_filter_get_type");
+    stub_funcs.ptr_gtk_custom_filter_new = cosmo_dlsym(gtk, "gtk_custom_filter_new");
     stub_funcs.ptr_gtk_custom_filter_set_filter_func = cosmo_dlsym(gtk, "gtk_custom_filter_set_filter_func");
     stub_funcs.ptr_gtk_custom_layout_get_type = cosmo_dlsym(gtk, "gtk_custom_layout_get_type");
+    stub_funcs.ptr_gtk_custom_layout_new = cosmo_dlsym(gtk, "gtk_custom_layout_new");
     stub_funcs.ptr_gtk_custom_sorter_get_type = cosmo_dlsym(gtk, "gtk_custom_sorter_get_type");
+    stub_funcs.ptr_gtk_custom_sorter_new = cosmo_dlsym(gtk, "gtk_custom_sorter_new");
     stub_funcs.ptr_gtk_custom_sorter_set_sort_func = cosmo_dlsym(gtk, "gtk_custom_sorter_set_sort_func");
     stub_funcs.ptr_gtk_set_debug_flags = cosmo_dlsym(gtk, "gtk_set_debug_flags");
     stub_funcs.ptr_gtk_get_debug_flags = cosmo_dlsym(gtk, "gtk_get_debug_flags");
     stub_funcs.ptr_gtk_dialog_error_quark = cosmo_dlsym(gtk, "gtk_dialog_error_quark");
     stub_funcs.ptr_gtk_directory_list_get_type = cosmo_dlsym(gtk, "gtk_directory_list_get_type");
+    stub_funcs.ptr_gtk_directory_list_new = cosmo_dlsym(gtk, "gtk_directory_list_new");
     stub_funcs.ptr_gtk_directory_list_set_file = cosmo_dlsym(gtk, "gtk_directory_list_set_file");
     stub_funcs.ptr_gtk_directory_list_get_file = cosmo_dlsym(gtk, "gtk_directory_list_get_file");
     stub_funcs.ptr_gtk_directory_list_set_attributes = cosmo_dlsym(gtk, "gtk_directory_list_set_attributes");
@@ -6473,6 +6619,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_directory_list_set_monitored = cosmo_dlsym(gtk, "gtk_directory_list_set_monitored");
     stub_funcs.ptr_gtk_directory_list_get_monitored = cosmo_dlsym(gtk, "gtk_directory_list_get_monitored");
     stub_funcs.ptr_gtk_drag_icon_get_type = cosmo_dlsym(gtk, "gtk_drag_icon_get_type");
+    stub_funcs.ptr_gtk_drag_icon_get_for_drag = cosmo_dlsym(gtk, "gtk_drag_icon_get_for_drag");
     stub_funcs.ptr_gtk_drag_icon_set_child = cosmo_dlsym(gtk, "gtk_drag_icon_set_child");
     stub_funcs.ptr_gtk_drag_icon_get_child = cosmo_dlsym(gtk, "gtk_drag_icon_get_child");
     stub_funcs.ptr_gtk_drag_icon_set_from_paintable = cosmo_dlsym(gtk, "gtk_drag_icon_set_from_paintable");
@@ -6500,6 +6647,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_drop_controller_motion_get_drop = cosmo_dlsym(gtk, "gtk_drop_controller_motion_get_drop");
     stub_funcs.ptr_gtk_drop_controller_motion_is_pointer = cosmo_dlsym(gtk, "gtk_drop_controller_motion_is_pointer");
     stub_funcs.ptr_gtk_drop_down_get_type = cosmo_dlsym(gtk, "gtk_drop_down_get_type");
+    stub_funcs.ptr_gtk_drop_down_new = cosmo_dlsym(gtk, "gtk_drop_down_new");
     stub_funcs.ptr_gtk_drop_down_new_from_strings = cosmo_dlsym(gtk, "gtk_drop_down_new_from_strings");
     stub_funcs.ptr_gtk_drop_down_set_model = cosmo_dlsym(gtk, "gtk_drop_down_set_model");
     stub_funcs.ptr_gtk_drop_down_get_model = cosmo_dlsym(gtk, "gtk_drop_down_get_model");
@@ -6569,6 +6717,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_editable_delegate_get_property = cosmo_dlsym(gtk, "gtk_editable_delegate_get_property");
     stub_funcs.ptr_gtk_editable_delegate_get_accessible_platform_state = cosmo_dlsym(gtk, "gtk_editable_delegate_get_accessible_platform_state");
     stub_funcs.ptr_gtk_editable_label_get_type = cosmo_dlsym(gtk, "gtk_editable_label_get_type");
+    stub_funcs.ptr_gtk_editable_label_new = cosmo_dlsym(gtk, "gtk_editable_label_new");
     stub_funcs.ptr_gtk_editable_label_get_editing = cosmo_dlsym(gtk, "gtk_editable_label_get_editing");
     stub_funcs.ptr_gtk_editable_label_start_editing = cosmo_dlsym(gtk, "gtk_editable_label_start_editing");
     stub_funcs.ptr_gtk_editable_label_stop_editing = cosmo_dlsym(gtk, "gtk_editable_label_stop_editing");
@@ -6733,6 +6882,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_param_expression_get_type = cosmo_dlsym(gtk, "gtk_param_expression_get_type");
     stub_funcs.ptr_gtk_param_spec_expression = cosmo_dlsym(gtk, "gtk_param_spec_expression");
     stub_funcs.ptr_gtk_file_dialog_get_type = cosmo_dlsym(gtk, "gtk_file_dialog_get_type");
+    stub_funcs.ptr_gtk_file_dialog_new = cosmo_dlsym(gtk, "gtk_file_dialog_new");
     stub_funcs.ptr_gtk_file_dialog_get_title = cosmo_dlsym(gtk, "gtk_file_dialog_get_title");
     stub_funcs.ptr_gtk_file_dialog_set_title = cosmo_dlsym(gtk, "gtk_file_dialog_set_title");
     stub_funcs.ptr_gtk_file_dialog_get_modal = cosmo_dlsym(gtk, "gtk_file_dialog_get_modal");
@@ -6771,6 +6921,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_file_filter_to_gvariant = cosmo_dlsym(gtk, "gtk_file_filter_to_gvariant");
     stub_funcs.ptr_gtk_file_filter_new_from_gvariant = cosmo_dlsym(gtk, "gtk_file_filter_new_from_gvariant");
     stub_funcs.ptr_gtk_file_launcher_get_type = cosmo_dlsym(gtk, "gtk_file_launcher_get_type");
+    stub_funcs.ptr_gtk_file_launcher_new = cosmo_dlsym(gtk, "gtk_file_launcher_new");
     stub_funcs.ptr_gtk_file_launcher_get_file = cosmo_dlsym(gtk, "gtk_file_launcher_get_file");
     stub_funcs.ptr_gtk_file_launcher_set_file = cosmo_dlsym(gtk, "gtk_file_launcher_set_file");
     stub_funcs.ptr_gtk_file_launcher_get_always_ask = cosmo_dlsym(gtk, "gtk_file_launcher_get_always_ask");
@@ -6782,9 +6933,11 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_file_launcher_open_containing_folder = cosmo_dlsym(gtk, "gtk_file_launcher_open_containing_folder");
     stub_funcs.ptr_gtk_file_launcher_open_containing_folder_finish = cosmo_dlsym(gtk, "gtk_file_launcher_open_containing_folder_finish");
     stub_funcs.ptr_gtk_filter_get_type = cosmo_dlsym(gtk, "gtk_filter_get_type");
+    stub_funcs.ptr_gtk_filter_match = cosmo_dlsym(gtk, "gtk_filter_match");
     stub_funcs.ptr_gtk_filter_get_strictness = cosmo_dlsym(gtk, "gtk_filter_get_strictness");
     stub_funcs.ptr_gtk_filter_changed = cosmo_dlsym(gtk, "gtk_filter_changed");
     stub_funcs.ptr_gtk_filter_list_model_get_type = cosmo_dlsym(gtk, "gtk_filter_list_model_get_type");
+    stub_funcs.ptr_gtk_filter_list_model_new = cosmo_dlsym(gtk, "gtk_filter_list_model_new");
     stub_funcs.ptr_gtk_filter_list_model_set_filter = cosmo_dlsym(gtk, "gtk_filter_list_model_set_filter");
     stub_funcs.ptr_gtk_filter_list_model_get_filter = cosmo_dlsym(gtk, "gtk_filter_list_model_get_filter");
     stub_funcs.ptr_gtk_filter_list_model_set_model = cosmo_dlsym(gtk, "gtk_filter_list_model_set_model");
@@ -6802,9 +6955,11 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_fixed_get_child_transform = cosmo_dlsym(gtk, "gtk_fixed_get_child_transform");
     stub_funcs.ptr_gtk_fixed_layout_get_type = cosmo_dlsym(gtk, "gtk_fixed_layout_get_type");
     stub_funcs.ptr_gtk_fixed_layout_child_get_type = cosmo_dlsym(gtk, "gtk_fixed_layout_child_get_type");
+    stub_funcs.ptr_gtk_fixed_layout_new = cosmo_dlsym(gtk, "gtk_fixed_layout_new");
     stub_funcs.ptr_gtk_fixed_layout_child_set_transform = cosmo_dlsym(gtk, "gtk_fixed_layout_child_set_transform");
     stub_funcs.ptr_gtk_fixed_layout_child_get_transform = cosmo_dlsym(gtk, "gtk_fixed_layout_child_get_transform");
     stub_funcs.ptr_gtk_flatten_list_model_get_type = cosmo_dlsym(gtk, "gtk_flatten_list_model_get_type");
+    stub_funcs.ptr_gtk_flatten_list_model_new = cosmo_dlsym(gtk, "gtk_flatten_list_model_new");
     stub_funcs.ptr_gtk_flatten_list_model_set_model = cosmo_dlsym(gtk, "gtk_flatten_list_model_set_model");
     stub_funcs.ptr_gtk_flatten_list_model_get_model = cosmo_dlsym(gtk, "gtk_flatten_list_model_get_model");
     stub_funcs.ptr_gtk_flatten_list_model_get_model_for_item = cosmo_dlsym(gtk, "gtk_flatten_list_model_get_model_for_item");
@@ -6852,6 +7007,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_flow_box_set_sort_func = cosmo_dlsym(gtk, "gtk_flow_box_set_sort_func");
     stub_funcs.ptr_gtk_flow_box_invalidate_sort = cosmo_dlsym(gtk, "gtk_flow_box_invalidate_sort");
     stub_funcs.ptr_gtk_font_dialog_get_type = cosmo_dlsym(gtk, "gtk_font_dialog_get_type");
+    stub_funcs.ptr_gtk_font_dialog_new = cosmo_dlsym(gtk, "gtk_font_dialog_new");
     stub_funcs.ptr_gtk_font_dialog_get_title = cosmo_dlsym(gtk, "gtk_font_dialog_get_title");
     stub_funcs.ptr_gtk_font_dialog_set_title = cosmo_dlsym(gtk, "gtk_font_dialog_set_title");
     stub_funcs.ptr_gtk_font_dialog_get_modal = cosmo_dlsym(gtk, "gtk_font_dialog_get_modal");
@@ -6871,6 +7027,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_font_dialog_choose_font_and_features = cosmo_dlsym(gtk, "gtk_font_dialog_choose_font_and_features");
     stub_funcs.ptr_gtk_font_dialog_choose_font_and_features_finish = cosmo_dlsym(gtk, "gtk_font_dialog_choose_font_and_features_finish");
     stub_funcs.ptr_gtk_font_dialog_button_get_type = cosmo_dlsym(gtk, "gtk_font_dialog_button_get_type");
+    stub_funcs.ptr_gtk_font_dialog_button_new = cosmo_dlsym(gtk, "gtk_font_dialog_button_new");
     stub_funcs.ptr_gtk_font_dialog_button_get_dialog = cosmo_dlsym(gtk, "gtk_font_dialog_button_get_dialog");
     stub_funcs.ptr_gtk_font_dialog_button_set_dialog = cosmo_dlsym(gtk, "gtk_font_dialog_button_set_dialog");
     stub_funcs.ptr_gtk_font_dialog_button_get_level = cosmo_dlsym(gtk, "gtk_font_dialog_button_get_level");
@@ -6975,6 +7132,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_gl_area_set_error = cosmo_dlsym(gtk, "gtk_gl_area_set_error");
     stub_funcs.ptr_gtk_gl_area_get_error = cosmo_dlsym(gtk, "gtk_gl_area_get_error");
     stub_funcs.ptr_gtk_graphics_offload_get_type = cosmo_dlsym(gtk, "gtk_graphics_offload_get_type");
+    stub_funcs.ptr_gtk_graphics_offload_new = cosmo_dlsym(gtk, "gtk_graphics_offload_new");
     stub_funcs.ptr_gtk_graphics_offload_set_child = cosmo_dlsym(gtk, "gtk_graphics_offload_set_child");
     stub_funcs.ptr_gtk_graphics_offload_get_child = cosmo_dlsym(gtk, "gtk_graphics_offload_get_child");
     stub_funcs.ptr_gtk_graphics_offload_set_enabled = cosmo_dlsym(gtk, "gtk_graphics_offload_set_enabled");
@@ -7005,6 +7163,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_grid_query_child = cosmo_dlsym(gtk, "gtk_grid_query_child");
     stub_funcs.ptr_gtk_grid_layout_get_type = cosmo_dlsym(gtk, "gtk_grid_layout_get_type");
     stub_funcs.ptr_gtk_grid_layout_child_get_type = cosmo_dlsym(gtk, "gtk_grid_layout_child_get_type");
+    stub_funcs.ptr_gtk_grid_layout_new = cosmo_dlsym(gtk, "gtk_grid_layout_new");
     stub_funcs.ptr_gtk_grid_layout_set_row_homogeneous = cosmo_dlsym(gtk, "gtk_grid_layout_set_row_homogeneous");
     stub_funcs.ptr_gtk_grid_layout_get_row_homogeneous = cosmo_dlsym(gtk, "gtk_grid_layout_get_row_homogeneous");
     stub_funcs.ptr_gtk_grid_layout_set_row_spacing = cosmo_dlsym(gtk, "gtk_grid_layout_set_row_spacing");
@@ -7055,6 +7214,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_header_bar_get_decoration_layout = cosmo_dlsym(gtk, "gtk_header_bar_get_decoration_layout");
     stub_funcs.ptr_gtk_icon_paintable_get_type = cosmo_dlsym(gtk, "gtk_icon_paintable_get_type");
     stub_funcs.ptr_gtk_icon_theme_get_type = cosmo_dlsym(gtk, "gtk_icon_theme_get_type");
+    stub_funcs.ptr_gtk_icon_theme_error_quark = cosmo_dlsym(gtk, "gtk_icon_theme_error_quark");
     stub_funcs.ptr_gtk_icon_theme_new = cosmo_dlsym(gtk, "gtk_icon_theme_new");
     stub_funcs.ptr_gtk_icon_theme_get_for_display = cosmo_dlsym(gtk, "gtk_icon_theme_get_for_display");
     stub_funcs.ptr_gtk_icon_theme_get_display = cosmo_dlsym(gtk, "gtk_icon_theme_get_display");
@@ -7124,6 +7284,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_im_multicontext_get_context_id = cosmo_dlsym(gtk, "gtk_im_multicontext_get_context_id");
     stub_funcs.ptr_gtk_im_multicontext_set_context_id = cosmo_dlsym(gtk, "gtk_im_multicontext_set_context_id");
     stub_funcs.ptr_gtk_inscription_get_type = cosmo_dlsym(gtk, "gtk_inscription_get_type");
+    stub_funcs.ptr_gtk_inscription_new = cosmo_dlsym(gtk, "gtk_inscription_new");
     stub_funcs.ptr_gtk_inscription_get_text = cosmo_dlsym(gtk, "gtk_inscription_get_text");
     stub_funcs.ptr_gtk_inscription_set_text = cosmo_dlsym(gtk, "gtk_inscription_set_text");
     stub_funcs.ptr_gtk_inscription_get_attributes = cosmo_dlsym(gtk, "gtk_inscription_get_attributes");
@@ -7198,8 +7359,10 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_label_set_tabs = cosmo_dlsym(gtk, "gtk_label_set_tabs");
     stub_funcs.ptr_gtk_label_get_tabs = cosmo_dlsym(gtk, "gtk_label_get_tabs");
     stub_funcs.ptr_gtk_layout_child_get_type = cosmo_dlsym(gtk, "gtk_layout_child_get_type");
+    stub_funcs.ptr_gtk_layout_child_get_layout_manager = cosmo_dlsym(gtk, "gtk_layout_child_get_layout_manager");
     stub_funcs.ptr_gtk_layout_child_get_child_widget = cosmo_dlsym(gtk, "gtk_layout_child_get_child_widget");
     stub_funcs.ptr_gtk_layout_manager_get_type = cosmo_dlsym(gtk, "gtk_layout_manager_get_type");
+    stub_funcs.ptr_gtk_layout_manager_measure = cosmo_dlsym(gtk, "gtk_layout_manager_measure");
     stub_funcs.ptr_gtk_layout_manager_allocate = cosmo_dlsym(gtk, "gtk_layout_manager_allocate");
     stub_funcs.ptr_gtk_layout_manager_get_request_mode = cosmo_dlsym(gtk, "gtk_layout_manager_get_request_mode");
     stub_funcs.ptr_gtk_layout_manager_get_widget = cosmo_dlsym(gtk, "gtk_layout_manager_get_widget");
@@ -7277,12 +7440,14 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_list_box_set_show_separators = cosmo_dlsym(gtk, "gtk_list_box_set_show_separators");
     stub_funcs.ptr_gtk_list_box_get_show_separators = cosmo_dlsym(gtk, "gtk_list_box_get_show_separators");
     stub_funcs.ptr_gtk_list_header_get_type = cosmo_dlsym(gtk, "gtk_list_header_get_type");
+    stub_funcs.ptr_gtk_list_header_get_item = cosmo_dlsym(gtk, "gtk_list_header_get_item");
     stub_funcs.ptr_gtk_list_header_get_start = cosmo_dlsym(gtk, "gtk_list_header_get_start");
     stub_funcs.ptr_gtk_list_header_get_end = cosmo_dlsym(gtk, "gtk_list_header_get_end");
     stub_funcs.ptr_gtk_list_header_get_n_items = cosmo_dlsym(gtk, "gtk_list_header_get_n_items");
     stub_funcs.ptr_gtk_list_header_set_child = cosmo_dlsym(gtk, "gtk_list_header_set_child");
     stub_funcs.ptr_gtk_list_header_get_child = cosmo_dlsym(gtk, "gtk_list_header_get_child");
     stub_funcs.ptr_gtk_list_item_get_type = cosmo_dlsym(gtk, "gtk_list_item_get_type");
+    stub_funcs.ptr_gtk_list_item_get_item = cosmo_dlsym(gtk, "gtk_list_item_get_item");
     stub_funcs.ptr_gtk_list_item_get_position = cosmo_dlsym(gtk, "gtk_list_item_get_position");
     stub_funcs.ptr_gtk_list_item_get_selected = cosmo_dlsym(gtk, "gtk_list_item_get_selected");
     stub_funcs.ptr_gtk_list_item_get_selectable = cosmo_dlsym(gtk, "gtk_list_item_get_selectable");
@@ -7324,14 +7489,17 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_get_locale_direction = cosmo_dlsym(gtk, "gtk_get_locale_direction");
     stub_funcs.ptr_gtk_init = cosmo_dlsym(gtk, "gtk_init");
     stub_funcs.ptr_gtk_map_list_model_get_type = cosmo_dlsym(gtk, "gtk_map_list_model_get_type");
+    stub_funcs.ptr_gtk_map_list_model_new = cosmo_dlsym(gtk, "gtk_map_list_model_new");
     stub_funcs.ptr_gtk_map_list_model_set_map_func = cosmo_dlsym(gtk, "gtk_map_list_model_set_map_func");
     stub_funcs.ptr_gtk_map_list_model_set_model = cosmo_dlsym(gtk, "gtk_map_list_model_set_model");
     stub_funcs.ptr_gtk_map_list_model_get_model = cosmo_dlsym(gtk, "gtk_map_list_model_get_model");
     stub_funcs.ptr_gtk_map_list_model_has_map = cosmo_dlsym(gtk, "gtk_map_list_model_has_map");
     stub_funcs.ptr_gtk_media_controls_get_type = cosmo_dlsym(gtk, "gtk_media_controls_get_type");
+    stub_funcs.ptr_gtk_media_controls_new = cosmo_dlsym(gtk, "gtk_media_controls_new");
     stub_funcs.ptr_gtk_media_controls_get_media_stream = cosmo_dlsym(gtk, "gtk_media_controls_get_media_stream");
     stub_funcs.ptr_gtk_media_controls_set_media_stream = cosmo_dlsym(gtk, "gtk_media_controls_set_media_stream");
     stub_funcs.ptr_gtk_media_file_get_type = cosmo_dlsym(gtk, "gtk_media_file_get_type");
+    stub_funcs.ptr_gtk_media_file_new = cosmo_dlsym(gtk, "gtk_media_file_new");
     stub_funcs.ptr_gtk_media_file_new_for_filename = cosmo_dlsym(gtk, "gtk_media_file_new_for_filename");
     stub_funcs.ptr_gtk_media_file_new_for_resource = cosmo_dlsym(gtk, "gtk_media_file_new_for_resource");
     stub_funcs.ptr_gtk_media_file_new_for_file = cosmo_dlsym(gtk, "gtk_media_file_new_for_file");
@@ -7344,6 +7512,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_media_file_set_input_stream = cosmo_dlsym(gtk, "gtk_media_file_set_input_stream");
     stub_funcs.ptr_gtk_media_file_get_input_stream = cosmo_dlsym(gtk, "gtk_media_file_get_input_stream");
     stub_funcs.ptr_gtk_media_stream_get_type = cosmo_dlsym(gtk, "gtk_media_stream_get_type");
+    stub_funcs.ptr_gtk_media_stream_is_prepared = cosmo_dlsym(gtk, "gtk_media_stream_is_prepared");
     stub_funcs.ptr_gtk_media_stream_get_error = cosmo_dlsym(gtk, "gtk_media_stream_get_error");
     stub_funcs.ptr_gtk_media_stream_has_audio = cosmo_dlsym(gtk, "gtk_media_stream_has_audio");
     stub_funcs.ptr_gtk_media_stream_has_video = cosmo_dlsym(gtk, "gtk_media_stream_has_video");
@@ -7413,21 +7582,28 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_mount_operation_set_display = cosmo_dlsym(gtk, "gtk_mount_operation_set_display");
     stub_funcs.ptr_gtk_mount_operation_get_display = cosmo_dlsym(gtk, "gtk_mount_operation_get_display");
     stub_funcs.ptr_gtk_multi_filter_get_type = cosmo_dlsym(gtk, "gtk_multi_filter_get_type");
+    stub_funcs.ptr_gtk_multi_filter_append = cosmo_dlsym(gtk, "gtk_multi_filter_append");
     stub_funcs.ptr_gtk_multi_filter_remove = cosmo_dlsym(gtk, "gtk_multi_filter_remove");
     stub_funcs.ptr_gtk_any_filter_get_type = cosmo_dlsym(gtk, "gtk_any_filter_get_type");
+    stub_funcs.ptr_gtk_any_filter_new = cosmo_dlsym(gtk, "gtk_any_filter_new");
     stub_funcs.ptr_gtk_every_filter_get_type = cosmo_dlsym(gtk, "gtk_every_filter_get_type");
+    stub_funcs.ptr_gtk_every_filter_new = cosmo_dlsym(gtk, "gtk_every_filter_new");
     stub_funcs.ptr_gtk_multi_selection_get_type = cosmo_dlsym(gtk, "gtk_multi_selection_get_type");
+    stub_funcs.ptr_gtk_multi_selection_new = cosmo_dlsym(gtk, "gtk_multi_selection_new");
     stub_funcs.ptr_gtk_multi_selection_get_model = cosmo_dlsym(gtk, "gtk_multi_selection_get_model");
     stub_funcs.ptr_gtk_multi_selection_set_model = cosmo_dlsym(gtk, "gtk_multi_selection_set_model");
     stub_funcs.ptr_gtk_multi_sorter_get_type = cosmo_dlsym(gtk, "gtk_multi_sorter_get_type");
+    stub_funcs.ptr_gtk_multi_sorter_new = cosmo_dlsym(gtk, "gtk_multi_sorter_new");
     stub_funcs.ptr_gtk_multi_sorter_append = cosmo_dlsym(gtk, "gtk_multi_sorter_append");
     stub_funcs.ptr_gtk_multi_sorter_remove = cosmo_dlsym(gtk, "gtk_multi_sorter_remove");
+    stub_funcs.ptr_gtk_native_get_type = cosmo_dlsym(gtk, "gtk_native_get_type");
     stub_funcs.ptr_gtk_native_unrealize = cosmo_dlsym(gtk, "gtk_native_unrealize");
     stub_funcs.ptr_gtk_native_get_for_surface = cosmo_dlsym(gtk, "gtk_native_get_for_surface");
     stub_funcs.ptr_gtk_native_get_surface = cosmo_dlsym(gtk, "gtk_native_get_surface");
     stub_funcs.ptr_gtk_native_get_renderer = cosmo_dlsym(gtk, "gtk_native_get_renderer");
     stub_funcs.ptr_gtk_native_get_surface_transform = cosmo_dlsym(gtk, "gtk_native_get_surface_transform");
     stub_funcs.ptr_gtk_native_dialog_get_type = cosmo_dlsym(gtk, "gtk_native_dialog_get_type");
+    stub_funcs.ptr_gtk_native_dialog_show = cosmo_dlsym(gtk, "gtk_native_dialog_show");
     stub_funcs.ptr_gtk_native_dialog_hide = cosmo_dlsym(gtk, "gtk_native_dialog_hide");
     stub_funcs.ptr_gtk_native_dialog_destroy = cosmo_dlsym(gtk, "gtk_native_dialog_destroy");
     stub_funcs.ptr_gtk_native_dialog_get_visible = cosmo_dlsym(gtk, "gtk_native_dialog_get_visible");
@@ -7438,6 +7614,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_native_dialog_set_transient_for = cosmo_dlsym(gtk, "gtk_native_dialog_set_transient_for");
     stub_funcs.ptr_gtk_native_dialog_get_transient_for = cosmo_dlsym(gtk, "gtk_native_dialog_get_transient_for");
     stub_funcs.ptr_gtk_no_selection_get_type = cosmo_dlsym(gtk, "gtk_no_selection_get_type");
+    stub_funcs.ptr_gtk_no_selection_new = cosmo_dlsym(gtk, "gtk_no_selection_new");
     stub_funcs.ptr_gtk_no_selection_get_model = cosmo_dlsym(gtk, "gtk_no_selection_get_model");
     stub_funcs.ptr_gtk_no_selection_set_model = cosmo_dlsym(gtk, "gtk_no_selection_set_model");
     stub_funcs.ptr_gtk_notebook_get_type = cosmo_dlsym(gtk, "gtk_notebook_get_type");
@@ -7489,6 +7666,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_notebook_page_get_child = cosmo_dlsym(gtk, "gtk_notebook_page_get_child");
     stub_funcs.ptr_gtk_notebook_get_pages = cosmo_dlsym(gtk, "gtk_notebook_get_pages");
     stub_funcs.ptr_gtk_numeric_sorter_get_type = cosmo_dlsym(gtk, "gtk_numeric_sorter_get_type");
+    stub_funcs.ptr_gtk_numeric_sorter_new = cosmo_dlsym(gtk, "gtk_numeric_sorter_new");
     stub_funcs.ptr_gtk_numeric_sorter_get_expression = cosmo_dlsym(gtk, "gtk_numeric_sorter_get_expression");
     stub_funcs.ptr_gtk_numeric_sorter_set_expression = cosmo_dlsym(gtk, "gtk_numeric_sorter_set_expression");
     stub_funcs.ptr_gtk_numeric_sorter_get_sort_order = cosmo_dlsym(gtk, "gtk_numeric_sorter_get_sort_order");
@@ -7508,6 +7686,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_overlay_set_clip_overlay = cosmo_dlsym(gtk, "gtk_overlay_set_clip_overlay");
     stub_funcs.ptr_gtk_overlay_layout_get_type = cosmo_dlsym(gtk, "gtk_overlay_layout_get_type");
     stub_funcs.ptr_gtk_overlay_layout_child_get_type = cosmo_dlsym(gtk, "gtk_overlay_layout_child_get_type");
+    stub_funcs.ptr_gtk_overlay_layout_new = cosmo_dlsym(gtk, "gtk_overlay_layout_new");
     stub_funcs.ptr_gtk_overlay_layout_child_set_measure = cosmo_dlsym(gtk, "gtk_overlay_layout_child_set_measure");
     stub_funcs.ptr_gtk_overlay_layout_child_get_measure = cosmo_dlsym(gtk, "gtk_overlay_layout_child_get_measure");
     stub_funcs.ptr_gtk_overlay_layout_child_set_clip_overlay = cosmo_dlsym(gtk, "gtk_overlay_layout_child_set_clip_overlay");
@@ -7541,7 +7720,9 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_password_entry_set_extra_menu = cosmo_dlsym(gtk, "gtk_password_entry_set_extra_menu");
     stub_funcs.ptr_gtk_password_entry_get_extra_menu = cosmo_dlsym(gtk, "gtk_password_entry_get_extra_menu");
     stub_funcs.ptr_gtk_password_entry_buffer_get_type = cosmo_dlsym(gtk, "gtk_password_entry_buffer_get_type");
+    stub_funcs.ptr_gtk_password_entry_buffer_new = cosmo_dlsym(gtk, "gtk_password_entry_buffer_new");
     stub_funcs.ptr_gtk_picture_get_type = cosmo_dlsym(gtk, "gtk_picture_get_type");
+    stub_funcs.ptr_gtk_picture_new = cosmo_dlsym(gtk, "gtk_picture_new");
     stub_funcs.ptr_gtk_picture_new_for_paintable = cosmo_dlsym(gtk, "gtk_picture_new_for_paintable");
     stub_funcs.ptr_gtk_picture_new_for_pixbuf = cosmo_dlsym(gtk, "gtk_picture_new_for_pixbuf");
     stub_funcs.ptr_gtk_picture_new_for_file = cosmo_dlsym(gtk, "gtk_picture_new_for_file");
@@ -7605,6 +7786,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_print_setup_get_print_settings = cosmo_dlsym(gtk, "gtk_print_setup_get_print_settings");
     stub_funcs.ptr_gtk_print_setup_get_page_setup = cosmo_dlsym(gtk, "gtk_print_setup_get_page_setup");
     stub_funcs.ptr_gtk_print_dialog_get_type = cosmo_dlsym(gtk, "gtk_print_dialog_get_type");
+    stub_funcs.ptr_gtk_print_dialog_new = cosmo_dlsym(gtk, "gtk_print_dialog_new");
     stub_funcs.ptr_gtk_print_dialog_get_title = cosmo_dlsym(gtk, "gtk_print_dialog_get_title");
     stub_funcs.ptr_gtk_print_dialog_set_title = cosmo_dlsym(gtk, "gtk_print_dialog_set_title");
     stub_funcs.ptr_gtk_print_dialog_get_accept_label = cosmo_dlsym(gtk, "gtk_print_dialog_get_accept_label");
@@ -7661,6 +7843,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_range_get_round_digits = cosmo_dlsym(gtk, "gtk_range_get_round_digits");
     stub_funcs.ptr_gtk_recent_info_get_type = cosmo_dlsym(gtk, "gtk_recent_info_get_type");
     stub_funcs.ptr_gtk_recent_manager_get_type = cosmo_dlsym(gtk, "gtk_recent_manager_get_type");
+    stub_funcs.ptr_gtk_recent_manager_error_quark = cosmo_dlsym(gtk, "gtk_recent_manager_error_quark");
     stub_funcs.ptr_gtk_recent_manager_new = cosmo_dlsym(gtk, "gtk_recent_manager_new");
     stub_funcs.ptr_gtk_recent_manager_get_default = cosmo_dlsym(gtk, "gtk_recent_manager_get_default");
     stub_funcs.ptr_gtk_recent_manager_add_item = cosmo_dlsym(gtk, "gtk_recent_manager_add_item");
@@ -7707,6 +7890,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_revealer_get_transition_type = cosmo_dlsym(gtk, "gtk_revealer_get_transition_type");
     stub_funcs.ptr_gtk_revealer_set_child = cosmo_dlsym(gtk, "gtk_revealer_set_child");
     stub_funcs.ptr_gtk_revealer_get_child = cosmo_dlsym(gtk, "gtk_revealer_get_child");
+    stub_funcs.ptr_gtk_root_get_type = cosmo_dlsym(gtk, "gtk_root_get_type");
     stub_funcs.ptr_gtk_root_set_focus = cosmo_dlsym(gtk, "gtk_root_set_focus");
     stub_funcs.ptr_gtk_root_get_focus = cosmo_dlsym(gtk, "gtk_root_get_focus");
     stub_funcs.ptr_gtk_scale_get_type = cosmo_dlsym(gtk, "gtk_scale_get_type");
@@ -7816,10 +8000,13 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_search_entry_get_input_purpose = cosmo_dlsym(gtk, "gtk_search_entry_get_input_purpose");
     stub_funcs.ptr_gtk_search_entry_set_input_hints = cosmo_dlsym(gtk, "gtk_search_entry_set_input_hints");
     stub_funcs.ptr_gtk_search_entry_get_input_hints = cosmo_dlsym(gtk, "gtk_search_entry_get_input_hints");
+    stub_funcs.ptr_gtk_section_model_get_type = cosmo_dlsym(gtk, "gtk_section_model_get_type");
     stub_funcs.ptr_gtk_section_model_sections_changed = cosmo_dlsym(gtk, "gtk_section_model_sections_changed");
     stub_funcs.ptr_gtk_selection_filter_model_get_type = cosmo_dlsym(gtk, "gtk_selection_filter_model_get_type");
+    stub_funcs.ptr_gtk_selection_filter_model_new = cosmo_dlsym(gtk, "gtk_selection_filter_model_new");
     stub_funcs.ptr_gtk_selection_filter_model_set_model = cosmo_dlsym(gtk, "gtk_selection_filter_model_set_model");
     stub_funcs.ptr_gtk_selection_filter_model_get_model = cosmo_dlsym(gtk, "gtk_selection_filter_model_get_model");
+    stub_funcs.ptr_gtk_selection_model_get_type = cosmo_dlsym(gtk, "gtk_selection_model_get_type");
     stub_funcs.ptr_gtk_selection_model_get_selection = cosmo_dlsym(gtk, "gtk_selection_model_get_selection");
     stub_funcs.ptr_gtk_selection_model_get_selection_in_range = cosmo_dlsym(gtk, "gtk_selection_model_get_selection_in_range");
     stub_funcs.ptr_gtk_selection_model_select_item = cosmo_dlsym(gtk, "gtk_selection_model_select_item");
@@ -7837,6 +8024,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_settings_get_for_display = cosmo_dlsym(gtk, "gtk_settings_get_for_display");
     stub_funcs.ptr_gtk_settings_reset_property = cosmo_dlsym(gtk, "gtk_settings_reset_property");
     stub_funcs.ptr_gtk_shortcut_get_type = cosmo_dlsym(gtk, "gtk_shortcut_get_type");
+    stub_funcs.ptr_gtk_shortcut_new = cosmo_dlsym(gtk, "gtk_shortcut_new");
     stub_funcs.ptr_gtk_shortcut_get_trigger = cosmo_dlsym(gtk, "gtk_shortcut_get_trigger");
     stub_funcs.ptr_gtk_shortcut_set_trigger = cosmo_dlsym(gtk, "gtk_shortcut_set_trigger");
     stub_funcs.ptr_gtk_shortcut_get_action = cosmo_dlsym(gtk, "gtk_shortcut_get_action");
@@ -7844,16 +8032,23 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_shortcut_get_arguments = cosmo_dlsym(gtk, "gtk_shortcut_get_arguments");
     stub_funcs.ptr_gtk_shortcut_set_arguments = cosmo_dlsym(gtk, "gtk_shortcut_set_arguments");
     stub_funcs.ptr_gtk_shortcut_action_get_type = cosmo_dlsym(gtk, "gtk_shortcut_action_get_type");
+    stub_funcs.ptr_gtk_shortcut_action_to_string = cosmo_dlsym(gtk, "gtk_shortcut_action_to_string");
     stub_funcs.ptr_gtk_shortcut_action_parse_string = cosmo_dlsym(gtk, "gtk_shortcut_action_parse_string");
     stub_funcs.ptr_gtk_shortcut_action_print = cosmo_dlsym(gtk, "gtk_shortcut_action_print");
     stub_funcs.ptr_gtk_shortcut_action_activate = cosmo_dlsym(gtk, "gtk_shortcut_action_activate");
     stub_funcs.ptr_gtk_nothing_action_get_type = cosmo_dlsym(gtk, "gtk_nothing_action_get_type");
+    stub_funcs.ptr_gtk_nothing_action_get = cosmo_dlsym(gtk, "gtk_nothing_action_get");
     stub_funcs.ptr_gtk_callback_action_get_type = cosmo_dlsym(gtk, "gtk_callback_action_get_type");
+    stub_funcs.ptr_gtk_callback_action_new = cosmo_dlsym(gtk, "gtk_callback_action_new");
     stub_funcs.ptr_gtk_mnemonic_action_get_type = cosmo_dlsym(gtk, "gtk_mnemonic_action_get_type");
+    stub_funcs.ptr_gtk_mnemonic_action_get = cosmo_dlsym(gtk, "gtk_mnemonic_action_get");
     stub_funcs.ptr_gtk_activate_action_get_type = cosmo_dlsym(gtk, "gtk_activate_action_get_type");
+    stub_funcs.ptr_gtk_activate_action_get = cosmo_dlsym(gtk, "gtk_activate_action_get");
     stub_funcs.ptr_gtk_signal_action_get_type = cosmo_dlsym(gtk, "gtk_signal_action_get_type");
+    stub_funcs.ptr_gtk_signal_action_new = cosmo_dlsym(gtk, "gtk_signal_action_new");
     stub_funcs.ptr_gtk_signal_action_get_signal_name = cosmo_dlsym(gtk, "gtk_signal_action_get_signal_name");
     stub_funcs.ptr_gtk_named_action_get_type = cosmo_dlsym(gtk, "gtk_named_action_get_type");
+    stub_funcs.ptr_gtk_named_action_new = cosmo_dlsym(gtk, "gtk_named_action_new");
     stub_funcs.ptr_gtk_named_action_get_action_name = cosmo_dlsym(gtk, "gtk_named_action_get_action_name");
     stub_funcs.ptr_gtk_shortcut_controller_get_type = cosmo_dlsym(gtk, "gtk_shortcut_controller_get_type");
     stub_funcs.ptr_gtk_shortcut_controller_new = cosmo_dlsym(gtk, "gtk_shortcut_controller_new");
@@ -7870,6 +8065,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_shortcut_label_set_accelerator = cosmo_dlsym(gtk, "gtk_shortcut_label_set_accelerator");
     stub_funcs.ptr_gtk_shortcut_label_get_disabled_text = cosmo_dlsym(gtk, "gtk_shortcut_label_get_disabled_text");
     stub_funcs.ptr_gtk_shortcut_label_set_disabled_text = cosmo_dlsym(gtk, "gtk_shortcut_label_set_disabled_text");
+    stub_funcs.ptr_gtk_shortcut_manager_get_type = cosmo_dlsym(gtk, "gtk_shortcut_manager_get_type");
     stub_funcs.ptr_gtk_shortcuts_group_get_type = cosmo_dlsym(gtk, "gtk_shortcuts_group_get_type");
     stub_funcs.ptr_gtk_shortcuts_group_add_shortcut = cosmo_dlsym(gtk, "gtk_shortcuts_group_add_shortcut");
     stub_funcs.ptr_gtk_shortcuts_section_get_type = cosmo_dlsym(gtk, "gtk_shortcuts_section_get_type");
@@ -7878,6 +8074,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_shortcuts_window_get_type = cosmo_dlsym(gtk, "gtk_shortcuts_window_get_type");
     stub_funcs.ptr_gtk_shortcuts_window_add_section = cosmo_dlsym(gtk, "gtk_shortcuts_window_add_section");
     stub_funcs.ptr_gtk_shortcut_trigger_get_type = cosmo_dlsym(gtk, "gtk_shortcut_trigger_get_type");
+    stub_funcs.ptr_gtk_shortcut_trigger_parse_string = cosmo_dlsym(gtk, "gtk_shortcut_trigger_parse_string");
     stub_funcs.ptr_gtk_shortcut_trigger_to_string = cosmo_dlsym(gtk, "gtk_shortcut_trigger_to_string");
     stub_funcs.ptr_gtk_shortcut_trigger_print = cosmo_dlsym(gtk, "gtk_shortcut_trigger_print");
     stub_funcs.ptr_gtk_shortcut_trigger_to_label = cosmo_dlsym(gtk, "gtk_shortcut_trigger_to_label");
@@ -7887,17 +8084,22 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_shortcut_trigger_compare = cosmo_dlsym(gtk, "gtk_shortcut_trigger_compare");
     stub_funcs.ptr_gtk_shortcut_trigger_trigger = cosmo_dlsym(gtk, "gtk_shortcut_trigger_trigger");
     stub_funcs.ptr_gtk_never_trigger_get_type = cosmo_dlsym(gtk, "gtk_never_trigger_get_type");
+    stub_funcs.ptr_gtk_never_trigger_get = cosmo_dlsym(gtk, "gtk_never_trigger_get");
     stub_funcs.ptr_gtk_keyval_trigger_get_type = cosmo_dlsym(gtk, "gtk_keyval_trigger_get_type");
+    stub_funcs.ptr_gtk_keyval_trigger_new = cosmo_dlsym(gtk, "gtk_keyval_trigger_new");
     stub_funcs.ptr_gtk_keyval_trigger_get_modifiers = cosmo_dlsym(gtk, "gtk_keyval_trigger_get_modifiers");
     stub_funcs.ptr_gtk_keyval_trigger_get_keyval = cosmo_dlsym(gtk, "gtk_keyval_trigger_get_keyval");
     stub_funcs.ptr_gtk_mnemonic_trigger_get_type = cosmo_dlsym(gtk, "gtk_mnemonic_trigger_get_type");
+    stub_funcs.ptr_gtk_mnemonic_trigger_new = cosmo_dlsym(gtk, "gtk_mnemonic_trigger_new");
     stub_funcs.ptr_gtk_mnemonic_trigger_get_keyval = cosmo_dlsym(gtk, "gtk_mnemonic_trigger_get_keyval");
     stub_funcs.ptr_gtk_alternative_trigger_get_type = cosmo_dlsym(gtk, "gtk_alternative_trigger_get_type");
+    stub_funcs.ptr_gtk_alternative_trigger_new = cosmo_dlsym(gtk, "gtk_alternative_trigger_new");
     stub_funcs.ptr_gtk_alternative_trigger_get_first = cosmo_dlsym(gtk, "gtk_alternative_trigger_get_first");
     stub_funcs.ptr_gtk_alternative_trigger_get_second = cosmo_dlsym(gtk, "gtk_alternative_trigger_get_second");
     stub_funcs.ptr_gtk_signal_list_item_factory_get_type = cosmo_dlsym(gtk, "gtk_signal_list_item_factory_get_type");
     stub_funcs.ptr_gtk_signal_list_item_factory_new = cosmo_dlsym(gtk, "gtk_signal_list_item_factory_new");
     stub_funcs.ptr_gtk_single_selection_get_type = cosmo_dlsym(gtk, "gtk_single_selection_get_type");
+    stub_funcs.ptr_gtk_single_selection_new = cosmo_dlsym(gtk, "gtk_single_selection_new");
     stub_funcs.ptr_gtk_single_selection_get_model = cosmo_dlsym(gtk, "gtk_single_selection_get_model");
     stub_funcs.ptr_gtk_single_selection_set_model = cosmo_dlsym(gtk, "gtk_single_selection_set_model");
     stub_funcs.ptr_gtk_single_selection_get_selected = cosmo_dlsym(gtk, "gtk_single_selection_get_selected");
@@ -7916,12 +8118,14 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_size_group_get_widgets = cosmo_dlsym(gtk, "gtk_size_group_get_widgets");
     stub_funcs.ptr_gtk_distribute_natural_allocation = cosmo_dlsym(gtk, "gtk_distribute_natural_allocation");
     stub_funcs.ptr_gtk_slice_list_model_get_type = cosmo_dlsym(gtk, "gtk_slice_list_model_get_type");
+    stub_funcs.ptr_gtk_slice_list_model_new = cosmo_dlsym(gtk, "gtk_slice_list_model_new");
     stub_funcs.ptr_gtk_slice_list_model_set_model = cosmo_dlsym(gtk, "gtk_slice_list_model_set_model");
     stub_funcs.ptr_gtk_slice_list_model_get_model = cosmo_dlsym(gtk, "gtk_slice_list_model_get_model");
     stub_funcs.ptr_gtk_slice_list_model_set_offset = cosmo_dlsym(gtk, "gtk_slice_list_model_set_offset");
     stub_funcs.ptr_gtk_slice_list_model_get_offset = cosmo_dlsym(gtk, "gtk_slice_list_model_get_offset");
     stub_funcs.ptr_gtk_slice_list_model_set_size = cosmo_dlsym(gtk, "gtk_slice_list_model_set_size");
     stub_funcs.ptr_gtk_slice_list_model_get_size = cosmo_dlsym(gtk, "gtk_slice_list_model_get_size");
+    stub_funcs.ptr_gtk_snapshot_get_type = cosmo_dlsym(gtk, "gtk_snapshot_get_type");
     stub_funcs.ptr_gtk_snapshot_new = cosmo_dlsym(gtk, "gtk_snapshot_new");
     stub_funcs.ptr_gtk_snapshot_free_to_node = cosmo_dlsym(gtk, "gtk_snapshot_free_to_node");
     stub_funcs.ptr_gtk_snapshot_free_to_paintable = cosmo_dlsym(gtk, "gtk_snapshot_free_to_paintable");
@@ -7970,9 +8174,11 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_snapshot_append_fill = cosmo_dlsym(gtk, "gtk_snapshot_append_fill");
     stub_funcs.ptr_gtk_snapshot_append_stroke = cosmo_dlsym(gtk, "gtk_snapshot_append_stroke");
     stub_funcs.ptr_gtk_sorter_get_type = cosmo_dlsym(gtk, "gtk_sorter_get_type");
+    stub_funcs.ptr_gtk_sorter_compare = cosmo_dlsym(gtk, "gtk_sorter_compare");
     stub_funcs.ptr_gtk_sorter_get_order = cosmo_dlsym(gtk, "gtk_sorter_get_order");
     stub_funcs.ptr_gtk_sorter_changed = cosmo_dlsym(gtk, "gtk_sorter_changed");
     stub_funcs.ptr_gtk_sort_list_model_get_type = cosmo_dlsym(gtk, "gtk_sort_list_model_get_type");
+    stub_funcs.ptr_gtk_sort_list_model_new = cosmo_dlsym(gtk, "gtk_sort_list_model_new");
     stub_funcs.ptr_gtk_sort_list_model_set_sorter = cosmo_dlsym(gtk, "gtk_sort_list_model_set_sorter");
     stub_funcs.ptr_gtk_sort_list_model_get_sorter = cosmo_dlsym(gtk, "gtk_sort_list_model_get_sorter");
     stub_funcs.ptr_gtk_sort_list_model_set_section_sorter = cosmo_dlsym(gtk, "gtk_sort_list_model_set_section_sorter");
@@ -8065,6 +8271,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_stack_switcher_set_stack = cosmo_dlsym(gtk, "gtk_stack_switcher_set_stack");
     stub_funcs.ptr_gtk_stack_switcher_get_stack = cosmo_dlsym(gtk, "gtk_stack_switcher_get_stack");
     stub_funcs.ptr_gtk_string_filter_get_type = cosmo_dlsym(gtk, "gtk_string_filter_get_type");
+    stub_funcs.ptr_gtk_string_filter_new = cosmo_dlsym(gtk, "gtk_string_filter_new");
     stub_funcs.ptr_gtk_string_filter_get_search = cosmo_dlsym(gtk, "gtk_string_filter_get_search");
     stub_funcs.ptr_gtk_string_filter_set_search = cosmo_dlsym(gtk, "gtk_string_filter_set_search");
     stub_funcs.ptr_gtk_string_filter_get_expression = cosmo_dlsym(gtk, "gtk_string_filter_get_expression");
@@ -8074,14 +8281,17 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_string_filter_get_match_mode = cosmo_dlsym(gtk, "gtk_string_filter_get_match_mode");
     stub_funcs.ptr_gtk_string_filter_set_match_mode = cosmo_dlsym(gtk, "gtk_string_filter_set_match_mode");
     stub_funcs.ptr_gtk_string_object_get_type = cosmo_dlsym(gtk, "gtk_string_object_get_type");
+    stub_funcs.ptr_gtk_string_object_new = cosmo_dlsym(gtk, "gtk_string_object_new");
     stub_funcs.ptr_gtk_string_object_get_string = cosmo_dlsym(gtk, "gtk_string_object_get_string");
     stub_funcs.ptr_gtk_string_list_get_type = cosmo_dlsym(gtk, "gtk_string_list_get_type");
+    stub_funcs.ptr_gtk_string_list_new = cosmo_dlsym(gtk, "gtk_string_list_new");
     stub_funcs.ptr_gtk_string_list_append = cosmo_dlsym(gtk, "gtk_string_list_append");
     stub_funcs.ptr_gtk_string_list_take = cosmo_dlsym(gtk, "gtk_string_list_take");
     stub_funcs.ptr_gtk_string_list_remove = cosmo_dlsym(gtk, "gtk_string_list_remove");
     stub_funcs.ptr_gtk_string_list_splice = cosmo_dlsym(gtk, "gtk_string_list_splice");
     stub_funcs.ptr_gtk_string_list_get_string = cosmo_dlsym(gtk, "gtk_string_list_get_string");
     stub_funcs.ptr_gtk_string_sorter_get_type = cosmo_dlsym(gtk, "gtk_string_sorter_get_type");
+    stub_funcs.ptr_gtk_string_sorter_new = cosmo_dlsym(gtk, "gtk_string_sorter_new");
     stub_funcs.ptr_gtk_string_sorter_get_expression = cosmo_dlsym(gtk, "gtk_string_sorter_get_expression");
     stub_funcs.ptr_gtk_string_sorter_set_expression = cosmo_dlsym(gtk, "gtk_string_sorter_set_expression");
     stub_funcs.ptr_gtk_string_sorter_get_ignore_case = cosmo_dlsym(gtk, "gtk_string_sorter_get_ignore_case");
@@ -8096,6 +8306,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_switch_get_active = cosmo_dlsym(gtk, "gtk_switch_get_active");
     stub_funcs.ptr_gtk_switch_set_state = cosmo_dlsym(gtk, "gtk_switch_set_state");
     stub_funcs.ptr_gtk_switch_get_state = cosmo_dlsym(gtk, "gtk_switch_get_state");
+    stub_funcs.ptr_gtk_symbolic_paintable_get_type = cosmo_dlsym(gtk, "gtk_symbolic_paintable_get_type");
     stub_funcs.ptr_gtk_test_accessible_has_property = cosmo_dlsym(gtk, "gtk_test_accessible_has_property");
     stub_funcs.ptr_gtk_test_accessible_has_relation = cosmo_dlsym(gtk, "gtk_test_accessible_has_relation");
     stub_funcs.ptr_gtk_test_accessible_has_state = cosmo_dlsym(gtk, "gtk_test_accessible_has_state");
@@ -8216,6 +8427,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_text_child_anchor_get_widgets = cosmo_dlsym(gtk, "gtk_text_child_anchor_get_widgets");
     stub_funcs.ptr_gtk_text_child_anchor_get_deleted = cosmo_dlsym(gtk, "gtk_text_child_anchor_get_deleted");
     stub_funcs.ptr_gtk_text_iter_get_type = cosmo_dlsym(gtk, "gtk_text_iter_get_type");
+    stub_funcs.ptr_gtk_text_iter_get_buffer = cosmo_dlsym(gtk, "gtk_text_iter_get_buffer");
     stub_funcs.ptr_gtk_text_iter_copy = cosmo_dlsym(gtk, "gtk_text_iter_copy");
     stub_funcs.ptr_gtk_text_iter_free = cosmo_dlsym(gtk, "gtk_text_iter_free");
     stub_funcs.ptr_gtk_text_iter_assign = cosmo_dlsym(gtk, "gtk_text_iter_assign");
@@ -8416,6 +8628,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_tooltip_set_custom = cosmo_dlsym(gtk, "gtk_tooltip_set_custom");
     stub_funcs.ptr_gtk_tooltip_set_tip_area = cosmo_dlsym(gtk, "gtk_tooltip_set_tip_area");
     stub_funcs.ptr_gtk_tree_expander_get_type = cosmo_dlsym(gtk, "gtk_tree_expander_get_type");
+    stub_funcs.ptr_gtk_tree_expander_new = cosmo_dlsym(gtk, "gtk_tree_expander_new");
     stub_funcs.ptr_gtk_tree_expander_get_child = cosmo_dlsym(gtk, "gtk_tree_expander_get_child");
     stub_funcs.ptr_gtk_tree_expander_set_child = cosmo_dlsym(gtk, "gtk_tree_expander_set_child");
     stub_funcs.ptr_gtk_tree_expander_get_item = cosmo_dlsym(gtk, "gtk_tree_expander_get_item");
@@ -8429,6 +8642,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_tree_expander_set_hide_expander = cosmo_dlsym(gtk, "gtk_tree_expander_set_hide_expander");
     stub_funcs.ptr_gtk_tree_list_model_get_type = cosmo_dlsym(gtk, "gtk_tree_list_model_get_type");
     stub_funcs.ptr_gtk_tree_list_row_get_type = cosmo_dlsym(gtk, "gtk_tree_list_row_get_type");
+    stub_funcs.ptr_gtk_tree_list_model_new = cosmo_dlsym(gtk, "gtk_tree_list_model_new");
     stub_funcs.ptr_gtk_tree_list_model_get_model = cosmo_dlsym(gtk, "gtk_tree_list_model_get_model");
     stub_funcs.ptr_gtk_tree_list_model_get_passthrough = cosmo_dlsym(gtk, "gtk_tree_list_model_get_passthrough");
     stub_funcs.ptr_gtk_tree_list_model_set_autoexpand = cosmo_dlsym(gtk, "gtk_tree_list_model_set_autoexpand");
@@ -8445,6 +8659,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_tree_list_row_get_parent = cosmo_dlsym(gtk, "gtk_tree_list_row_get_parent");
     stub_funcs.ptr_gtk_tree_list_row_get_child_row = cosmo_dlsym(gtk, "gtk_tree_list_row_get_child_row");
     stub_funcs.ptr_gtk_tree_list_row_sorter_get_type = cosmo_dlsym(gtk, "gtk_tree_list_row_sorter_get_type");
+    stub_funcs.ptr_gtk_tree_list_row_sorter_new = cosmo_dlsym(gtk, "gtk_tree_list_row_sorter_new");
     stub_funcs.ptr_gtk_tree_list_row_sorter_get_sorter = cosmo_dlsym(gtk, "gtk_tree_list_row_sorter_get_sorter");
     stub_funcs.ptr_gtk_tree_list_row_sorter_set_sorter = cosmo_dlsym(gtk, "gtk_tree_list_row_sorter_set_sorter");
     stub_funcs.ptr_gtk_assistant_page_type_get_type = cosmo_dlsym(gtk, "gtk_assistant_page_type_get_type");
@@ -8569,6 +8784,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_print_operation_action_get_type = cosmo_dlsym(gtk, "gtk_print_operation_action_get_type");
     stub_funcs.ptr_gtk_print_error_get_type = cosmo_dlsym(gtk, "gtk_print_error_get_type");
     stub_funcs.ptr_gtk_uri_launcher_get_type = cosmo_dlsym(gtk, "gtk_uri_launcher_get_type");
+    stub_funcs.ptr_gtk_uri_launcher_new = cosmo_dlsym(gtk, "gtk_uri_launcher_new");
     stub_funcs.ptr_gtk_uri_launcher_get_uri = cosmo_dlsym(gtk, "gtk_uri_launcher_get_uri");
     stub_funcs.ptr_gtk_uri_launcher_set_uri = cosmo_dlsym(gtk, "gtk_uri_launcher_set_uri");
     stub_funcs.ptr_gtk_uri_launcher_launch = cosmo_dlsym(gtk, "gtk_uri_launcher_launch");
@@ -8580,6 +8796,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_check_version = cosmo_dlsym(gtk, "gtk_check_version");
     stub_funcs.ptr_gtk_get_major_version = cosmo_dlsym(gtk, "gtk_get_major_version");
     stub_funcs.ptr_gtk_video_get_type = cosmo_dlsym(gtk, "gtk_video_get_type");
+    stub_funcs.ptr_gtk_video_new = cosmo_dlsym(gtk, "gtk_video_new");
     stub_funcs.ptr_gtk_video_new_for_media_stream = cosmo_dlsym(gtk, "gtk_video_new_for_media_stream");
     stub_funcs.ptr_gtk_video_new_for_file = cosmo_dlsym(gtk, "gtk_video_new_for_file");
     stub_funcs.ptr_gtk_video_new_for_filename = cosmo_dlsym(gtk, "gtk_video_new_for_filename");
@@ -8789,6 +9006,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_widget_class_set_accessible_role = cosmo_dlsym(gtk, "gtk_widget_class_set_accessible_role");
     stub_funcs.ptr_gtk_widget_class_get_accessible_role = cosmo_dlsym(gtk, "gtk_widget_class_get_accessible_role");
     stub_funcs.ptr_gtk_widget_paintable_get_type = cosmo_dlsym(gtk, "gtk_widget_paintable_get_type");
+    stub_funcs.ptr_gtk_widget_paintable_new = cosmo_dlsym(gtk, "gtk_widget_paintable_new");
     stub_funcs.ptr_gtk_widget_paintable_get_widget = cosmo_dlsym(gtk, "gtk_widget_paintable_get_widget");
     stub_funcs.ptr_gtk_widget_paintable_set_widget = cosmo_dlsym(gtk, "gtk_widget_paintable_set_widget");
     stub_funcs.ptr_gtk_window_get_type = cosmo_dlsym(gtk, "gtk_window_get_type");
@@ -8855,6 +9073,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_window_set_handle_menubar_accel = cosmo_dlsym(gtk, "gtk_window_set_handle_menubar_accel");
     stub_funcs.ptr_gtk_window_get_handle_menubar_accel = cosmo_dlsym(gtk, "gtk_window_get_handle_menubar_accel");
     stub_funcs.ptr_gtk_window_controls_get_type = cosmo_dlsym(gtk, "gtk_window_controls_get_type");
+    stub_funcs.ptr_gtk_window_controls_new = cosmo_dlsym(gtk, "gtk_window_controls_new");
     stub_funcs.ptr_gtk_window_controls_get_side = cosmo_dlsym(gtk, "gtk_window_controls_get_side");
     stub_funcs.ptr_gtk_window_controls_set_side = cosmo_dlsym(gtk, "gtk_window_controls_set_side");
     stub_funcs.ptr_gtk_window_controls_get_decoration_layout = cosmo_dlsym(gtk, "gtk_window_controls_get_decoration_layout");
@@ -8866,6 +9085,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_window_group_remove_window = cosmo_dlsym(gtk, "gtk_window_group_remove_window");
     stub_funcs.ptr_gtk_window_group_list_windows = cosmo_dlsym(gtk, "gtk_window_group_list_windows");
     stub_funcs.ptr_gtk_window_handle_get_type = cosmo_dlsym(gtk, "gtk_window_handle_get_type");
+    stub_funcs.ptr_gtk_window_handle_new = cosmo_dlsym(gtk, "gtk_window_handle_new");
     stub_funcs.ptr_gtk_window_handle_get_child = cosmo_dlsym(gtk, "gtk_window_handle_get_child");
     stub_funcs.ptr_gtk_window_handle_set_child = cosmo_dlsym(gtk, "gtk_window_handle_set_child");
     stub_funcs.ptr_gdk_broadway_cursor_get_type = cosmo_dlsym(gtk, "gdk_broadway_cursor_get_type");
@@ -9024,6 +9244,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_content_deserialize_async = cosmo_dlsym(gtk, "gdk_content_deserialize_async");
     stub_funcs.ptr_gdk_content_deserialize_finish = cosmo_dlsym(gtk, "gdk_content_deserialize_finish");
     stub_funcs.ptr_gdk_content_formats_get_type = cosmo_dlsym(gtk, "gdk_content_formats_get_type");
+    stub_funcs.ptr_gdk_intern_mime_type = cosmo_dlsym(gtk, "gdk_intern_mime_type");
     stub_funcs.ptr_gdk_content_formats_new = cosmo_dlsym(gtk, "gdk_content_formats_new");
     stub_funcs.ptr_gdk_content_formats_new_for_gtype = cosmo_dlsym(gtk, "gdk_content_formats_new_for_gtype");
     stub_funcs.ptr_gdk_content_formats_parse = cosmo_dlsym(gtk, "gdk_content_formats_parse");
@@ -9163,6 +9384,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_dmabuf_texture_get_type = cosmo_dlsym(gtk, "gdk_dmabuf_texture_get_type");
     stub_funcs.ptr_gdk_dmabuf_error_quark = cosmo_dlsym(gtk, "gdk_dmabuf_error_quark");
     stub_funcs.ptr_gdk_dmabuf_texture_builder_get_type = cosmo_dlsym(gtk, "gdk_dmabuf_texture_builder_get_type");
+    stub_funcs.ptr_gdk_dmabuf_texture_builder_new = cosmo_dlsym(gtk, "gdk_dmabuf_texture_builder_new");
     stub_funcs.ptr_gdk_dmabuf_texture_builder_get_display = cosmo_dlsym(gtk, "gdk_dmabuf_texture_builder_get_display");
     stub_funcs.ptr_gdk_dmabuf_texture_builder_set_display = cosmo_dlsym(gtk, "gdk_dmabuf_texture_builder_set_display");
     stub_funcs.ptr_gdk_dmabuf_texture_builder_get_width = cosmo_dlsym(gtk, "gdk_dmabuf_texture_builder_get_width");
@@ -9201,6 +9423,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_drag_set_hotspot = cosmo_dlsym(gtk, "gdk_drag_set_hotspot");
     stub_funcs.ptr_gdk_drag_get_content = cosmo_dlsym(gtk, "gdk_drag_get_content");
     stub_funcs.ptr_gdk_drag_get_surface = cosmo_dlsym(gtk, "gdk_drag_get_surface");
+    stub_funcs.ptr_gdk_drag_surface_get_type = cosmo_dlsym(gtk, "gdk_drag_surface_get_type");
     stub_funcs.ptr_gdk_drag_surface_size_get_type = cosmo_dlsym(gtk, "gdk_drag_surface_size_get_type");
     stub_funcs.ptr_gdk_drag_surface_size_set_size = cosmo_dlsym(gtk, "gdk_drag_surface_size_set_size");
     stub_funcs.ptr_gdk_draw_context_get_type = cosmo_dlsym(gtk, "gdk_draw_context_get_type");
@@ -9339,6 +9562,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_frame_timings_get_predicted_presentation_time = cosmo_dlsym(gtk, "gdk_frame_timings_get_predicted_presentation_time");
     stub_funcs.ptr_gdk_frame_timings_get_type = cosmo_dlsym(gtk, "gdk_frame_timings_get_type");
     stub_funcs.ptr_gdk_gl_context_get_type = cosmo_dlsym(gtk, "gdk_gl_context_get_type");
+    stub_funcs.ptr_gdk_gl_error_quark = cosmo_dlsym(gtk, "gdk_gl_error_quark");
     stub_funcs.ptr_gdk_gl_context_get_display = cosmo_dlsym(gtk, "gdk_gl_context_get_display");
     stub_funcs.ptr_gdk_gl_context_get_surface = cosmo_dlsym(gtk, "gdk_gl_context_get_surface");
     stub_funcs.ptr_gdk_gl_context_get_shared_context = cosmo_dlsym(gtk, "gdk_gl_context_get_shared_context");
@@ -9364,6 +9588,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_gl_texture_new = cosmo_dlsym(gtk, "gdk_gl_texture_new");
     stub_funcs.ptr_gdk_gl_texture_release = cosmo_dlsym(gtk, "gdk_gl_texture_release");
     stub_funcs.ptr_gdk_gl_texture_builder_get_type = cosmo_dlsym(gtk, "gdk_gl_texture_builder_get_type");
+    stub_funcs.ptr_gdk_gl_texture_builder_new = cosmo_dlsym(gtk, "gdk_gl_texture_builder_new");
     stub_funcs.ptr_gdk_gl_texture_builder_get_context = cosmo_dlsym(gtk, "gdk_gl_texture_builder_get_context");
     stub_funcs.ptr_gdk_gl_texture_builder_set_context = cosmo_dlsym(gtk, "gdk_gl_texture_builder_set_context");
     stub_funcs.ptr_gdk_gl_texture_builder_get_id = cosmo_dlsym(gtk, "gdk_gl_texture_builder_get_id");
@@ -9392,6 +9617,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_keyval_to_unicode = cosmo_dlsym(gtk, "gdk_keyval_to_unicode");
     stub_funcs.ptr_gdk_unicode_to_keyval = cosmo_dlsym(gtk, "gdk_unicode_to_keyval");
     stub_funcs.ptr_gdk_keyval_name = cosmo_dlsym(gtk, "gdk_keyval_name");
+    stub_funcs.ptr_gdk_memory_texture_get_type = cosmo_dlsym(gtk, "gdk_memory_texture_get_type");
     stub_funcs.ptr_gdk_memory_texture_new = cosmo_dlsym(gtk, "gdk_memory_texture_new");
     stub_funcs.ptr_gdk_monitor_get_type = cosmo_dlsym(gtk, "gdk_monitor_get_type");
     stub_funcs.ptr_gdk_monitor_get_display = cosmo_dlsym(gtk, "gdk_monitor_get_display");
@@ -9407,6 +9633,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_monitor_get_subpixel_layout = cosmo_dlsym(gtk, "gdk_monitor_get_subpixel_layout");
     stub_funcs.ptr_gdk_monitor_is_valid = cosmo_dlsym(gtk, "gdk_monitor_is_valid");
     stub_funcs.ptr_gdk_monitor_get_description = cosmo_dlsym(gtk, "gdk_monitor_get_description");
+    stub_funcs.ptr_gdk_paintable_get_type = cosmo_dlsym(gtk, "gdk_paintable_get_type");
     stub_funcs.ptr_gdk_paintable_get_current_image = cosmo_dlsym(gtk, "gdk_paintable_get_current_image");
     stub_funcs.ptr_gdk_paintable_get_flags = cosmo_dlsym(gtk, "gdk_paintable_get_flags");
     stub_funcs.ptr_gdk_paintable_get_intrinsic_width = cosmo_dlsym(gtk, "gdk_paintable_get_intrinsic_width");
@@ -9418,6 +9645,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_paintable_new_empty = cosmo_dlsym(gtk, "gdk_paintable_new_empty");
     stub_funcs.ptr_gdk_pango_layout_get_clip_region = cosmo_dlsym(gtk, "gdk_pango_layout_get_clip_region");
     stub_funcs.ptr_gdk_pango_layout_line_get_clip_region = cosmo_dlsym(gtk, "gdk_pango_layout_line_get_clip_region");
+    stub_funcs.ptr_gdk_popup_get_type = cosmo_dlsym(gtk, "gdk_popup_get_type");
     stub_funcs.ptr_gdk_popup_get_surface_anchor = cosmo_dlsym(gtk, "gdk_popup_get_surface_anchor");
     stub_funcs.ptr_gdk_popup_get_rect_anchor = cosmo_dlsym(gtk, "gdk_popup_get_rect_anchor");
     stub_funcs.ptr_gdk_popup_get_parent = cosmo_dlsym(gtk, "gdk_popup_get_parent");
@@ -9493,6 +9721,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_surface_create_gl_context = cosmo_dlsym(gtk, "gdk_surface_create_gl_context");
     stub_funcs.ptr_gdk_surface_create_vulkan_context = cosmo_dlsym(gtk, "gdk_surface_create_vulkan_context");
     stub_funcs.ptr_gdk_texture_get_type = cosmo_dlsym(gtk, "gdk_texture_get_type");
+    stub_funcs.ptr_gdk_texture_error_quark = cosmo_dlsym(gtk, "gdk_texture_error_quark");
     stub_funcs.ptr_gdk_texture_new_for_pixbuf = cosmo_dlsym(gtk, "gdk_texture_new_for_pixbuf");
     stub_funcs.ptr_gdk_texture_new_from_resource = cosmo_dlsym(gtk, "gdk_texture_new_from_resource");
     stub_funcs.ptr_gdk_texture_new_from_file = cosmo_dlsym(gtk, "gdk_texture_new_from_file");
@@ -9516,6 +9745,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_texture_downloader_get_format = cosmo_dlsym(gtk, "gdk_texture_downloader_get_format");
     stub_funcs.ptr_gdk_texture_downloader_download_into = cosmo_dlsym(gtk, "gdk_texture_downloader_download_into");
     stub_funcs.ptr_gdk_texture_downloader_download_bytes = cosmo_dlsym(gtk, "gdk_texture_downloader_download_bytes");
+    stub_funcs.ptr_gdk_toplevel_get_type = cosmo_dlsym(gtk, "gdk_toplevel_get_type");
     stub_funcs.ptr_gdk_toplevel_minimize = cosmo_dlsym(gtk, "gdk_toplevel_minimize");
     stub_funcs.ptr_gdk_toplevel_lower = cosmo_dlsym(gtk, "gdk_toplevel_lower");
     stub_funcs.ptr_gdk_toplevel_focus = cosmo_dlsym(gtk, "gdk_toplevel_focus");
@@ -9553,6 +9783,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_toplevel_size_set_min_size = cosmo_dlsym(gtk, "gdk_toplevel_size_set_min_size");
     stub_funcs.ptr_gdk_toplevel_size_set_shadow_width = cosmo_dlsym(gtk, "gdk_toplevel_size_set_shadow_width");
     stub_funcs.ptr_gdk_vulkan_context_get_type = cosmo_dlsym(gtk, "gdk_vulkan_context_get_type");
+    stub_funcs.ptr_gdk_vulkan_error_quark = cosmo_dlsym(gtk, "gdk_vulkan_error_quark");
     stub_funcs.ptr_gsk_broadway_renderer_get_type = cosmo_dlsym(gtk, "gsk_broadway_renderer_get_type");
     stub_funcs.ptr_gsk_broadway_renderer_new = cosmo_dlsym(gtk, "gsk_broadway_renderer_new");
     stub_funcs.ptr_gsk_gl_renderer_get_type = cosmo_dlsym(gtk, "gsk_gl_renderer_get_type");
@@ -9579,6 +9810,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gsk_path_foreach_flags_get_type = cosmo_dlsym(gtk, "gsk_path_foreach_flags_get_type");
     stub_funcs.ptr_gsk_shader_args_builder_get_type = cosmo_dlsym(gtk, "gsk_shader_args_builder_get_type");
     stub_funcs.ptr_gsk_gl_shader_get_type = cosmo_dlsym(gtk, "gsk_gl_shader_get_type");
+    stub_funcs.ptr_gsk_gl_shader_new_from_bytes = cosmo_dlsym(gtk, "gsk_gl_shader_new_from_bytes");
     stub_funcs.ptr_gsk_gl_shader_new_from_resource = cosmo_dlsym(gtk, "gsk_gl_shader_new_from_resource");
     stub_funcs.ptr_gsk_gl_shader_compile = cosmo_dlsym(gtk, "gsk_gl_shader_compile");
     stub_funcs.ptr_gsk_gl_shader_get_source = cosmo_dlsym(gtk, "gsk_gl_shader_get_source");
@@ -10258,6 +10490,7 @@ const char * (gtk_file_chooser_get_choice)(GtkFileChooser *chooser, const char *
 GType (gtk_file_chooser_dialog_get_type)(void) { return stub_funcs.ptr_gtk_file_chooser_dialog_get_type(); }
 // Unable to locate va_equiv for gtk_file_chooser_dialog_new
 GType (gtk_file_chooser_native_get_type)(void) { return stub_funcs.ptr_gtk_file_chooser_native_get_type(); }
+GtkFileChooserNative* (gtk_file_chooser_native_new)(const char *title, GtkWindow *parent, GtkFileChooserAction action, const char *accept_label, const char *cancel_label) { return stub_funcs.ptr_gtk_file_chooser_native_new(title, parent, action, accept_label, cancel_label); }
 const char* (gtk_file_chooser_native_get_accept_label)(GtkFileChooserNative *self) { return stub_funcs.ptr_gtk_file_chooser_native_get_accept_label(self); }
 void (gtk_file_chooser_native_set_accept_label)(GtkFileChooserNative *self, const char *accept_label) { stub_funcs.ptr_gtk_file_chooser_native_set_accept_label(self, accept_label); }
 const char* (gtk_file_chooser_native_get_cancel_label)(GtkFileChooserNative *self) { return stub_funcs.ptr_gtk_file_chooser_native_get_cancel_label(self); }
@@ -10475,6 +10708,7 @@ GType (gtk_tree_model_get_type)(void) { return stub_funcs.ptr_gtk_tree_model_get
 GType (gtk_tree_iter_get_type)(void) { return stub_funcs.ptr_gtk_tree_iter_get_type(); }
 GType (gtk_tree_path_get_type)(void) { return stub_funcs.ptr_gtk_tree_path_get_type(); }
 GType (gtk_tree_row_reference_get_type)(void) { return stub_funcs.ptr_gtk_tree_row_reference_get_type(); }
+GtkTreePath* (gtk_tree_path_new)(void) { return stub_funcs.ptr_gtk_tree_path_new(); }
 GtkTreePath* (gtk_tree_path_new_from_string)(const char *path) { return stub_funcs.ptr_gtk_tree_path_new_from_string(path); }
 // Found va_equiv for func gtk_tree_path_new_from_indices as func gtk_tree_path_new_from_indicesv with pattern gtk_tree_path_new_from_indices[_]*va*$, but err: va_list missing
 GtkTreePath* (gtk_tree_path_new_from_indicesv)(int *indices, gsize length) { return stub_funcs.ptr_gtk_tree_path_new_from_indicesv(indices, length); }
@@ -10822,6 +11056,7 @@ PangoContext* (gtk_print_context_create_pango_context)(GtkPrintContext *context)
 PangoLayout* (gtk_print_context_create_pango_layout)(GtkPrintContext *context) { return stub_funcs.ptr_gtk_print_context_create_pango_layout(context); }
 void (gtk_print_context_set_cairo_context)(GtkPrintContext *context, cairo_t *cr, double dpi_x, double dpi_y) { stub_funcs.ptr_gtk_print_context_set_cairo_context(context, cr, dpi_x, dpi_y); }
 GType (gtk_print_operation_get_type)(void) { return stub_funcs.ptr_gtk_print_operation_get_type(); }
+GQuark (gtk_print_error_quark)(void) { return stub_funcs.ptr_gtk_print_error_quark(); }
 GtkPrintOperation * (gtk_print_operation_new)(void) { return stub_funcs.ptr_gtk_print_operation_new(); }
 void (gtk_print_operation_set_default_page_setup)(GtkPrintOperation *op, GtkPageSetup *default_page_setup) { stub_funcs.ptr_gtk_print_operation_set_default_page_setup(op, default_page_setup); }
 GtkPageSetup * (gtk_print_operation_get_default_page_setup)(GtkPrintOperation *op) { return stub_funcs.ptr_gtk_print_operation_get_default_page_setup(op); }
@@ -10936,6 +11171,7 @@ void (gtk_print_settings_set_output_bin)(GtkPrintSettings *settings, const char 
 GVariant* (gtk_print_settings_to_gvariant)(GtkPrintSettings *settings) { return stub_funcs.ptr_gtk_print_settings_to_gvariant(settings); }
 GtkPrintSettings* (gtk_print_settings_new_from_gvariant)(GVariant *variant) { return stub_funcs.ptr_gtk_print_settings_new_from_gvariant(variant); }
 GType (gtk_at_spi_socket_get_type)(void) { return stub_funcs.ptr_gtk_at_spi_socket_get_type(); }
+GtkAccessible * (gtk_at_spi_socket_new)(const char *bus_name, const char *object_path, GError **error) { return stub_funcs.ptr_gtk_at_spi_socket_new(bus_name, object_path, error); }
 const char * (gtk_at_spi_socket_get_bus_name)(GtkAtSpiSocket *self) { return stub_funcs.ptr_gtk_at_spi_socket_get_bus_name(self); }
 const char * (gtk_at_spi_socket_get_object_path)(GtkAtSpiSocket *self) { return stub_funcs.ptr_gtk_at_spi_socket_get_object_path(self); }
 GType (gtk_about_dialog_get_type)(void) { return stub_funcs.ptr_gtk_about_dialog_get_type(); }
@@ -10982,6 +11218,7 @@ char * (gtk_accelerator_get_label)(guint accelerator_key, GdkModifierType accele
 char * (gtk_accelerator_get_label_with_keycode)(GdkDisplay *display, guint accelerator_key, guint keycode, GdkModifierType accelerator_mods) { return stub_funcs.ptr_gtk_accelerator_get_label_with_keycode(display, accelerator_key, keycode, accelerator_mods); }
 GdkModifierType (gtk_accelerator_get_default_mod_mask)(void) { return stub_funcs.ptr_gtk_accelerator_get_default_mod_mask(); }
 gboolean (gtk_accelerator_valid)(guint keyval, GdkModifierType modifiers) { return stub_funcs.ptr_gtk_accelerator_valid(keyval, modifiers); }
+GType (gtk_accessible_get_type)(void) { return stub_funcs.ptr_gtk_accessible_get_type(); }
 gboolean (gtk_accessible_get_platform_state)(GtkAccessible *self, GtkAccessiblePlatformState state) { return stub_funcs.ptr_gtk_accessible_get_platform_state(self, state); }
 GtkAccessible * (gtk_accessible_get_accessible_parent)(GtkAccessible *self) { return stub_funcs.ptr_gtk_accessible_get_accessible_parent(self); }
 void (gtk_accessible_set_accessible_parent)(GtkAccessible *self, GtkAccessible *parent, GtkAccessible *next_sibling) { stub_funcs.ptr_gtk_accessible_set_accessible_parent(self, parent, next_sibling); }
@@ -11007,6 +11244,8 @@ GList * (gtk_accessible_list_get_objects)(GtkAccessibleList *accessible_list) { 
 GtkAccessibleList * (gtk_accessible_list_new_from_list)(GList *list) { return stub_funcs.ptr_gtk_accessible_list_new_from_list(list); }
 GtkAccessibleList * (gtk_accessible_list_new_from_array)(GtkAccessible **accessibles, gsize n_accessibles) { return stub_funcs.ptr_gtk_accessible_list_new_from_array(accessibles, n_accessibles); }
 void (gtk_accessible_announce)(GtkAccessible *self, const char *message, GtkAccessibleAnnouncementPriority priority) { stub_funcs.ptr_gtk_accessible_announce(self, message, priority); }
+GType (gtk_accessible_range_get_type)(void) { return stub_funcs.ptr_gtk_accessible_range_get_type(); }
+GType (gtk_accessible_text_get_type)(void) { return stub_funcs.ptr_gtk_accessible_text_get_type(); }
 void (gtk_accessible_text_update_selection_bound)(GtkAccessibleText *self) { stub_funcs.ptr_gtk_accessible_text_update_selection_bound(self); }
 void (gtk_accessible_text_update_contents)(GtkAccessibleText *self, GtkAccessibleTextContentChange change, unsigned int start, unsigned int end) { stub_funcs.ptr_gtk_accessible_text_update_contents(self, change, start, end); }
 GType (gtk_actionable_get_type)(void) { return stub_funcs.ptr_gtk_actionable_get_type(); }
@@ -11043,6 +11282,7 @@ void (gtk_adjustment_set_page_size)(GtkAdjustment *adjustment, double page_size)
 void (gtk_adjustment_configure)(GtkAdjustment *adjustment, double value, double lower, double upper, double step_increment, double page_increment, double page_size) { stub_funcs.ptr_gtk_adjustment_configure(adjustment, value, lower, upper, step_increment, page_increment, page_size); }
 double (gtk_adjustment_get_minimum_increment)(GtkAdjustment *adjustment) { return stub_funcs.ptr_gtk_adjustment_get_minimum_increment(adjustment); }
 GType (gtk_alert_dialog_get_type)(void) { return stub_funcs.ptr_gtk_alert_dialog_get_type(); }
+// Unable to locate va_equiv for gtk_alert_dialog_new
 gboolean (gtk_alert_dialog_get_modal)(GtkAlertDialog *self) { return stub_funcs.ptr_gtk_alert_dialog_get_modal(self); }
 void (gtk_alert_dialog_set_modal)(GtkAlertDialog *self, gboolean modal) { stub_funcs.ptr_gtk_alert_dialog_set_modal(self, modal); }
 const char * (gtk_alert_dialog_get_message)(GtkAlertDialog *self) { return stub_funcs.ptr_gtk_alert_dialog_get_message(self); }
@@ -11094,9 +11334,11 @@ gboolean (gtk_aspect_frame_get_obey_child)(GtkAspectFrame *self) { return stub_f
 void (gtk_aspect_frame_set_child)(GtkAspectFrame *self, GtkWidget *child) { stub_funcs.ptr_gtk_aspect_frame_set_child(self, child); }
 GtkWidget* (gtk_aspect_frame_get_child)(GtkAspectFrame *self) { return stub_funcs.ptr_gtk_aspect_frame_get_child(self); }
 GType (gtk_at_context_get_type)(void) { return stub_funcs.ptr_gtk_at_context_get_type(); }
+GtkAccessible * (gtk_at_context_get_accessible)(GtkATContext *self) { return stub_funcs.ptr_gtk_at_context_get_accessible(self); }
 GtkAccessibleRole (gtk_at_context_get_accessible_role)(GtkATContext *self) { return stub_funcs.ptr_gtk_at_context_get_accessible_role(self); }
 GtkATContext * (gtk_at_context_create)(GtkAccessibleRole accessible_role, GtkAccessible *accessible, GdkDisplay *display) { return stub_funcs.ptr_gtk_at_context_create(accessible_role, accessible, display); }
 GType (gtk_bin_layout_get_type)(void) { return stub_funcs.ptr_gtk_bin_layout_get_type(); }
+GtkLayoutManager * (gtk_bin_layout_new)(void) { return stub_funcs.ptr_gtk_bin_layout_new(); }
 GType (gtk_bitset_get_type)(void) { return stub_funcs.ptr_gtk_bitset_get_type(); }
 GtkBitset * (gtk_bitset_ref)(GtkBitset *self) { return stub_funcs.ptr_gtk_bitset_ref(self); }
 void (gtk_bitset_unref)(GtkBitset *self) { stub_funcs.ptr_gtk_bitset_unref(self); }
@@ -11135,6 +11377,7 @@ gboolean (gtk_bitset_iter_previous)(GtkBitsetIter *iter, guint *value) { return 
 guint (gtk_bitset_iter_get_value)(const GtkBitsetIter *iter) { return stub_funcs.ptr_gtk_bitset_iter_get_value(iter); }
 gboolean (gtk_bitset_iter_is_valid)(const GtkBitsetIter *iter) { return stub_funcs.ptr_gtk_bitset_iter_is_valid(iter); }
 GType (gtk_bookmark_list_get_type)(void) { return stub_funcs.ptr_gtk_bookmark_list_get_type(); }
+GtkBookmarkList * (gtk_bookmark_list_new)(const char *filename, const char *attributes) { return stub_funcs.ptr_gtk_bookmark_list_new(filename, attributes); }
 const char * (gtk_bookmark_list_get_filename)(GtkBookmarkList *self) { return stub_funcs.ptr_gtk_bookmark_list_get_filename(self); }
 void (gtk_bookmark_list_set_attributes)(GtkBookmarkList *self, const char *attributes) { stub_funcs.ptr_gtk_bookmark_list_set_attributes(self, attributes); }
 const char * (gtk_bookmark_list_get_attributes)(GtkBookmarkList *self) { return stub_funcs.ptr_gtk_bookmark_list_get_attributes(self); }
@@ -11142,6 +11385,7 @@ void (gtk_bookmark_list_set_io_priority)(GtkBookmarkList *self, int io_priority)
 int (gtk_bookmark_list_get_io_priority)(GtkBookmarkList *self) { return stub_funcs.ptr_gtk_bookmark_list_get_io_priority(self); }
 gboolean (gtk_bookmark_list_is_loading)(GtkBookmarkList *self) { return stub_funcs.ptr_gtk_bookmark_list_is_loading(self); }
 GType (gtk_bool_filter_get_type)(void) { return stub_funcs.ptr_gtk_bool_filter_get_type(); }
+GtkBoolFilter * (gtk_bool_filter_new)(GtkExpression *expression) { return stub_funcs.ptr_gtk_bool_filter_new(expression); }
 GtkExpression * (gtk_bool_filter_get_expression)(GtkBoolFilter *self) { return stub_funcs.ptr_gtk_bool_filter_get_expression(self); }
 void (gtk_bool_filter_set_expression)(GtkBoolFilter *self, GtkExpression *expression) { stub_funcs.ptr_gtk_bool_filter_set_expression(self, expression); }
 gboolean (gtk_bool_filter_get_invert)(GtkBoolFilter *self) { return stub_funcs.ptr_gtk_bool_filter_get_invert(self); }
@@ -11166,6 +11410,7 @@ void (gtk_box_remove)(GtkBox *box, GtkWidget *child) { stub_funcs.ptr_gtk_box_re
 void (gtk_box_insert_child_after)(GtkBox *box, GtkWidget *child, GtkWidget *sibling) { stub_funcs.ptr_gtk_box_insert_child_after(box, child, sibling); }
 void (gtk_box_reorder_child_after)(GtkBox *box, GtkWidget *child, GtkWidget *sibling) { stub_funcs.ptr_gtk_box_reorder_child_after(box, child, sibling); }
 GType (gtk_box_layout_get_type)(void) { return stub_funcs.ptr_gtk_box_layout_get_type(); }
+GtkLayoutManager * (gtk_box_layout_new)(GtkOrientation orientation) { return stub_funcs.ptr_gtk_box_layout_new(orientation); }
 void (gtk_box_layout_set_homogeneous)(GtkBoxLayout *box_layout, gboolean homogeneous) { stub_funcs.ptr_gtk_box_layout_set_homogeneous(box_layout, homogeneous); }
 gboolean (gtk_box_layout_get_homogeneous)(GtkBoxLayout *box_layout) { return stub_funcs.ptr_gtk_box_layout_get_homogeneous(box_layout); }
 void (gtk_box_layout_set_spacing)(GtkBoxLayout *box_layout, guint spacing) { stub_funcs.ptr_gtk_box_layout_set_spacing(box_layout, spacing); }
@@ -11182,6 +11427,7 @@ const char * (gtk_buildable_parse_context_get_element)(GtkBuildableParseContext 
 GPtrArray* (gtk_buildable_parse_context_get_element_stack)(GtkBuildableParseContext *context) { return stub_funcs.ptr_gtk_buildable_parse_context_get_element_stack(context); }
 void (gtk_buildable_parse_context_get_position)(GtkBuildableParseContext *context, int *line_number, int *char_number) { stub_funcs.ptr_gtk_buildable_parse_context_get_position(context, line_number, char_number); }
 GType (gtk_builder_get_type)(void) { return stub_funcs.ptr_gtk_builder_get_type(); }
+GQuark (gtk_builder_error_quark)(void) { return stub_funcs.ptr_gtk_builder_error_quark(); }
 GtkBuilder* (gtk_builder_new)(void) { return stub_funcs.ptr_gtk_builder_new(); }
 gboolean (gtk_builder_add_from_file)(GtkBuilder *builder, const char *filename, GError **error) { return stub_funcs.ptr_gtk_builder_add_from_file(builder, filename, error); }
 gboolean (gtk_builder_add_from_resource)(GtkBuilder *builder, const char *resource_path, GError **error) { return stub_funcs.ptr_gtk_builder_add_from_resource(builder, resource_path, error); }
@@ -11212,7 +11458,9 @@ GtkListItemFactory * (gtk_builder_list_item_factory_new_from_resource)(GtkBuilde
 GBytes * (gtk_builder_list_item_factory_get_bytes)(GtkBuilderListItemFactory *self) { return stub_funcs.ptr_gtk_builder_list_item_factory_get_bytes(self); }
 const char * (gtk_builder_list_item_factory_get_resource)(GtkBuilderListItemFactory *self) { return stub_funcs.ptr_gtk_builder_list_item_factory_get_resource(self); }
 GtkBuilderScope * (gtk_builder_list_item_factory_get_scope)(GtkBuilderListItemFactory *self) { return stub_funcs.ptr_gtk_builder_list_item_factory_get_scope(self); }
+GType (gtk_builder_scope_get_type)(void) { return stub_funcs.ptr_gtk_builder_scope_get_type(); }
 GType (gtk_builder_cscope_get_type)(void) { return stub_funcs.ptr_gtk_builder_cscope_get_type(); }
+GtkBuilderScope * (gtk_builder_cscope_new)(void) { return stub_funcs.ptr_gtk_builder_cscope_new(); }
 void (gtk_builder_cscope_add_callback_symbol)(GtkBuilderCScope *self, const char *callback_name, GCallback callback_symbol) { stub_funcs.ptr_gtk_builder_cscope_add_callback_symbol(self, callback_name, callback_symbol); }
 // Unable to locate va_equiv for gtk_builder_cscope_add_callback_symbols
 GCallback (gtk_builder_cscope_lookup_callback_symbol)(GtkBuilderCScope *self, const char *callback_name) { return stub_funcs.ptr_gtk_builder_cscope_lookup_callback_symbol(self, callback_name); }
@@ -11266,6 +11514,7 @@ GtkBaselinePosition (gtk_center_box_get_baseline_position)(GtkCenterBox *self) {
 void (gtk_center_box_set_shrink_center_last)(GtkCenterBox *self, gboolean shrink_center_last) { stub_funcs.ptr_gtk_center_box_set_shrink_center_last(self, shrink_center_last); }
 gboolean (gtk_center_box_get_shrink_center_last)(GtkCenterBox *self) { return stub_funcs.ptr_gtk_center_box_get_shrink_center_last(self); }
 GType (gtk_center_layout_get_type)(void) { return stub_funcs.ptr_gtk_center_layout_get_type(); }
+GtkLayoutManager * (gtk_center_layout_new)(void) { return stub_funcs.ptr_gtk_center_layout_new(); }
 void (gtk_center_layout_set_orientation)(GtkCenterLayout *self, GtkOrientation orientation) { stub_funcs.ptr_gtk_center_layout_set_orientation(self, orientation); }
 GtkOrientation (gtk_center_layout_get_orientation)(GtkCenterLayout *self) { return stub_funcs.ptr_gtk_center_layout_get_orientation(self); }
 void (gtk_center_layout_set_baseline_position)(GtkCenterLayout *self, GtkBaselinePosition baseline_position) { stub_funcs.ptr_gtk_center_layout_set_baseline_position(self, baseline_position); }
@@ -11294,6 +11543,7 @@ void (gtk_check_button_set_use_underline)(GtkCheckButton *self, gboolean setting
 GtkWidget * (gtk_check_button_get_child)(GtkCheckButton *button) { return stub_funcs.ptr_gtk_check_button_get_child(button); }
 void (gtk_check_button_set_child)(GtkCheckButton *button, GtkWidget *child) { stub_funcs.ptr_gtk_check_button_set_child(button, child); }
 GType (gtk_color_dialog_get_type)(void) { return stub_funcs.ptr_gtk_color_dialog_get_type(); }
+GtkColorDialog* (gtk_color_dialog_new)(void) { return stub_funcs.ptr_gtk_color_dialog_new(); }
 const char * (gtk_color_dialog_get_title)(GtkColorDialog *self) { return stub_funcs.ptr_gtk_color_dialog_get_title(self); }
 void (gtk_color_dialog_set_title)(GtkColorDialog *self, const char *title) { stub_funcs.ptr_gtk_color_dialog_set_title(self, title); }
 gboolean (gtk_color_dialog_get_modal)(GtkColorDialog *self) { return stub_funcs.ptr_gtk_color_dialog_get_modal(self); }
@@ -11303,6 +11553,7 @@ void (gtk_color_dialog_set_with_alpha)(GtkColorDialog *self, gboolean with_alpha
 void (gtk_color_dialog_choose_rgba)(GtkColorDialog *self, GtkWindow *parent, const GdkRGBA *initial_color, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data) { stub_funcs.ptr_gtk_color_dialog_choose_rgba(self, parent, initial_color, cancellable, callback, user_data); }
 GdkRGBA * (gtk_color_dialog_choose_rgba_finish)(GtkColorDialog *self, GAsyncResult *result, GError **error) { return stub_funcs.ptr_gtk_color_dialog_choose_rgba_finish(self, result, error); }
 GType (gtk_color_dialog_button_get_type)(void) { return stub_funcs.ptr_gtk_color_dialog_button_get_type(); }
+GtkWidget * (gtk_color_dialog_button_new)(GtkColorDialog *dialog) { return stub_funcs.ptr_gtk_color_dialog_button_new(dialog); }
 GtkColorDialog* (gtk_color_dialog_button_get_dialog)(GtkColorDialogButton *self) { return stub_funcs.ptr_gtk_color_dialog_button_get_dialog(self); }
 void (gtk_color_dialog_button_set_dialog)(GtkColorDialogButton *self, GtkColorDialog *dialog) { stub_funcs.ptr_gtk_color_dialog_button_set_dialog(self, dialog); }
 const GdkRGBA * (gtk_color_dialog_button_get_rgba)(GtkColorDialogButton *self) { return stub_funcs.ptr_gtk_color_dialog_button_get_rgba(self); }
@@ -11337,12 +11588,14 @@ void (gtk_column_view_set_header_factory)(GtkColumnView *self, GtkListItemFactor
 GtkListItemFactory * (gtk_column_view_get_header_factory)(GtkColumnView *self) { return stub_funcs.ptr_gtk_column_view_get_header_factory(self); }
 void (gtk_column_view_scroll_to)(GtkColumnView *self, guint pos, GtkColumnViewColumn *column, GtkListScrollFlags flags, GtkScrollInfo *scroll) { stub_funcs.ptr_gtk_column_view_scroll_to(self, pos, column, flags, scroll); }
 GType (gtk_column_view_cell_get_type)(void) { return stub_funcs.ptr_gtk_column_view_cell_get_type(); }
+gpointer (gtk_column_view_cell_get_item)(GtkColumnViewCell *self) { return stub_funcs.ptr_gtk_column_view_cell_get_item(self); }
 guint (gtk_column_view_cell_get_position)(GtkColumnViewCell *self) { return stub_funcs.ptr_gtk_column_view_cell_get_position(self); }
 gboolean (gtk_column_view_cell_get_selected)(GtkColumnViewCell *self) { return stub_funcs.ptr_gtk_column_view_cell_get_selected(self); }
 gboolean (gtk_column_view_cell_get_focusable)(GtkColumnViewCell *self) { return stub_funcs.ptr_gtk_column_view_cell_get_focusable(self); }
 void (gtk_column_view_cell_set_focusable)(GtkColumnViewCell *self, gboolean focusable) { stub_funcs.ptr_gtk_column_view_cell_set_focusable(self, focusable); }
 void (gtk_column_view_cell_set_child)(GtkColumnViewCell *self, GtkWidget *child) { stub_funcs.ptr_gtk_column_view_cell_set_child(self, child); }
 GtkWidget * (gtk_column_view_cell_get_child)(GtkColumnViewCell *self) { return stub_funcs.ptr_gtk_column_view_cell_get_child(self); }
+GType (gtk_column_view_column_get_type)(void) { return stub_funcs.ptr_gtk_column_view_column_get_type(); }
 GtkColumnViewColumn * (gtk_column_view_column_new)(const char *title, GtkListItemFactory *factory) { return stub_funcs.ptr_gtk_column_view_column_new(title, factory); }
 GtkColumnView * (gtk_column_view_column_get_column_view)(GtkColumnViewColumn *self) { return stub_funcs.ptr_gtk_column_view_column_get_column_view(self); }
 void (gtk_column_view_column_set_factory)(GtkColumnViewColumn *self, GtkListItemFactory *factory) { stub_funcs.ptr_gtk_column_view_column_set_factory(self, factory); }
@@ -11364,6 +11617,7 @@ gboolean (gtk_column_view_column_get_expand)(GtkColumnViewColumn *self) { return
 void (gtk_column_view_column_set_id)(GtkColumnViewColumn *self, const char *id) { stub_funcs.ptr_gtk_column_view_column_set_id(self, id); }
 const char * (gtk_column_view_column_get_id)(GtkColumnViewColumn *self) { return stub_funcs.ptr_gtk_column_view_column_get_id(self); }
 GType (gtk_column_view_row_get_type)(void) { return stub_funcs.ptr_gtk_column_view_row_get_type(); }
+gpointer (gtk_column_view_row_get_item)(GtkColumnViewRow *self) { return stub_funcs.ptr_gtk_column_view_row_get_item(self); }
 guint (gtk_column_view_row_get_position)(GtkColumnViewRow *self) { return stub_funcs.ptr_gtk_column_view_row_get_position(self); }
 gboolean (gtk_column_view_row_get_selected)(GtkColumnViewRow *self) { return stub_funcs.ptr_gtk_column_view_row_get_selected(self); }
 gboolean (gtk_column_view_row_get_selectable)(GtkColumnViewRow *self) { return stub_funcs.ptr_gtk_column_view_row_get_selectable(self); }
@@ -11377,10 +11631,13 @@ void (gtk_column_view_row_set_accessible_description)(GtkColumnViewRow *self, co
 const char * (gtk_column_view_row_get_accessible_label)(GtkColumnViewRow *self) { return stub_funcs.ptr_gtk_column_view_row_get_accessible_label(self); }
 void (gtk_column_view_row_set_accessible_label)(GtkColumnViewRow *self, const char *label) { stub_funcs.ptr_gtk_column_view_row_set_accessible_label(self, label); }
 GType (gtk_column_view_sorter_get_type)(void) { return stub_funcs.ptr_gtk_column_view_sorter_get_type(); }
+GtkColumnViewColumn * (gtk_column_view_sorter_get_primary_sort_column)(GtkColumnViewSorter *self) { return stub_funcs.ptr_gtk_column_view_sorter_get_primary_sort_column(self); }
 GtkSortType (gtk_column_view_sorter_get_primary_sort_order)(GtkColumnViewSorter *self) { return stub_funcs.ptr_gtk_column_view_sorter_get_primary_sort_order(self); }
 guint (gtk_column_view_sorter_get_n_sort_columns)(GtkColumnViewSorter *self) { return stub_funcs.ptr_gtk_column_view_sorter_get_n_sort_columns(self); }
 GtkColumnViewColumn * (gtk_column_view_sorter_get_nth_sort_column)(GtkColumnViewSorter *self, guint position, GtkSortType *sort_order) { return stub_funcs.ptr_gtk_column_view_sorter_get_nth_sort_column(self, position, sort_order); }
+GType (gtk_constraint_target_get_type)(void) { return stub_funcs.ptr_gtk_constraint_target_get_type(); }
 GType (gtk_constraint_get_type)(void) { return stub_funcs.ptr_gtk_constraint_get_type(); }
+GtkConstraint * (gtk_constraint_new)(gpointer target, GtkConstraintAttribute target_attribute, GtkConstraintRelation relation, gpointer source, GtkConstraintAttribute source_attribute, double multiplier, double constant, int strength) { return stub_funcs.ptr_gtk_constraint_new(target, target_attribute, relation, source, source_attribute, multiplier, constant, strength); }
 GtkConstraint * (gtk_constraint_new_constant)(gpointer target, GtkConstraintAttribute target_attribute, GtkConstraintRelation relation, double constant, int strength) { return stub_funcs.ptr_gtk_constraint_new_constant(target, target_attribute, relation, constant, strength); }
 GtkConstraintTarget * (gtk_constraint_get_target)(GtkConstraint *constraint) { return stub_funcs.ptr_gtk_constraint_get_target(constraint); }
 GtkConstraintAttribute (gtk_constraint_get_target_attribute)(GtkConstraint *constraint) { return stub_funcs.ptr_gtk_constraint_get_target_attribute(constraint); }
@@ -11394,6 +11651,7 @@ gboolean (gtk_constraint_is_required)(GtkConstraint *constraint) { return stub_f
 gboolean (gtk_constraint_is_attached)(GtkConstraint *constraint) { return stub_funcs.ptr_gtk_constraint_is_attached(constraint); }
 gboolean (gtk_constraint_is_constant)(GtkConstraint *constraint) { return stub_funcs.ptr_gtk_constraint_is_constant(constraint); }
 GType (gtk_constraint_guide_get_type)(void) { return stub_funcs.ptr_gtk_constraint_guide_get_type(); }
+GtkConstraintGuide * (gtk_constraint_guide_new)(void) { return stub_funcs.ptr_gtk_constraint_guide_new(); }
 void (gtk_constraint_guide_set_min_size)(GtkConstraintGuide *guide, int width, int height) { stub_funcs.ptr_gtk_constraint_guide_set_min_size(guide, width, height); }
 void (gtk_constraint_guide_get_min_size)(GtkConstraintGuide *guide, int *width, int *height) { stub_funcs.ptr_gtk_constraint_guide_get_min_size(guide, width, height); }
 void (gtk_constraint_guide_set_nat_size)(GtkConstraintGuide *guide, int width, int height) { stub_funcs.ptr_gtk_constraint_guide_set_nat_size(guide, width, height); }
@@ -11406,6 +11664,7 @@ void (gtk_constraint_guide_set_name)(GtkConstraintGuide *guide, const char *name
 const char * (gtk_constraint_guide_get_name)(GtkConstraintGuide *guide) { return stub_funcs.ptr_gtk_constraint_guide_get_name(guide); }
 GType (gtk_constraint_layout_get_type)(void) { return stub_funcs.ptr_gtk_constraint_layout_get_type(); }
 GType (gtk_constraint_layout_child_get_type)(void) { return stub_funcs.ptr_gtk_constraint_layout_child_get_type(); }
+GQuark (gtk_constraint_vfl_parser_error_quark)(void) { return stub_funcs.ptr_gtk_constraint_vfl_parser_error_quark(); }
 GtkLayoutManager * (gtk_constraint_layout_new)(void) { return stub_funcs.ptr_gtk_constraint_layout_new(); }
 void (gtk_constraint_layout_add_constraint)(GtkConstraintLayout *layout, GtkConstraint *constraint) { stub_funcs.ptr_gtk_constraint_layout_add_constraint(layout, constraint); }
 void (gtk_constraint_layout_remove_constraint)(GtkConstraintLayout *layout, GtkConstraint *constraint) { stub_funcs.ptr_gtk_constraint_layout_remove_constraint(layout, constraint); }
@@ -11427,14 +11686,18 @@ void (gtk_css_provider_load_from_path)(GtkCssProvider *css_provider, const char 
 void (gtk_css_provider_load_from_resource)(GtkCssProvider *css_provider, const char *resource_path) { stub_funcs.ptr_gtk_css_provider_load_from_resource(css_provider, resource_path); }
 void (gtk_css_provider_load_named)(GtkCssProvider *provider, const char *name, const char *variant) { stub_funcs.ptr_gtk_css_provider_load_named(provider, name, variant); }
 GType (gtk_custom_filter_get_type)(void) { return stub_funcs.ptr_gtk_custom_filter_get_type(); }
+GtkCustomFilter * (gtk_custom_filter_new)(GtkCustomFilterFunc match_func, gpointer user_data, GDestroyNotify user_destroy) { return stub_funcs.ptr_gtk_custom_filter_new(match_func, user_data, user_destroy); }
 void (gtk_custom_filter_set_filter_func)(GtkCustomFilter *self, GtkCustomFilterFunc match_func, gpointer user_data, GDestroyNotify user_destroy) { stub_funcs.ptr_gtk_custom_filter_set_filter_func(self, match_func, user_data, user_destroy); }
 GType (gtk_custom_layout_get_type)(void) { return stub_funcs.ptr_gtk_custom_layout_get_type(); }
+GtkLayoutManager * (gtk_custom_layout_new)(GtkCustomRequestModeFunc request_mode, GtkCustomMeasureFunc measure, GtkCustomAllocateFunc allocate) { return stub_funcs.ptr_gtk_custom_layout_new(request_mode, measure, allocate); }
 GType (gtk_custom_sorter_get_type)(void) { return stub_funcs.ptr_gtk_custom_sorter_get_type(); }
+GtkCustomSorter * (gtk_custom_sorter_new)(GCompareDataFunc sort_func, gpointer user_data, GDestroyNotify user_destroy) { return stub_funcs.ptr_gtk_custom_sorter_new(sort_func, user_data, user_destroy); }
 void (gtk_custom_sorter_set_sort_func)(GtkCustomSorter *self, GCompareDataFunc sort_func, gpointer user_data, GDestroyNotify user_destroy) { stub_funcs.ptr_gtk_custom_sorter_set_sort_func(self, sort_func, user_data, user_destroy); }
 void (gtk_set_debug_flags)(GtkDebugFlags flags) { stub_funcs.ptr_gtk_set_debug_flags(flags); }
 GtkDebugFlags (gtk_get_debug_flags)(void) { return stub_funcs.ptr_gtk_get_debug_flags(); }
 GQuark (gtk_dialog_error_quark)(void) { return stub_funcs.ptr_gtk_dialog_error_quark(); }
 GType (gtk_directory_list_get_type)(void) { return stub_funcs.ptr_gtk_directory_list_get_type(); }
+GtkDirectoryList * (gtk_directory_list_new)(const char *attributes, GFile *file) { return stub_funcs.ptr_gtk_directory_list_new(attributes, file); }
 void (gtk_directory_list_set_file)(GtkDirectoryList *self, GFile *file) { stub_funcs.ptr_gtk_directory_list_set_file(self, file); }
 GFile * (gtk_directory_list_get_file)(GtkDirectoryList *self) { return stub_funcs.ptr_gtk_directory_list_get_file(self); }
 void (gtk_directory_list_set_attributes)(GtkDirectoryList *self, const char *attributes) { stub_funcs.ptr_gtk_directory_list_set_attributes(self, attributes); }
@@ -11446,6 +11709,7 @@ const GError * (gtk_directory_list_get_error)(GtkDirectoryList *self) { return s
 void (gtk_directory_list_set_monitored)(GtkDirectoryList *self, gboolean monitored) { stub_funcs.ptr_gtk_directory_list_set_monitored(self, monitored); }
 gboolean (gtk_directory_list_get_monitored)(GtkDirectoryList *self) { return stub_funcs.ptr_gtk_directory_list_get_monitored(self); }
 GType (gtk_drag_icon_get_type)(void) { return stub_funcs.ptr_gtk_drag_icon_get_type(); }
+GtkWidget * (gtk_drag_icon_get_for_drag)(GdkDrag *drag) { return stub_funcs.ptr_gtk_drag_icon_get_for_drag(drag); }
 void (gtk_drag_icon_set_child)(GtkDragIcon *self, GtkWidget *child) { stub_funcs.ptr_gtk_drag_icon_set_child(self, child); }
 GtkWidget * (gtk_drag_icon_get_child)(GtkDragIcon *self) { return stub_funcs.ptr_gtk_drag_icon_get_child(self); }
 void (gtk_drag_icon_set_from_paintable)(GdkDrag *drag, GdkPaintable *paintable, int hot_x, int hot_y) { stub_funcs.ptr_gtk_drag_icon_set_from_paintable(drag, paintable, hot_x, hot_y); }
@@ -11473,6 +11737,7 @@ gboolean (gtk_drop_controller_motion_contains_pointer)(GtkDropControllerMotion *
 GdkDrop * (gtk_drop_controller_motion_get_drop)(GtkDropControllerMotion *self) { return stub_funcs.ptr_gtk_drop_controller_motion_get_drop(self); }
 gboolean (gtk_drop_controller_motion_is_pointer)(GtkDropControllerMotion *self) { return stub_funcs.ptr_gtk_drop_controller_motion_is_pointer(self); }
 GType (gtk_drop_down_get_type)(void) { return stub_funcs.ptr_gtk_drop_down_get_type(); }
+GtkWidget * (gtk_drop_down_new)(GListModel *model, GtkExpression *expression) { return stub_funcs.ptr_gtk_drop_down_new(model, expression); }
 GtkWidget * (gtk_drop_down_new_from_strings)(const char * const * strings) { return stub_funcs.ptr_gtk_drop_down_new_from_strings(strings); }
 void (gtk_drop_down_set_model)(GtkDropDown *self, GListModel *model) { stub_funcs.ptr_gtk_drop_down_set_model(self, model); }
 GListModel * (gtk_drop_down_get_model)(GtkDropDown *self) { return stub_funcs.ptr_gtk_drop_down_get_model(self); }
@@ -11542,6 +11807,7 @@ gboolean (gtk_editable_delegate_set_property)(GObject *object, guint prop_id, co
 gboolean (gtk_editable_delegate_get_property)(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) { return stub_funcs.ptr_gtk_editable_delegate_get_property(object, prop_id, value, pspec); }
 gboolean (gtk_editable_delegate_get_accessible_platform_state)(GtkEditable *editable, GtkAccessiblePlatformState state) { return stub_funcs.ptr_gtk_editable_delegate_get_accessible_platform_state(editable, state); }
 GType (gtk_editable_label_get_type)(void) { return stub_funcs.ptr_gtk_editable_label_get_type(); }
+GtkWidget * (gtk_editable_label_new)(const char *str) { return stub_funcs.ptr_gtk_editable_label_new(str); }
 gboolean (gtk_editable_label_get_editing)(GtkEditableLabel *self) { return stub_funcs.ptr_gtk_editable_label_get_editing(self); }
 void (gtk_editable_label_start_editing)(GtkEditableLabel *self) { stub_funcs.ptr_gtk_editable_label_start_editing(self); }
 void (gtk_editable_label_stop_editing)(GtkEditableLabel *self, gboolean commit) { stub_funcs.ptr_gtk_editable_label_stop_editing(self, commit); }
@@ -11707,6 +11973,7 @@ GtkExpression * (gtk_value_dup_expression)(const GValue *value) { return stub_fu
 GType (gtk_param_expression_get_type)(void) { return stub_funcs.ptr_gtk_param_expression_get_type(); }
 GParamSpec * (gtk_param_spec_expression)(const char *name, const char *nick, const char *blurb, GParamFlags flags) { return stub_funcs.ptr_gtk_param_spec_expression(name, nick, blurb, flags); }
 GType (gtk_file_dialog_get_type)(void) { return stub_funcs.ptr_gtk_file_dialog_get_type(); }
+GtkFileDialog * (gtk_file_dialog_new)(void) { return stub_funcs.ptr_gtk_file_dialog_new(); }
 const char * (gtk_file_dialog_get_title)(GtkFileDialog *self) { return stub_funcs.ptr_gtk_file_dialog_get_title(self); }
 void (gtk_file_dialog_set_title)(GtkFileDialog *self, const char *title) { stub_funcs.ptr_gtk_file_dialog_set_title(self, title); }
 gboolean (gtk_file_dialog_get_modal)(GtkFileDialog *self) { return stub_funcs.ptr_gtk_file_dialog_get_modal(self); }
@@ -11745,6 +12012,7 @@ const char ** (gtk_file_filter_get_attributes)(GtkFileFilter *filter) { return s
 GVariant * (gtk_file_filter_to_gvariant)(GtkFileFilter *filter) { return stub_funcs.ptr_gtk_file_filter_to_gvariant(filter); }
 GtkFileFilter * (gtk_file_filter_new_from_gvariant)(GVariant *variant) { return stub_funcs.ptr_gtk_file_filter_new_from_gvariant(variant); }
 GType (gtk_file_launcher_get_type)(void) { return stub_funcs.ptr_gtk_file_launcher_get_type(); }
+GtkFileLauncher * (gtk_file_launcher_new)(GFile *file) { return stub_funcs.ptr_gtk_file_launcher_new(file); }
 GFile * (gtk_file_launcher_get_file)(GtkFileLauncher *self) { return stub_funcs.ptr_gtk_file_launcher_get_file(self); }
 void (gtk_file_launcher_set_file)(GtkFileLauncher *self, GFile *file) { stub_funcs.ptr_gtk_file_launcher_set_file(self, file); }
 gboolean (gtk_file_launcher_get_always_ask)(GtkFileLauncher *self) { return stub_funcs.ptr_gtk_file_launcher_get_always_ask(self); }
@@ -11756,9 +12024,11 @@ gboolean (gtk_file_launcher_launch_finish)(GtkFileLauncher *self, GAsyncResult *
 void (gtk_file_launcher_open_containing_folder)(GtkFileLauncher *self, GtkWindow *parent, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data) { stub_funcs.ptr_gtk_file_launcher_open_containing_folder(self, parent, cancellable, callback, user_data); }
 gboolean (gtk_file_launcher_open_containing_folder_finish)(GtkFileLauncher *self, GAsyncResult *result, GError **error) { return stub_funcs.ptr_gtk_file_launcher_open_containing_folder_finish(self, result, error); }
 GType (gtk_filter_get_type)(void) { return stub_funcs.ptr_gtk_filter_get_type(); }
+gboolean (gtk_filter_match)(GtkFilter *self, gpointer item) { return stub_funcs.ptr_gtk_filter_match(self, item); }
 GtkFilterMatch (gtk_filter_get_strictness)(GtkFilter *self) { return stub_funcs.ptr_gtk_filter_get_strictness(self); }
 void (gtk_filter_changed)(GtkFilter *self, GtkFilterChange change) { stub_funcs.ptr_gtk_filter_changed(self, change); }
 GType (gtk_filter_list_model_get_type)(void) { return stub_funcs.ptr_gtk_filter_list_model_get_type(); }
+GtkFilterListModel * (gtk_filter_list_model_new)(GListModel *model, GtkFilter *filter) { return stub_funcs.ptr_gtk_filter_list_model_new(model, filter); }
 void (gtk_filter_list_model_set_filter)(GtkFilterListModel *self, GtkFilter *filter) { stub_funcs.ptr_gtk_filter_list_model_set_filter(self, filter); }
 GtkFilter * (gtk_filter_list_model_get_filter)(GtkFilterListModel *self) { return stub_funcs.ptr_gtk_filter_list_model_get_filter(self); }
 void (gtk_filter_list_model_set_model)(GtkFilterListModel *self, GListModel *model) { stub_funcs.ptr_gtk_filter_list_model_set_model(self, model); }
@@ -11776,9 +12046,11 @@ void (gtk_fixed_set_child_transform)(GtkFixed *fixed, GtkWidget *widget, GskTran
 GskTransform * (gtk_fixed_get_child_transform)(GtkFixed *fixed, GtkWidget *widget) { return stub_funcs.ptr_gtk_fixed_get_child_transform(fixed, widget); }
 GType (gtk_fixed_layout_get_type)(void) { return stub_funcs.ptr_gtk_fixed_layout_get_type(); }
 GType (gtk_fixed_layout_child_get_type)(void) { return stub_funcs.ptr_gtk_fixed_layout_child_get_type(); }
+GtkLayoutManager * (gtk_fixed_layout_new)(void) { return stub_funcs.ptr_gtk_fixed_layout_new(); }
 void (gtk_fixed_layout_child_set_transform)(GtkFixedLayoutChild *child, GskTransform *transform) { stub_funcs.ptr_gtk_fixed_layout_child_set_transform(child, transform); }
 GskTransform * (gtk_fixed_layout_child_get_transform)(GtkFixedLayoutChild *child) { return stub_funcs.ptr_gtk_fixed_layout_child_get_transform(child); }
 GType (gtk_flatten_list_model_get_type)(void) { return stub_funcs.ptr_gtk_flatten_list_model_get_type(); }
+GtkFlattenListModel * (gtk_flatten_list_model_new)(GListModel *model) { return stub_funcs.ptr_gtk_flatten_list_model_new(model); }
 void (gtk_flatten_list_model_set_model)(GtkFlattenListModel *self, GListModel *model) { stub_funcs.ptr_gtk_flatten_list_model_set_model(self, model); }
 GListModel * (gtk_flatten_list_model_get_model)(GtkFlattenListModel *self) { return stub_funcs.ptr_gtk_flatten_list_model_get_model(self); }
 GListModel * (gtk_flatten_list_model_get_model_for_item)(GtkFlattenListModel *self, guint position) { return stub_funcs.ptr_gtk_flatten_list_model_get_model_for_item(self, position); }
@@ -11826,6 +12098,7 @@ void (gtk_flow_box_invalidate_filter)(GtkFlowBox *box) { stub_funcs.ptr_gtk_flow
 void (gtk_flow_box_set_sort_func)(GtkFlowBox *box, GtkFlowBoxSortFunc sort_func, gpointer user_data, GDestroyNotify destroy) { stub_funcs.ptr_gtk_flow_box_set_sort_func(box, sort_func, user_data, destroy); }
 void (gtk_flow_box_invalidate_sort)(GtkFlowBox *box) { stub_funcs.ptr_gtk_flow_box_invalidate_sort(box); }
 GType (gtk_font_dialog_get_type)(void) { return stub_funcs.ptr_gtk_font_dialog_get_type(); }
+GtkFontDialog * (gtk_font_dialog_new)(void) { return stub_funcs.ptr_gtk_font_dialog_new(); }
 const char * (gtk_font_dialog_get_title)(GtkFontDialog *self) { return stub_funcs.ptr_gtk_font_dialog_get_title(self); }
 void (gtk_font_dialog_set_title)(GtkFontDialog *self, const char *title) { stub_funcs.ptr_gtk_font_dialog_set_title(self, title); }
 gboolean (gtk_font_dialog_get_modal)(GtkFontDialog *self) { return stub_funcs.ptr_gtk_font_dialog_get_modal(self); }
@@ -11845,6 +12118,7 @@ PangoFontDescription * (gtk_font_dialog_choose_font_finish)(GtkFontDialog *self,
 void (gtk_font_dialog_choose_font_and_features)(GtkFontDialog *self, GtkWindow *parent, PangoFontDescription *initial_value, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data) { stub_funcs.ptr_gtk_font_dialog_choose_font_and_features(self, parent, initial_value, cancellable, callback, user_data); }
 gboolean (gtk_font_dialog_choose_font_and_features_finish)(GtkFontDialog *self, GAsyncResult *result, PangoFontDescription **font_desc, char **font_features, PangoLanguage **language, GError **error) { return stub_funcs.ptr_gtk_font_dialog_choose_font_and_features_finish(self, result, font_desc, font_features, language, error); }
 GType (gtk_font_dialog_button_get_type)(void) { return stub_funcs.ptr_gtk_font_dialog_button_get_type(); }
+GtkWidget * (gtk_font_dialog_button_new)(GtkFontDialog *dialog) { return stub_funcs.ptr_gtk_font_dialog_button_new(dialog); }
 GtkFontDialog * (gtk_font_dialog_button_get_dialog)(GtkFontDialogButton *self) { return stub_funcs.ptr_gtk_font_dialog_button_get_dialog(self); }
 void (gtk_font_dialog_button_set_dialog)(GtkFontDialogButton *self, GtkFontDialog *dialog) { stub_funcs.ptr_gtk_font_dialog_button_set_dialog(self, dialog); }
 GtkFontLevel (gtk_font_dialog_button_get_level)(GtkFontDialogButton *self) { return stub_funcs.ptr_gtk_font_dialog_button_get_level(self); }
@@ -11949,6 +12223,7 @@ void (gtk_gl_area_attach_buffers)(GtkGLArea *area) { stub_funcs.ptr_gtk_gl_area_
 void (gtk_gl_area_set_error)(GtkGLArea *area, const GError *error) { stub_funcs.ptr_gtk_gl_area_set_error(area, error); }
 GError * (gtk_gl_area_get_error)(GtkGLArea *area) { return stub_funcs.ptr_gtk_gl_area_get_error(area); }
 GType (gtk_graphics_offload_get_type)(void) { return stub_funcs.ptr_gtk_graphics_offload_get_type(); }
+GtkWidget * (gtk_graphics_offload_new)(GtkWidget *child) { return stub_funcs.ptr_gtk_graphics_offload_new(child); }
 void (gtk_graphics_offload_set_child)(GtkGraphicsOffload *self, GtkWidget *child) { stub_funcs.ptr_gtk_graphics_offload_set_child(self, child); }
 GtkWidget * (gtk_graphics_offload_get_child)(GtkGraphicsOffload *self) { return stub_funcs.ptr_gtk_graphics_offload_get_child(self); }
 void (gtk_graphics_offload_set_enabled)(GtkGraphicsOffload *self, GtkGraphicsOffloadEnabled enabled) { stub_funcs.ptr_gtk_graphics_offload_set_enabled(self, enabled); }
@@ -11979,6 +12254,7 @@ int (gtk_grid_get_baseline_row)(GtkGrid *grid) { return stub_funcs.ptr_gtk_grid_
 void (gtk_grid_query_child)(GtkGrid *grid, GtkWidget *child, int *column, int *row, int *width, int *height) { stub_funcs.ptr_gtk_grid_query_child(grid, child, column, row, width, height); }
 GType (gtk_grid_layout_get_type)(void) { return stub_funcs.ptr_gtk_grid_layout_get_type(); }
 GType (gtk_grid_layout_child_get_type)(void) { return stub_funcs.ptr_gtk_grid_layout_child_get_type(); }
+GtkLayoutManager * (gtk_grid_layout_new)(void) { return stub_funcs.ptr_gtk_grid_layout_new(); }
 void (gtk_grid_layout_set_row_homogeneous)(GtkGridLayout *grid, gboolean homogeneous) { stub_funcs.ptr_gtk_grid_layout_set_row_homogeneous(grid, homogeneous); }
 gboolean (gtk_grid_layout_get_row_homogeneous)(GtkGridLayout *grid) { return stub_funcs.ptr_gtk_grid_layout_get_row_homogeneous(grid); }
 void (gtk_grid_layout_set_row_spacing)(GtkGridLayout *grid, guint spacing) { stub_funcs.ptr_gtk_grid_layout_set_row_spacing(grid, spacing); }
@@ -12029,6 +12305,7 @@ void (gtk_header_bar_set_decoration_layout)(GtkHeaderBar *bar, const char *layou
 const char* (gtk_header_bar_get_decoration_layout)(GtkHeaderBar *bar) { return stub_funcs.ptr_gtk_header_bar_get_decoration_layout(bar); }
 GType (gtk_icon_paintable_get_type)(void) { return stub_funcs.ptr_gtk_icon_paintable_get_type(); }
 GType (gtk_icon_theme_get_type)(void) { return stub_funcs.ptr_gtk_icon_theme_get_type(); }
+GQuark (gtk_icon_theme_error_quark)(void) { return stub_funcs.ptr_gtk_icon_theme_error_quark(); }
 GtkIconTheme* (gtk_icon_theme_new)(void) { return stub_funcs.ptr_gtk_icon_theme_new(); }
 GtkIconTheme* (gtk_icon_theme_get_for_display)(GdkDisplay *display) { return stub_funcs.ptr_gtk_icon_theme_get_for_display(display); }
 GdkDisplay * (gtk_icon_theme_get_display)(GtkIconTheme *self) { return stub_funcs.ptr_gtk_icon_theme_get_display(self); }
@@ -12098,6 +12375,7 @@ GtkIMContext* (gtk_im_multicontext_new)(void) { return stub_funcs.ptr_gtk_im_mul
 const char * (gtk_im_multicontext_get_context_id)(GtkIMMulticontext *context) { return stub_funcs.ptr_gtk_im_multicontext_get_context_id(context); }
 void (gtk_im_multicontext_set_context_id)(GtkIMMulticontext *context, const char *context_id) { stub_funcs.ptr_gtk_im_multicontext_set_context_id(context, context_id); }
 GType (gtk_inscription_get_type)(void) { return stub_funcs.ptr_gtk_inscription_get_type(); }
+GtkWidget * (gtk_inscription_new)(const char *text) { return stub_funcs.ptr_gtk_inscription_new(text); }
 const char * (gtk_inscription_get_text)(GtkInscription *self) { return stub_funcs.ptr_gtk_inscription_get_text(self); }
 void (gtk_inscription_set_text)(GtkInscription *self, const char *text) { stub_funcs.ptr_gtk_inscription_set_text(self, text); }
 PangoAttrList * (gtk_inscription_get_attributes)(GtkInscription *self) { return stub_funcs.ptr_gtk_inscription_get_attributes(self); }
@@ -12172,8 +12450,10 @@ GMenuModel * (gtk_label_get_extra_menu)(GtkLabel *self) { return stub_funcs.ptr_
 void (gtk_label_set_tabs)(GtkLabel *self, PangoTabArray *tabs) { stub_funcs.ptr_gtk_label_set_tabs(self, tabs); }
 PangoTabArray * (gtk_label_get_tabs)(GtkLabel *self) { return stub_funcs.ptr_gtk_label_get_tabs(self); }
 GType (gtk_layout_child_get_type)(void) { return stub_funcs.ptr_gtk_layout_child_get_type(); }
+GtkLayoutManager * (gtk_layout_child_get_layout_manager)(GtkLayoutChild *layout_child) { return stub_funcs.ptr_gtk_layout_child_get_layout_manager(layout_child); }
 GtkWidget * (gtk_layout_child_get_child_widget)(GtkLayoutChild *layout_child) { return stub_funcs.ptr_gtk_layout_child_get_child_widget(layout_child); }
 GType (gtk_layout_manager_get_type)(void) { return stub_funcs.ptr_gtk_layout_manager_get_type(); }
+void (gtk_layout_manager_measure)(GtkLayoutManager *manager, GtkWidget *widget, GtkOrientation orientation, int for_size, int *minimum, int *natural, int *minimum_baseline, int *natural_baseline) { stub_funcs.ptr_gtk_layout_manager_measure(manager, widget, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline); }
 void (gtk_layout_manager_allocate)(GtkLayoutManager *manager, GtkWidget *widget, int width, int height, int baseline) { stub_funcs.ptr_gtk_layout_manager_allocate(manager, widget, width, height, baseline); }
 GtkSizeRequestMode (gtk_layout_manager_get_request_mode)(GtkLayoutManager *manager) { return stub_funcs.ptr_gtk_layout_manager_get_request_mode(manager); }
 GtkWidget * (gtk_layout_manager_get_widget)(GtkLayoutManager *manager) { return stub_funcs.ptr_gtk_layout_manager_get_widget(manager); }
@@ -12251,12 +12531,14 @@ void (gtk_list_box_bind_model)(GtkListBox *box, GListModel *model, GtkListBoxCre
 void (gtk_list_box_set_show_separators)(GtkListBox *box, gboolean show_separators) { stub_funcs.ptr_gtk_list_box_set_show_separators(box, show_separators); }
 gboolean (gtk_list_box_get_show_separators)(GtkListBox *box) { return stub_funcs.ptr_gtk_list_box_get_show_separators(box); }
 GType (gtk_list_header_get_type)(void) { return stub_funcs.ptr_gtk_list_header_get_type(); }
+gpointer (gtk_list_header_get_item)(GtkListHeader *self) { return stub_funcs.ptr_gtk_list_header_get_item(self); }
 guint (gtk_list_header_get_start)(GtkListHeader *self) { return stub_funcs.ptr_gtk_list_header_get_start(self); }
 guint (gtk_list_header_get_end)(GtkListHeader *self) { return stub_funcs.ptr_gtk_list_header_get_end(self); }
 guint (gtk_list_header_get_n_items)(GtkListHeader *self) { return stub_funcs.ptr_gtk_list_header_get_n_items(self); }
 void (gtk_list_header_set_child)(GtkListHeader *self, GtkWidget *child) { stub_funcs.ptr_gtk_list_header_set_child(self, child); }
 GtkWidget * (gtk_list_header_get_child)(GtkListHeader *self) { return stub_funcs.ptr_gtk_list_header_get_child(self); }
 GType (gtk_list_item_get_type)(void) { return stub_funcs.ptr_gtk_list_item_get_type(); }
+gpointer (gtk_list_item_get_item)(GtkListItem *self) { return stub_funcs.ptr_gtk_list_item_get_item(self); }
 guint (gtk_list_item_get_position)(GtkListItem *self) { return stub_funcs.ptr_gtk_list_item_get_position(self); }
 gboolean (gtk_list_item_get_selected)(GtkListItem *self) { return stub_funcs.ptr_gtk_list_item_get_selected(self); }
 gboolean (gtk_list_item_get_selectable)(GtkListItem *self) { return stub_funcs.ptr_gtk_list_item_get_selectable(self); }
@@ -12298,14 +12580,17 @@ PangoLanguage * (gtk_get_default_language)(void) { return stub_funcs.ptr_gtk_get
 GtkTextDirection (gtk_get_locale_direction)(void) { return stub_funcs.ptr_gtk_get_locale_direction(); }
 void (gtk_init)(void) { stub_funcs.ptr_gtk_init(); }
 GType (gtk_map_list_model_get_type)(void) { return stub_funcs.ptr_gtk_map_list_model_get_type(); }
+GtkMapListModel * (gtk_map_list_model_new)(GListModel *model, GtkMapListModelMapFunc map_func, gpointer user_data, GDestroyNotify user_destroy) { return stub_funcs.ptr_gtk_map_list_model_new(model, map_func, user_data, user_destroy); }
 void (gtk_map_list_model_set_map_func)(GtkMapListModel *self, GtkMapListModelMapFunc map_func, gpointer user_data, GDestroyNotify user_destroy) { stub_funcs.ptr_gtk_map_list_model_set_map_func(self, map_func, user_data, user_destroy); }
 void (gtk_map_list_model_set_model)(GtkMapListModel *self, GListModel *model) { stub_funcs.ptr_gtk_map_list_model_set_model(self, model); }
 GListModel * (gtk_map_list_model_get_model)(GtkMapListModel *self) { return stub_funcs.ptr_gtk_map_list_model_get_model(self); }
 gboolean (gtk_map_list_model_has_map)(GtkMapListModel *self) { return stub_funcs.ptr_gtk_map_list_model_has_map(self); }
 GType (gtk_media_controls_get_type)(void) { return stub_funcs.ptr_gtk_media_controls_get_type(); }
+GtkWidget* (gtk_media_controls_new)(GtkMediaStream *stream) { return stub_funcs.ptr_gtk_media_controls_new(stream); }
 GtkMediaStream* (gtk_media_controls_get_media_stream)(GtkMediaControls *controls) { return stub_funcs.ptr_gtk_media_controls_get_media_stream(controls); }
 void (gtk_media_controls_set_media_stream)(GtkMediaControls *controls, GtkMediaStream *stream) { stub_funcs.ptr_gtk_media_controls_set_media_stream(controls, stream); }
 GType (gtk_media_file_get_type)(void) { return stub_funcs.ptr_gtk_media_file_get_type(); }
+GtkMediaStream * (gtk_media_file_new)(void) { return stub_funcs.ptr_gtk_media_file_new(); }
 GtkMediaStream * (gtk_media_file_new_for_filename)(const char *filename) { return stub_funcs.ptr_gtk_media_file_new_for_filename(filename); }
 GtkMediaStream * (gtk_media_file_new_for_resource)(const char *resource_path) { return stub_funcs.ptr_gtk_media_file_new_for_resource(resource_path); }
 GtkMediaStream * (gtk_media_file_new_for_file)(GFile *file) { return stub_funcs.ptr_gtk_media_file_new_for_file(file); }
@@ -12318,6 +12603,7 @@ GFile * (gtk_media_file_get_file)(GtkMediaFile *self) { return stub_funcs.ptr_gt
 void (gtk_media_file_set_input_stream)(GtkMediaFile *self, GInputStream *stream) { stub_funcs.ptr_gtk_media_file_set_input_stream(self, stream); }
 GInputStream * (gtk_media_file_get_input_stream)(GtkMediaFile *self) { return stub_funcs.ptr_gtk_media_file_get_input_stream(self); }
 GType (gtk_media_stream_get_type)(void) { return stub_funcs.ptr_gtk_media_stream_get_type(); }
+gboolean (gtk_media_stream_is_prepared)(GtkMediaStream *self) { return stub_funcs.ptr_gtk_media_stream_is_prepared(self); }
 const GError * (gtk_media_stream_get_error)(GtkMediaStream *self) { return stub_funcs.ptr_gtk_media_stream_get_error(self); }
 gboolean (gtk_media_stream_has_audio)(GtkMediaStream *self) { return stub_funcs.ptr_gtk_media_stream_has_audio(self); }
 gboolean (gtk_media_stream_has_video)(GtkMediaStream *self) { return stub_funcs.ptr_gtk_media_stream_has_video(self); }
@@ -12388,21 +12674,28 @@ GtkWindow * (gtk_mount_operation_get_parent)(GtkMountOperation *op) { return stu
 void (gtk_mount_operation_set_display)(GtkMountOperation *op, GdkDisplay *display) { stub_funcs.ptr_gtk_mount_operation_set_display(op, display); }
 GdkDisplay * (gtk_mount_operation_get_display)(GtkMountOperation *op) { return stub_funcs.ptr_gtk_mount_operation_get_display(op); }
 GType (gtk_multi_filter_get_type)(void) { return stub_funcs.ptr_gtk_multi_filter_get_type(); }
+void (gtk_multi_filter_append)(GtkMultiFilter *self, GtkFilter *filter) { stub_funcs.ptr_gtk_multi_filter_append(self, filter); }
 void (gtk_multi_filter_remove)(GtkMultiFilter *self, guint position) { stub_funcs.ptr_gtk_multi_filter_remove(self, position); }
 GType (gtk_any_filter_get_type)(void) { return stub_funcs.ptr_gtk_any_filter_get_type(); }
+GtkAnyFilter * (gtk_any_filter_new)(void) { return stub_funcs.ptr_gtk_any_filter_new(); }
 GType (gtk_every_filter_get_type)(void) { return stub_funcs.ptr_gtk_every_filter_get_type(); }
+GtkEveryFilter * (gtk_every_filter_new)(void) { return stub_funcs.ptr_gtk_every_filter_new(); }
 GType (gtk_multi_selection_get_type)(void) { return stub_funcs.ptr_gtk_multi_selection_get_type(); }
+GtkMultiSelection * (gtk_multi_selection_new)(GListModel *model) { return stub_funcs.ptr_gtk_multi_selection_new(model); }
 GListModel * (gtk_multi_selection_get_model)(GtkMultiSelection *self) { return stub_funcs.ptr_gtk_multi_selection_get_model(self); }
 void (gtk_multi_selection_set_model)(GtkMultiSelection *self, GListModel *model) { stub_funcs.ptr_gtk_multi_selection_set_model(self, model); }
 GType (gtk_multi_sorter_get_type)(void) { return stub_funcs.ptr_gtk_multi_sorter_get_type(); }
+GtkMultiSorter * (gtk_multi_sorter_new)(void) { return stub_funcs.ptr_gtk_multi_sorter_new(); }
 void (gtk_multi_sorter_append)(GtkMultiSorter *self, GtkSorter *sorter) { stub_funcs.ptr_gtk_multi_sorter_append(self, sorter); }
 void (gtk_multi_sorter_remove)(GtkMultiSorter *self, guint position) { stub_funcs.ptr_gtk_multi_sorter_remove(self, position); }
+GType (gtk_native_get_type)(void) { return stub_funcs.ptr_gtk_native_get_type(); }
 void (gtk_native_unrealize)(GtkNative *self) { stub_funcs.ptr_gtk_native_unrealize(self); }
 GtkNative * (gtk_native_get_for_surface)(GdkSurface *surface) { return stub_funcs.ptr_gtk_native_get_for_surface(surface); }
 GdkSurface* (gtk_native_get_surface)(GtkNative *self) { return stub_funcs.ptr_gtk_native_get_surface(self); }
 GskRenderer* (gtk_native_get_renderer)(GtkNative *self) { return stub_funcs.ptr_gtk_native_get_renderer(self); }
 void (gtk_native_get_surface_transform)(GtkNative *self, double *x, double *y) { stub_funcs.ptr_gtk_native_get_surface_transform(self, x, y); }
 GType (gtk_native_dialog_get_type)(void) { return stub_funcs.ptr_gtk_native_dialog_get_type(); }
+void (gtk_native_dialog_show)(GtkNativeDialog *self) { stub_funcs.ptr_gtk_native_dialog_show(self); }
 void (gtk_native_dialog_hide)(GtkNativeDialog *self) { stub_funcs.ptr_gtk_native_dialog_hide(self); }
 void (gtk_native_dialog_destroy)(GtkNativeDialog *self) { stub_funcs.ptr_gtk_native_dialog_destroy(self); }
 gboolean (gtk_native_dialog_get_visible)(GtkNativeDialog *self) { return stub_funcs.ptr_gtk_native_dialog_get_visible(self); }
@@ -12413,6 +12706,7 @@ const char * (gtk_native_dialog_get_title)(GtkNativeDialog *self) { return stub_
 void (gtk_native_dialog_set_transient_for)(GtkNativeDialog *self, GtkWindow *parent) { stub_funcs.ptr_gtk_native_dialog_set_transient_for(self, parent); }
 GtkWindow * (gtk_native_dialog_get_transient_for)(GtkNativeDialog *self) { return stub_funcs.ptr_gtk_native_dialog_get_transient_for(self); }
 GType (gtk_no_selection_get_type)(void) { return stub_funcs.ptr_gtk_no_selection_get_type(); }
+GtkNoSelection * (gtk_no_selection_new)(GListModel *model) { return stub_funcs.ptr_gtk_no_selection_new(model); }
 GListModel * (gtk_no_selection_get_model)(GtkNoSelection *self) { return stub_funcs.ptr_gtk_no_selection_get_model(self); }
 void (gtk_no_selection_set_model)(GtkNoSelection *self, GListModel *model) { stub_funcs.ptr_gtk_no_selection_set_model(self, model); }
 GType (gtk_notebook_get_type)(void) { return stub_funcs.ptr_gtk_notebook_get_type(); }
@@ -12464,6 +12758,7 @@ GtkNotebookPage* (gtk_notebook_get_page)(GtkNotebook *notebook, GtkWidget *child
 GtkWidget* (gtk_notebook_page_get_child)(GtkNotebookPage *page) { return stub_funcs.ptr_gtk_notebook_page_get_child(page); }
 GListModel* (gtk_notebook_get_pages)(GtkNotebook *notebook) { return stub_funcs.ptr_gtk_notebook_get_pages(notebook); }
 GType (gtk_numeric_sorter_get_type)(void) { return stub_funcs.ptr_gtk_numeric_sorter_get_type(); }
+GtkNumericSorter * (gtk_numeric_sorter_new)(GtkExpression *expression) { return stub_funcs.ptr_gtk_numeric_sorter_new(expression); }
 GtkExpression * (gtk_numeric_sorter_get_expression)(GtkNumericSorter *self) { return stub_funcs.ptr_gtk_numeric_sorter_get_expression(self); }
 void (gtk_numeric_sorter_set_expression)(GtkNumericSorter *self, GtkExpression *expression) { stub_funcs.ptr_gtk_numeric_sorter_set_expression(self, expression); }
 GtkSortType (gtk_numeric_sorter_get_sort_order)(GtkNumericSorter *self) { return stub_funcs.ptr_gtk_numeric_sorter_get_sort_order(self); }
@@ -12483,6 +12778,7 @@ gboolean (gtk_overlay_get_clip_overlay)(GtkOverlay *overlay, GtkWidget *widget) 
 void (gtk_overlay_set_clip_overlay)(GtkOverlay *overlay, GtkWidget *widget, gboolean clip_overlay) { stub_funcs.ptr_gtk_overlay_set_clip_overlay(overlay, widget, clip_overlay); }
 GType (gtk_overlay_layout_get_type)(void) { return stub_funcs.ptr_gtk_overlay_layout_get_type(); }
 GType (gtk_overlay_layout_child_get_type)(void) { return stub_funcs.ptr_gtk_overlay_layout_child_get_type(); }
+GtkLayoutManager * (gtk_overlay_layout_new)(void) { return stub_funcs.ptr_gtk_overlay_layout_new(); }
 void (gtk_overlay_layout_child_set_measure)(GtkOverlayLayoutChild *child, gboolean measure) { stub_funcs.ptr_gtk_overlay_layout_child_set_measure(child, measure); }
 gboolean (gtk_overlay_layout_child_get_measure)(GtkOverlayLayoutChild *child) { return stub_funcs.ptr_gtk_overlay_layout_child_get_measure(child); }
 void (gtk_overlay_layout_child_set_clip_overlay)(GtkOverlayLayoutChild *child, gboolean clip_overlay) { stub_funcs.ptr_gtk_overlay_layout_child_set_clip_overlay(child, clip_overlay); }
@@ -12516,7 +12812,9 @@ gboolean (gtk_password_entry_get_show_peek_icon)(GtkPasswordEntry *entry) { retu
 void (gtk_password_entry_set_extra_menu)(GtkPasswordEntry *entry, GMenuModel *model) { stub_funcs.ptr_gtk_password_entry_set_extra_menu(entry, model); }
 GMenuModel * (gtk_password_entry_get_extra_menu)(GtkPasswordEntry *entry) { return stub_funcs.ptr_gtk_password_entry_get_extra_menu(entry); }
 GType (gtk_password_entry_buffer_get_type)(void) { return stub_funcs.ptr_gtk_password_entry_buffer_get_type(); }
+GtkEntryBuffer * (gtk_password_entry_buffer_new)(void) { return stub_funcs.ptr_gtk_password_entry_buffer_new(); }
 GType (gtk_picture_get_type)(void) { return stub_funcs.ptr_gtk_picture_get_type(); }
+GtkWidget* (gtk_picture_new)(void) { return stub_funcs.ptr_gtk_picture_new(); }
 GtkWidget* (gtk_picture_new_for_paintable)(GdkPaintable *paintable) { return stub_funcs.ptr_gtk_picture_new_for_paintable(paintable); }
 GtkWidget* (gtk_picture_new_for_pixbuf)(GdkPixbuf *pixbuf) { return stub_funcs.ptr_gtk_picture_new_for_pixbuf(pixbuf); }
 GtkWidget* (gtk_picture_new_for_file)(GFile *file) { return stub_funcs.ptr_gtk_picture_new_for_file(file); }
@@ -12580,6 +12878,7 @@ void (gtk_print_setup_unref)(GtkPrintSetup *setup) { stub_funcs.ptr_gtk_print_se
 GtkPrintSettings * (gtk_print_setup_get_print_settings)(GtkPrintSetup *setup) { return stub_funcs.ptr_gtk_print_setup_get_print_settings(setup); }
 GtkPageSetup * (gtk_print_setup_get_page_setup)(GtkPrintSetup *setup) { return stub_funcs.ptr_gtk_print_setup_get_page_setup(setup); }
 GType (gtk_print_dialog_get_type)(void) { return stub_funcs.ptr_gtk_print_dialog_get_type(); }
+GtkPrintDialog* (gtk_print_dialog_new)(void) { return stub_funcs.ptr_gtk_print_dialog_new(); }
 const char * (gtk_print_dialog_get_title)(GtkPrintDialog *self) { return stub_funcs.ptr_gtk_print_dialog_get_title(self); }
 void (gtk_print_dialog_set_title)(GtkPrintDialog *self, const char *title) { stub_funcs.ptr_gtk_print_dialog_set_title(self, title); }
 const char * (gtk_print_dialog_get_accept_label)(GtkPrintDialog *self) { return stub_funcs.ptr_gtk_print_dialog_get_accept_label(self); }
@@ -12636,6 +12935,7 @@ void (gtk_range_set_round_digits)(GtkRange *range, int round_digits) { stub_func
 int (gtk_range_get_round_digits)(GtkRange *range) { return stub_funcs.ptr_gtk_range_get_round_digits(range); }
 GType (gtk_recent_info_get_type)(void) { return stub_funcs.ptr_gtk_recent_info_get_type(); }
 GType (gtk_recent_manager_get_type)(void) { return stub_funcs.ptr_gtk_recent_manager_get_type(); }
+GQuark (gtk_recent_manager_error_quark)(void) { return stub_funcs.ptr_gtk_recent_manager_error_quark(); }
 GtkRecentManager* (gtk_recent_manager_new)(void) { return stub_funcs.ptr_gtk_recent_manager_new(); }
 GtkRecentManager* (gtk_recent_manager_get_default)(void) { return stub_funcs.ptr_gtk_recent_manager_get_default(); }
 gboolean (gtk_recent_manager_add_item)(GtkRecentManager *manager, const char *uri) { return stub_funcs.ptr_gtk_recent_manager_add_item(manager, uri); }
@@ -12682,6 +12982,7 @@ void (gtk_revealer_set_transition_type)(GtkRevealer *revealer, GtkRevealerTransi
 GtkRevealerTransitionType (gtk_revealer_get_transition_type)(GtkRevealer *revealer) { return stub_funcs.ptr_gtk_revealer_get_transition_type(revealer); }
 void (gtk_revealer_set_child)(GtkRevealer *revealer, GtkWidget *child) { stub_funcs.ptr_gtk_revealer_set_child(revealer, child); }
 GtkWidget * (gtk_revealer_get_child)(GtkRevealer *revealer) { return stub_funcs.ptr_gtk_revealer_get_child(revealer); }
+GType (gtk_root_get_type)(void) { return stub_funcs.ptr_gtk_root_get_type(); }
 void (gtk_root_set_focus)(GtkRoot *self, GtkWidget *focus) { stub_funcs.ptr_gtk_root_set_focus(self, focus); }
 GtkWidget * (gtk_root_get_focus)(GtkRoot *self) { return stub_funcs.ptr_gtk_root_get_focus(self); }
 GType (gtk_scale_get_type)(void) { return stub_funcs.ptr_gtk_scale_get_type(); }
@@ -12791,10 +13092,13 @@ void (gtk_search_entry_set_input_purpose)(GtkSearchEntry *entry, GtkInputPurpose
 GtkInputPurpose (gtk_search_entry_get_input_purpose)(GtkSearchEntry *entry) { return stub_funcs.ptr_gtk_search_entry_get_input_purpose(entry); }
 void (gtk_search_entry_set_input_hints)(GtkSearchEntry *entry, GtkInputHints hints) { stub_funcs.ptr_gtk_search_entry_set_input_hints(entry, hints); }
 GtkInputHints (gtk_search_entry_get_input_hints)(GtkSearchEntry *entry) { return stub_funcs.ptr_gtk_search_entry_get_input_hints(entry); }
+GType (gtk_section_model_get_type)(void) { return stub_funcs.ptr_gtk_section_model_get_type(); }
 void (gtk_section_model_sections_changed)(GtkSectionModel *self, guint position, guint n_items) { stub_funcs.ptr_gtk_section_model_sections_changed(self, position, n_items); }
 GType (gtk_selection_filter_model_get_type)(void) { return stub_funcs.ptr_gtk_selection_filter_model_get_type(); }
+GtkSelectionFilterModel * (gtk_selection_filter_model_new)(GtkSelectionModel *model) { return stub_funcs.ptr_gtk_selection_filter_model_new(model); }
 void (gtk_selection_filter_model_set_model)(GtkSelectionFilterModel *self, GtkSelectionModel *model) { stub_funcs.ptr_gtk_selection_filter_model_set_model(self, model); }
 GtkSelectionModel * (gtk_selection_filter_model_get_model)(GtkSelectionFilterModel *self) { return stub_funcs.ptr_gtk_selection_filter_model_get_model(self); }
+GType (gtk_selection_model_get_type)(void) { return stub_funcs.ptr_gtk_selection_model_get_type(); }
 GtkBitset * (gtk_selection_model_get_selection)(GtkSelectionModel *model) { return stub_funcs.ptr_gtk_selection_model_get_selection(model); }
 GtkBitset * (gtk_selection_model_get_selection_in_range)(GtkSelectionModel *model, guint position, guint n_items) { return stub_funcs.ptr_gtk_selection_model_get_selection_in_range(model, position, n_items); }
 gboolean (gtk_selection_model_select_item)(GtkSelectionModel *model, guint position, gboolean unselect_rest) { return stub_funcs.ptr_gtk_selection_model_select_item(model, position, unselect_rest); }
@@ -12812,6 +13116,7 @@ GtkSettings* (gtk_settings_get_default)(void) { return stub_funcs.ptr_gtk_settin
 GtkSettings* (gtk_settings_get_for_display)(GdkDisplay *display) { return stub_funcs.ptr_gtk_settings_get_for_display(display); }
 void (gtk_settings_reset_property)(GtkSettings *settings, const char *name) { stub_funcs.ptr_gtk_settings_reset_property(settings, name); }
 GType (gtk_shortcut_get_type)(void) { return stub_funcs.ptr_gtk_shortcut_get_type(); }
+GtkShortcut * (gtk_shortcut_new)(GtkShortcutTrigger *trigger, GtkShortcutAction *action) { return stub_funcs.ptr_gtk_shortcut_new(trigger, action); }
 // Unable to locate va_equiv for gtk_shortcut_new_with_arguments
 GtkShortcutTrigger * (gtk_shortcut_get_trigger)(GtkShortcut *self) { return stub_funcs.ptr_gtk_shortcut_get_trigger(self); }
 void (gtk_shortcut_set_trigger)(GtkShortcut *self, GtkShortcutTrigger *trigger) { stub_funcs.ptr_gtk_shortcut_set_trigger(self, trigger); }
@@ -12820,16 +13125,23 @@ void (gtk_shortcut_set_action)(GtkShortcut *self, GtkShortcutAction *action) { s
 GVariant * (gtk_shortcut_get_arguments)(GtkShortcut *self) { return stub_funcs.ptr_gtk_shortcut_get_arguments(self); }
 void (gtk_shortcut_set_arguments)(GtkShortcut *self, GVariant *args) { stub_funcs.ptr_gtk_shortcut_set_arguments(self, args); }
 GType (gtk_shortcut_action_get_type)(void) { return stub_funcs.ptr_gtk_shortcut_action_get_type(); }
+char * (gtk_shortcut_action_to_string)(GtkShortcutAction *self) { return stub_funcs.ptr_gtk_shortcut_action_to_string(self); }
 GtkShortcutAction * (gtk_shortcut_action_parse_string)(const char * string) { return stub_funcs.ptr_gtk_shortcut_action_parse_string(string); }
 void (gtk_shortcut_action_print)(GtkShortcutAction *self, GString *string) { stub_funcs.ptr_gtk_shortcut_action_print(self, string); }
 gboolean (gtk_shortcut_action_activate)(GtkShortcutAction *self, GtkShortcutActionFlags flags, GtkWidget *widget, GVariant *args) { return stub_funcs.ptr_gtk_shortcut_action_activate(self, flags, widget, args); }
 GType (gtk_nothing_action_get_type)(void) { return stub_funcs.ptr_gtk_nothing_action_get_type(); }
+GtkShortcutAction * (gtk_nothing_action_get)(void) { return stub_funcs.ptr_gtk_nothing_action_get(); }
 GType (gtk_callback_action_get_type)(void) { return stub_funcs.ptr_gtk_callback_action_get_type(); }
+GtkShortcutAction * (gtk_callback_action_new)(GtkShortcutFunc callback, gpointer data, GDestroyNotify destroy) { return stub_funcs.ptr_gtk_callback_action_new(callback, data, destroy); }
 GType (gtk_mnemonic_action_get_type)(void) { return stub_funcs.ptr_gtk_mnemonic_action_get_type(); }
+GtkShortcutAction * (gtk_mnemonic_action_get)(void) { return stub_funcs.ptr_gtk_mnemonic_action_get(); }
 GType (gtk_activate_action_get_type)(void) { return stub_funcs.ptr_gtk_activate_action_get_type(); }
+GtkShortcutAction * (gtk_activate_action_get)(void) { return stub_funcs.ptr_gtk_activate_action_get(); }
 GType (gtk_signal_action_get_type)(void) { return stub_funcs.ptr_gtk_signal_action_get_type(); }
+GtkShortcutAction * (gtk_signal_action_new)(const char *signal_name) { return stub_funcs.ptr_gtk_signal_action_new(signal_name); }
 const char * (gtk_signal_action_get_signal_name)(GtkSignalAction *self) { return stub_funcs.ptr_gtk_signal_action_get_signal_name(self); }
 GType (gtk_named_action_get_type)(void) { return stub_funcs.ptr_gtk_named_action_get_type(); }
+GtkShortcutAction * (gtk_named_action_new)(const char *name) { return stub_funcs.ptr_gtk_named_action_new(name); }
 const char * (gtk_named_action_get_action_name)(GtkNamedAction *self) { return stub_funcs.ptr_gtk_named_action_get_action_name(self); }
 GType (gtk_shortcut_controller_get_type)(void) { return stub_funcs.ptr_gtk_shortcut_controller_get_type(); }
 GtkEventController * (gtk_shortcut_controller_new)(void) { return stub_funcs.ptr_gtk_shortcut_controller_new(); }
@@ -12846,6 +13158,7 @@ const char* (gtk_shortcut_label_get_accelerator)(GtkShortcutLabel *self) { retur
 void (gtk_shortcut_label_set_accelerator)(GtkShortcutLabel *self, const char *accelerator) { stub_funcs.ptr_gtk_shortcut_label_set_accelerator(self, accelerator); }
 const char* (gtk_shortcut_label_get_disabled_text)(GtkShortcutLabel *self) { return stub_funcs.ptr_gtk_shortcut_label_get_disabled_text(self); }
 void (gtk_shortcut_label_set_disabled_text)(GtkShortcutLabel *self, const char *disabled_text) { stub_funcs.ptr_gtk_shortcut_label_set_disabled_text(self, disabled_text); }
+GType (gtk_shortcut_manager_get_type)(void) { return stub_funcs.ptr_gtk_shortcut_manager_get_type(); }
 GType (gtk_shortcuts_group_get_type)(void) { return stub_funcs.ptr_gtk_shortcuts_group_get_type(); }
 void (gtk_shortcuts_group_add_shortcut)(GtkShortcutsGroup *self, GtkShortcutsShortcut *shortcut) { stub_funcs.ptr_gtk_shortcuts_group_add_shortcut(self, shortcut); }
 GType (gtk_shortcuts_section_get_type)(void) { return stub_funcs.ptr_gtk_shortcuts_section_get_type(); }
@@ -12854,6 +13167,7 @@ GType (gtk_shortcuts_shortcut_get_type)(void) { return stub_funcs.ptr_gtk_shortc
 GType (gtk_shortcuts_window_get_type)(void) { return stub_funcs.ptr_gtk_shortcuts_window_get_type(); }
 void (gtk_shortcuts_window_add_section)(GtkShortcutsWindow *self, GtkShortcutsSection *section) { stub_funcs.ptr_gtk_shortcuts_window_add_section(self, section); }
 GType (gtk_shortcut_trigger_get_type)(void) { return stub_funcs.ptr_gtk_shortcut_trigger_get_type(); }
+GtkShortcutTrigger * (gtk_shortcut_trigger_parse_string)(const char *string) { return stub_funcs.ptr_gtk_shortcut_trigger_parse_string(string); }
 char * (gtk_shortcut_trigger_to_string)(GtkShortcutTrigger *self) { return stub_funcs.ptr_gtk_shortcut_trigger_to_string(self); }
 void (gtk_shortcut_trigger_print)(GtkShortcutTrigger *self, GString *string) { stub_funcs.ptr_gtk_shortcut_trigger_print(self, string); }
 char * (gtk_shortcut_trigger_to_label)(GtkShortcutTrigger *self, GdkDisplay *display) { return stub_funcs.ptr_gtk_shortcut_trigger_to_label(self, display); }
@@ -12863,17 +13177,22 @@ gboolean (gtk_shortcut_trigger_equal)(gconstpointer trigger1, gconstpointer trig
 int (gtk_shortcut_trigger_compare)(gconstpointer trigger1, gconstpointer trigger2) { return stub_funcs.ptr_gtk_shortcut_trigger_compare(trigger1, trigger2); }
 GdkKeyMatch (gtk_shortcut_trigger_trigger)(GtkShortcutTrigger *self, GdkEvent *event, gboolean enable_mnemonics) { return stub_funcs.ptr_gtk_shortcut_trigger_trigger(self, event, enable_mnemonics); }
 GType (gtk_never_trigger_get_type)(void) { return stub_funcs.ptr_gtk_never_trigger_get_type(); }
+GtkShortcutTrigger * (gtk_never_trigger_get)(void) { return stub_funcs.ptr_gtk_never_trigger_get(); }
 GType (gtk_keyval_trigger_get_type)(void) { return stub_funcs.ptr_gtk_keyval_trigger_get_type(); }
+GtkShortcutTrigger * (gtk_keyval_trigger_new)(guint keyval, GdkModifierType modifiers) { return stub_funcs.ptr_gtk_keyval_trigger_new(keyval, modifiers); }
 GdkModifierType (gtk_keyval_trigger_get_modifiers)(GtkKeyvalTrigger *self) { return stub_funcs.ptr_gtk_keyval_trigger_get_modifiers(self); }
 guint (gtk_keyval_trigger_get_keyval)(GtkKeyvalTrigger *self) { return stub_funcs.ptr_gtk_keyval_trigger_get_keyval(self); }
 GType (gtk_mnemonic_trigger_get_type)(void) { return stub_funcs.ptr_gtk_mnemonic_trigger_get_type(); }
+GtkShortcutTrigger * (gtk_mnemonic_trigger_new)(guint keyval) { return stub_funcs.ptr_gtk_mnemonic_trigger_new(keyval); }
 guint (gtk_mnemonic_trigger_get_keyval)(GtkMnemonicTrigger *self) { return stub_funcs.ptr_gtk_mnemonic_trigger_get_keyval(self); }
 GType (gtk_alternative_trigger_get_type)(void) { return stub_funcs.ptr_gtk_alternative_trigger_get_type(); }
+GtkShortcutTrigger * (gtk_alternative_trigger_new)(GtkShortcutTrigger *first, GtkShortcutTrigger *second) { return stub_funcs.ptr_gtk_alternative_trigger_new(first, second); }
 GtkShortcutTrigger * (gtk_alternative_trigger_get_first)(GtkAlternativeTrigger *self) { return stub_funcs.ptr_gtk_alternative_trigger_get_first(self); }
 GtkShortcutTrigger * (gtk_alternative_trigger_get_second)(GtkAlternativeTrigger *self) { return stub_funcs.ptr_gtk_alternative_trigger_get_second(self); }
 GType (gtk_signal_list_item_factory_get_type)(void) { return stub_funcs.ptr_gtk_signal_list_item_factory_get_type(); }
 GtkListItemFactory * (gtk_signal_list_item_factory_new)(void) { return stub_funcs.ptr_gtk_signal_list_item_factory_new(); }
 GType (gtk_single_selection_get_type)(void) { return stub_funcs.ptr_gtk_single_selection_get_type(); }
+GtkSingleSelection * (gtk_single_selection_new)(GListModel *model) { return stub_funcs.ptr_gtk_single_selection_new(model); }
 GListModel * (gtk_single_selection_get_model)(GtkSingleSelection *self) { return stub_funcs.ptr_gtk_single_selection_get_model(self); }
 void (gtk_single_selection_set_model)(GtkSingleSelection *self, GListModel *model) { stub_funcs.ptr_gtk_single_selection_set_model(self, model); }
 guint (gtk_single_selection_get_selected)(GtkSingleSelection *self) { return stub_funcs.ptr_gtk_single_selection_get_selected(self); }
@@ -12892,12 +13211,14 @@ void (gtk_size_group_remove_widget)(GtkSizeGroup *size_group, GtkWidget *widget)
 GSList * (gtk_size_group_get_widgets)(GtkSizeGroup *size_group) { return stub_funcs.ptr_gtk_size_group_get_widgets(size_group); }
 int (gtk_distribute_natural_allocation)(int extra_space, guint n_requested_sizes, GtkRequestedSize *sizes) { return stub_funcs.ptr_gtk_distribute_natural_allocation(extra_space, n_requested_sizes, sizes); }
 GType (gtk_slice_list_model_get_type)(void) { return stub_funcs.ptr_gtk_slice_list_model_get_type(); }
+GtkSliceListModel * (gtk_slice_list_model_new)(GListModel *model, guint offset, guint size) { return stub_funcs.ptr_gtk_slice_list_model_new(model, offset, size); }
 void (gtk_slice_list_model_set_model)(GtkSliceListModel *self, GListModel *model) { stub_funcs.ptr_gtk_slice_list_model_set_model(self, model); }
 GListModel * (gtk_slice_list_model_get_model)(GtkSliceListModel *self) { return stub_funcs.ptr_gtk_slice_list_model_get_model(self); }
 void (gtk_slice_list_model_set_offset)(GtkSliceListModel *self, guint offset) { stub_funcs.ptr_gtk_slice_list_model_set_offset(self, offset); }
 guint (gtk_slice_list_model_get_offset)(GtkSliceListModel *self) { return stub_funcs.ptr_gtk_slice_list_model_get_offset(self); }
 void (gtk_slice_list_model_set_size)(GtkSliceListModel *self, guint size) { stub_funcs.ptr_gtk_slice_list_model_set_size(self, size); }
 guint (gtk_slice_list_model_get_size)(GtkSliceListModel *self) { return stub_funcs.ptr_gtk_slice_list_model_get_size(self); }
+GType (gtk_snapshot_get_type)(void) { return stub_funcs.ptr_gtk_snapshot_get_type(); }
 GtkSnapshot * (gtk_snapshot_new)(void) { return stub_funcs.ptr_gtk_snapshot_new(); }
 GskRenderNode * (gtk_snapshot_free_to_node)(GtkSnapshot *snapshot) { return stub_funcs.ptr_gtk_snapshot_free_to_node(snapshot); }
 GdkPaintable * (gtk_snapshot_free_to_paintable)(GtkSnapshot *snapshot, const graphene_size_t *size) { return stub_funcs.ptr_gtk_snapshot_free_to_paintable(snapshot, size); }
@@ -12947,9 +13268,11 @@ void (gtk_snapshot_append_layout)(GtkSnapshot *snapshot, PangoLayout *layout, co
 void (gtk_snapshot_append_fill)(GtkSnapshot *snapshot, GskPath *path, GskFillRule fill_rule, const GdkRGBA *color) { stub_funcs.ptr_gtk_snapshot_append_fill(snapshot, path, fill_rule, color); }
 void (gtk_snapshot_append_stroke)(GtkSnapshot *snapshot, GskPath *path, const GskStroke *stroke, const GdkRGBA *color) { stub_funcs.ptr_gtk_snapshot_append_stroke(snapshot, path, stroke, color); }
 GType (gtk_sorter_get_type)(void) { return stub_funcs.ptr_gtk_sorter_get_type(); }
+GtkOrdering (gtk_sorter_compare)(GtkSorter *self, gpointer item1, gpointer item2) { return stub_funcs.ptr_gtk_sorter_compare(self, item1, item2); }
 GtkSorterOrder (gtk_sorter_get_order)(GtkSorter *self) { return stub_funcs.ptr_gtk_sorter_get_order(self); }
 void (gtk_sorter_changed)(GtkSorter *self, GtkSorterChange change) { stub_funcs.ptr_gtk_sorter_changed(self, change); }
 GType (gtk_sort_list_model_get_type)(void) { return stub_funcs.ptr_gtk_sort_list_model_get_type(); }
+GtkSortListModel * (gtk_sort_list_model_new)(GListModel *model, GtkSorter *sorter) { return stub_funcs.ptr_gtk_sort_list_model_new(model, sorter); }
 void (gtk_sort_list_model_set_sorter)(GtkSortListModel *self, GtkSorter *sorter) { stub_funcs.ptr_gtk_sort_list_model_set_sorter(self, sorter); }
 GtkSorter * (gtk_sort_list_model_get_sorter)(GtkSortListModel *self) { return stub_funcs.ptr_gtk_sort_list_model_get_sorter(self); }
 void (gtk_sort_list_model_set_section_sorter)(GtkSortListModel *self, GtkSorter *sorter) { stub_funcs.ptr_gtk_sort_list_model_set_section_sorter(self, sorter); }
@@ -13042,6 +13365,7 @@ GtkWidget * (gtk_stack_switcher_new)(void) { return stub_funcs.ptr_gtk_stack_swi
 void (gtk_stack_switcher_set_stack)(GtkStackSwitcher *switcher, GtkStack *stack) { stub_funcs.ptr_gtk_stack_switcher_set_stack(switcher, stack); }
 GtkStack * (gtk_stack_switcher_get_stack)(GtkStackSwitcher *switcher) { return stub_funcs.ptr_gtk_stack_switcher_get_stack(switcher); }
 GType (gtk_string_filter_get_type)(void) { return stub_funcs.ptr_gtk_string_filter_get_type(); }
+GtkStringFilter * (gtk_string_filter_new)(GtkExpression *expression) { return stub_funcs.ptr_gtk_string_filter_new(expression); }
 const char * (gtk_string_filter_get_search)(GtkStringFilter *self) { return stub_funcs.ptr_gtk_string_filter_get_search(self); }
 void (gtk_string_filter_set_search)(GtkStringFilter *self, const char *search) { stub_funcs.ptr_gtk_string_filter_set_search(self, search); }
 GtkExpression * (gtk_string_filter_get_expression)(GtkStringFilter *self) { return stub_funcs.ptr_gtk_string_filter_get_expression(self); }
@@ -13051,14 +13375,17 @@ void (gtk_string_filter_set_ignore_case)(GtkStringFilter *self, gboolean ignore_
 GtkStringFilterMatchMode (gtk_string_filter_get_match_mode)(GtkStringFilter *self) { return stub_funcs.ptr_gtk_string_filter_get_match_mode(self); }
 void (gtk_string_filter_set_match_mode)(GtkStringFilter *self, GtkStringFilterMatchMode mode) { stub_funcs.ptr_gtk_string_filter_set_match_mode(self, mode); }
 GType (gtk_string_object_get_type)(void) { return stub_funcs.ptr_gtk_string_object_get_type(); }
+GtkStringObject * (gtk_string_object_new)(const char *string) { return stub_funcs.ptr_gtk_string_object_new(string); }
 const char * (gtk_string_object_get_string)(GtkStringObject *self) { return stub_funcs.ptr_gtk_string_object_get_string(self); }
 GType (gtk_string_list_get_type)(void) { return stub_funcs.ptr_gtk_string_list_get_type(); }
+GtkStringList * (gtk_string_list_new)(const char * const *strings) { return stub_funcs.ptr_gtk_string_list_new(strings); }
 void (gtk_string_list_append)(GtkStringList *self, const char *string) { stub_funcs.ptr_gtk_string_list_append(self, string); }
 void (gtk_string_list_take)(GtkStringList *self, char *string) { stub_funcs.ptr_gtk_string_list_take(self, string); }
 void (gtk_string_list_remove)(GtkStringList *self, guint position) { stub_funcs.ptr_gtk_string_list_remove(self, position); }
 void (gtk_string_list_splice)(GtkStringList *self, guint position, guint n_removals, const char * const *additions) { stub_funcs.ptr_gtk_string_list_splice(self, position, n_removals, additions); }
 const char * (gtk_string_list_get_string)(GtkStringList *self, guint position) { return stub_funcs.ptr_gtk_string_list_get_string(self, position); }
 GType (gtk_string_sorter_get_type)(void) { return stub_funcs.ptr_gtk_string_sorter_get_type(); }
+GtkStringSorter * (gtk_string_sorter_new)(GtkExpression *expression) { return stub_funcs.ptr_gtk_string_sorter_new(expression); }
 GtkExpression * (gtk_string_sorter_get_expression)(GtkStringSorter *self) { return stub_funcs.ptr_gtk_string_sorter_get_expression(self); }
 void (gtk_string_sorter_set_expression)(GtkStringSorter *self, GtkExpression *expression) { stub_funcs.ptr_gtk_string_sorter_set_expression(self, expression); }
 gboolean (gtk_string_sorter_get_ignore_case)(GtkStringSorter *self) { return stub_funcs.ptr_gtk_string_sorter_get_ignore_case(self); }
@@ -13073,6 +13400,7 @@ void (gtk_switch_set_active)(GtkSwitch *self, gboolean is_active) { stub_funcs.p
 gboolean (gtk_switch_get_active)(GtkSwitch *self) { return stub_funcs.ptr_gtk_switch_get_active(self); }
 void (gtk_switch_set_state)(GtkSwitch *self, gboolean state) { stub_funcs.ptr_gtk_switch_set_state(self, state); }
 gboolean (gtk_switch_get_state)(GtkSwitch *self) { return stub_funcs.ptr_gtk_switch_get_state(self); }
+GType (gtk_symbolic_paintable_get_type)(void) { return stub_funcs.ptr_gtk_symbolic_paintable_get_type(); }
 gboolean (gtk_test_accessible_has_property)(GtkAccessible *accessible, GtkAccessibleProperty property) { return stub_funcs.ptr_gtk_test_accessible_has_property(accessible, property); }
 gboolean (gtk_test_accessible_has_relation)(GtkAccessible *accessible, GtkAccessibleRelation relation) { return stub_funcs.ptr_gtk_test_accessible_has_relation(accessible, relation); }
 gboolean (gtk_test_accessible_has_state)(GtkAccessible *accessible, GtkAccessibleState state) { return stub_funcs.ptr_gtk_test_accessible_has_state(accessible, state); }
@@ -13200,6 +13528,7 @@ GtkTextChildAnchor* (gtk_text_child_anchor_new_with_replacement)(const char *cha
 GtkWidget** (gtk_text_child_anchor_get_widgets)(GtkTextChildAnchor *anchor, guint *out_len) { return stub_funcs.ptr_gtk_text_child_anchor_get_widgets(anchor, out_len); }
 gboolean (gtk_text_child_anchor_get_deleted)(GtkTextChildAnchor *anchor) { return stub_funcs.ptr_gtk_text_child_anchor_get_deleted(anchor); }
 GType (gtk_text_iter_get_type)(void) { return stub_funcs.ptr_gtk_text_iter_get_type(); }
+GtkTextBuffer* (gtk_text_iter_get_buffer)(const GtkTextIter *iter) { return stub_funcs.ptr_gtk_text_iter_get_buffer(iter); }
 GtkTextIter* (gtk_text_iter_copy)(const GtkTextIter *iter) { return stub_funcs.ptr_gtk_text_iter_copy(iter); }
 void (gtk_text_iter_free)(GtkTextIter *iter) { stub_funcs.ptr_gtk_text_iter_free(iter); }
 void (gtk_text_iter_assign)(GtkTextIter *iter, const GtkTextIter *other) { stub_funcs.ptr_gtk_text_iter_assign(iter, other); }
@@ -13400,6 +13729,7 @@ void (gtk_tooltip_set_icon_from_gicon)(GtkTooltip *tooltip, GIcon *gicon) { stub
 void (gtk_tooltip_set_custom)(GtkTooltip *tooltip, GtkWidget *custom_widget) { stub_funcs.ptr_gtk_tooltip_set_custom(tooltip, custom_widget); }
 void (gtk_tooltip_set_tip_area)(GtkTooltip *tooltip, const GdkRectangle *rect) { stub_funcs.ptr_gtk_tooltip_set_tip_area(tooltip, rect); }
 GType (gtk_tree_expander_get_type)(void) { return stub_funcs.ptr_gtk_tree_expander_get_type(); }
+GtkWidget * (gtk_tree_expander_new)(void) { return stub_funcs.ptr_gtk_tree_expander_new(); }
 GtkWidget * (gtk_tree_expander_get_child)(GtkTreeExpander *self) { return stub_funcs.ptr_gtk_tree_expander_get_child(self); }
 void (gtk_tree_expander_set_child)(GtkTreeExpander *self, GtkWidget *child) { stub_funcs.ptr_gtk_tree_expander_set_child(self, child); }
 gpointer (gtk_tree_expander_get_item)(GtkTreeExpander *self) { return stub_funcs.ptr_gtk_tree_expander_get_item(self); }
@@ -13413,6 +13743,7 @@ gboolean (gtk_tree_expander_get_hide_expander)(GtkTreeExpander *self) { return s
 void (gtk_tree_expander_set_hide_expander)(GtkTreeExpander *self, gboolean hide_expander) { stub_funcs.ptr_gtk_tree_expander_set_hide_expander(self, hide_expander); }
 GType (gtk_tree_list_model_get_type)(void) { return stub_funcs.ptr_gtk_tree_list_model_get_type(); }
 GType (gtk_tree_list_row_get_type)(void) { return stub_funcs.ptr_gtk_tree_list_row_get_type(); }
+GtkTreeListModel * (gtk_tree_list_model_new)(GListModel *root, gboolean passthrough, gboolean autoexpand, GtkTreeListModelCreateModelFunc create_func, gpointer user_data, GDestroyNotify user_destroy) { return stub_funcs.ptr_gtk_tree_list_model_new(root, passthrough, autoexpand, create_func, user_data, user_destroy); }
 GListModel * (gtk_tree_list_model_get_model)(GtkTreeListModel *self) { return stub_funcs.ptr_gtk_tree_list_model_get_model(self); }
 gboolean (gtk_tree_list_model_get_passthrough)(GtkTreeListModel *self) { return stub_funcs.ptr_gtk_tree_list_model_get_passthrough(self); }
 void (gtk_tree_list_model_set_autoexpand)(GtkTreeListModel *self, gboolean autoexpand) { stub_funcs.ptr_gtk_tree_list_model_set_autoexpand(self, autoexpand); }
@@ -13429,6 +13760,7 @@ GListModel * (gtk_tree_list_row_get_children)(GtkTreeListRow *self) { return stu
 GtkTreeListRow * (gtk_tree_list_row_get_parent)(GtkTreeListRow *self) { return stub_funcs.ptr_gtk_tree_list_row_get_parent(self); }
 GtkTreeListRow * (gtk_tree_list_row_get_child_row)(GtkTreeListRow *self, guint position) { return stub_funcs.ptr_gtk_tree_list_row_get_child_row(self, position); }
 GType (gtk_tree_list_row_sorter_get_type)(void) { return stub_funcs.ptr_gtk_tree_list_row_sorter_get_type(); }
+GtkTreeListRowSorter * (gtk_tree_list_row_sorter_new)(GtkSorter *sorter) { return stub_funcs.ptr_gtk_tree_list_row_sorter_new(sorter); }
 GtkSorter * (gtk_tree_list_row_sorter_get_sorter)(GtkTreeListRowSorter *self) { return stub_funcs.ptr_gtk_tree_list_row_sorter_get_sorter(self); }
 void (gtk_tree_list_row_sorter_set_sorter)(GtkTreeListRowSorter *self, GtkSorter *sorter) { stub_funcs.ptr_gtk_tree_list_row_sorter_set_sorter(self, sorter); }
 GType (gtk_assistant_page_type_get_type)(void) { return stub_funcs.ptr_gtk_assistant_page_type_get_type(); }
@@ -13553,6 +13885,7 @@ GType (gtk_print_operation_result_get_type)(void) { return stub_funcs.ptr_gtk_pr
 GType (gtk_print_operation_action_get_type)(void) { return stub_funcs.ptr_gtk_print_operation_action_get_type(); }
 GType (gtk_print_error_get_type)(void) { return stub_funcs.ptr_gtk_print_error_get_type(); }
 GType (gtk_uri_launcher_get_type)(void) { return stub_funcs.ptr_gtk_uri_launcher_get_type(); }
+GtkUriLauncher * (gtk_uri_launcher_new)(const char *uri) { return stub_funcs.ptr_gtk_uri_launcher_new(uri); }
 const char * (gtk_uri_launcher_get_uri)(GtkUriLauncher *self) { return stub_funcs.ptr_gtk_uri_launcher_get_uri(self); }
 void (gtk_uri_launcher_set_uri)(GtkUriLauncher *self, const char *uri) { stub_funcs.ptr_gtk_uri_launcher_set_uri(self, uri); }
 void (gtk_uri_launcher_launch)(GtkUriLauncher *self, GtkWindow *parent, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data) { stub_funcs.ptr_gtk_uri_launcher_launch(self, parent, cancellable, callback, user_data); }
@@ -13564,6 +13897,7 @@ guint (gtk_get_interface_age)(void) { return stub_funcs.ptr_gtk_get_interface_ag
 const char * (gtk_check_version)(guint required_major, guint required_minor, guint required_micro) { return stub_funcs.ptr_gtk_check_version(required_major, required_minor, required_micro); }
 guint (gtk_get_major_version)(void) { return stub_funcs.ptr_gtk_get_major_version(); }
 GType (gtk_video_get_type)(void) { return stub_funcs.ptr_gtk_video_get_type(); }
+GtkWidget * (gtk_video_new)(void) { return stub_funcs.ptr_gtk_video_new(); }
 GtkWidget * (gtk_video_new_for_media_stream)(GtkMediaStream *stream) { return stub_funcs.ptr_gtk_video_new_for_media_stream(stream); }
 GtkWidget * (gtk_video_new_for_file)(GFile *file) { return stub_funcs.ptr_gtk_video_new_for_file(file); }
 GtkWidget * (gtk_video_new_for_filename)(const char *filename) { return stub_funcs.ptr_gtk_video_new_for_filename(filename); }
@@ -13777,6 +14111,7 @@ void (gtk_widget_action_set_enabled)(GtkWidget *widget, const char *action_name,
 void (gtk_widget_class_set_accessible_role)(GtkWidgetClass *widget_class, GtkAccessibleRole accessible_role) { stub_funcs.ptr_gtk_widget_class_set_accessible_role(widget_class, accessible_role); }
 GtkAccessibleRole (gtk_widget_class_get_accessible_role)(GtkWidgetClass *widget_class) { return stub_funcs.ptr_gtk_widget_class_get_accessible_role(widget_class); }
 GType (gtk_widget_paintable_get_type)(void) { return stub_funcs.ptr_gtk_widget_paintable_get_type(); }
+GdkPaintable * (gtk_widget_paintable_new)(GtkWidget *widget) { return stub_funcs.ptr_gtk_widget_paintable_new(widget); }
 GtkWidget * (gtk_widget_paintable_get_widget)(GtkWidgetPaintable *self) { return stub_funcs.ptr_gtk_widget_paintable_get_widget(self); }
 void (gtk_widget_paintable_set_widget)(GtkWidgetPaintable *self, GtkWidget *widget) { stub_funcs.ptr_gtk_widget_paintable_set_widget(self, widget); }
 GType (gtk_window_get_type)(void) { return stub_funcs.ptr_gtk_window_get_type(); }
@@ -13843,6 +14178,7 @@ void (gtk_window_set_interactive_debugging)(gboolean enable) { stub_funcs.ptr_gt
 void (gtk_window_set_handle_menubar_accel)(GtkWindow *window, gboolean handle_menubar_accel) { stub_funcs.ptr_gtk_window_set_handle_menubar_accel(window, handle_menubar_accel); }
 gboolean (gtk_window_get_handle_menubar_accel)(GtkWindow *window) { return stub_funcs.ptr_gtk_window_get_handle_menubar_accel(window); }
 GType (gtk_window_controls_get_type)(void) { return stub_funcs.ptr_gtk_window_controls_get_type(); }
+GtkWidget * (gtk_window_controls_new)(GtkPackType side) { return stub_funcs.ptr_gtk_window_controls_new(side); }
 GtkPackType (gtk_window_controls_get_side)(GtkWindowControls *self) { return stub_funcs.ptr_gtk_window_controls_get_side(self); }
 void (gtk_window_controls_set_side)(GtkWindowControls *self, GtkPackType side) { stub_funcs.ptr_gtk_window_controls_set_side(self, side); }
 const char * (gtk_window_controls_get_decoration_layout)(GtkWindowControls *self) { return stub_funcs.ptr_gtk_window_controls_get_decoration_layout(self); }
@@ -13854,6 +14190,7 @@ void (gtk_window_group_add_window)(GtkWindowGroup *window_group, GtkWindow *wind
 void (gtk_window_group_remove_window)(GtkWindowGroup *window_group, GtkWindow *window) { stub_funcs.ptr_gtk_window_group_remove_window(window_group, window); }
 GList * (gtk_window_group_list_windows)(GtkWindowGroup *window_group) { return stub_funcs.ptr_gtk_window_group_list_windows(window_group); }
 GType (gtk_window_handle_get_type)(void) { return stub_funcs.ptr_gtk_window_handle_get_type(); }
+GtkWidget * (gtk_window_handle_new)(void) { return stub_funcs.ptr_gtk_window_handle_new(); }
 GtkWidget * (gtk_window_handle_get_child)(GtkWindowHandle *self) { return stub_funcs.ptr_gtk_window_handle_get_child(self); }
 void (gtk_window_handle_set_child)(GtkWindowHandle *self, GtkWidget *child) { stub_funcs.ptr_gtk_window_handle_set_child(self, child); }
 GType (gdk_broadway_cursor_get_type)(void) { return stub_funcs.ptr_gdk_broadway_cursor_get_type(); }
@@ -14014,6 +14351,7 @@ void (gdk_content_register_deserializer)(const char *mime_type, GType type, GdkC
 void (gdk_content_deserialize_async)(GInputStream *stream, const char *mime_type, GType type, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data) { stub_funcs.ptr_gdk_content_deserialize_async(stream, mime_type, type, io_priority, cancellable, callback, user_data); }
 gboolean (gdk_content_deserialize_finish)(GAsyncResult *result, GValue *value, GError **error) { return stub_funcs.ptr_gdk_content_deserialize_finish(result, value, error); }
 GType (gdk_content_formats_get_type)(void) { return stub_funcs.ptr_gdk_content_formats_get_type(); }
+const char * (gdk_intern_mime_type)(const char *string) { return stub_funcs.ptr_gdk_intern_mime_type(string); }
 GdkContentFormats * (gdk_content_formats_new)(const char **mime_types, guint n_mime_types) { return stub_funcs.ptr_gdk_content_formats_new(mime_types, n_mime_types); }
 GdkContentFormats * (gdk_content_formats_new_for_gtype)(GType type) { return stub_funcs.ptr_gdk_content_formats_new_for_gtype(type); }
 GdkContentFormats * (gdk_content_formats_parse)(const char *string) { return stub_funcs.ptr_gdk_content_formats_parse(string); }
@@ -14154,6 +14492,7 @@ gboolean (gdk_dmabuf_formats_equal)(const GdkDmabufFormats *formats1, const GdkD
 GType (gdk_dmabuf_texture_get_type)(void) { return stub_funcs.ptr_gdk_dmabuf_texture_get_type(); }
 GQuark (gdk_dmabuf_error_quark)(void) { return stub_funcs.ptr_gdk_dmabuf_error_quark(); }
 GType (gdk_dmabuf_texture_builder_get_type)(void) { return stub_funcs.ptr_gdk_dmabuf_texture_builder_get_type(); }
+GdkDmabufTextureBuilder* (gdk_dmabuf_texture_builder_new)(void) { return stub_funcs.ptr_gdk_dmabuf_texture_builder_new(); }
 GdkDisplay * (gdk_dmabuf_texture_builder_get_display)(GdkDmabufTextureBuilder *self) { return stub_funcs.ptr_gdk_dmabuf_texture_builder_get_display(self); }
 void (gdk_dmabuf_texture_builder_set_display)(GdkDmabufTextureBuilder *self, GdkDisplay *display) { stub_funcs.ptr_gdk_dmabuf_texture_builder_set_display(self, display); }
 unsigned int (gdk_dmabuf_texture_builder_get_width)(GdkDmabufTextureBuilder *self) { return stub_funcs.ptr_gdk_dmabuf_texture_builder_get_width(self); }
@@ -14192,6 +14531,7 @@ GdkSurface* (gdk_drag_get_drag_surface)(GdkDrag *drag) { return stub_funcs.ptr_g
 void (gdk_drag_set_hotspot)(GdkDrag *drag, int hot_x, int hot_y) { stub_funcs.ptr_gdk_drag_set_hotspot(drag, hot_x, hot_y); }
 GdkContentProvider * (gdk_drag_get_content)(GdkDrag *drag) { return stub_funcs.ptr_gdk_drag_get_content(drag); }
 GdkSurface * (gdk_drag_get_surface)(GdkDrag *drag) { return stub_funcs.ptr_gdk_drag_get_surface(drag); }
+GType (gdk_drag_surface_get_type)(void) { return stub_funcs.ptr_gdk_drag_surface_get_type(); }
 GType (gdk_drag_surface_size_get_type)(void) { return stub_funcs.ptr_gdk_drag_surface_size_get_type(); }
 void (gdk_drag_surface_size_set_size)(GdkDragSurfaceSize *size, int width, int height) { stub_funcs.ptr_gdk_drag_surface_size_set_size(size, width, height); }
 GType (gdk_draw_context_get_type)(void) { return stub_funcs.ptr_gdk_draw_context_get_type(); }
@@ -14330,6 +14670,7 @@ gint64 (gdk_frame_timings_get_refresh_interval)(GdkFrameTimings *timings) { retu
 gint64 (gdk_frame_timings_get_predicted_presentation_time)(GdkFrameTimings *timings) { return stub_funcs.ptr_gdk_frame_timings_get_predicted_presentation_time(timings); }
 GType (gdk_frame_timings_get_type)(void) { return stub_funcs.ptr_gdk_frame_timings_get_type(); }
 GType (gdk_gl_context_get_type)(void) { return stub_funcs.ptr_gdk_gl_context_get_type(); }
+GQuark (gdk_gl_error_quark)(void) { return stub_funcs.ptr_gdk_gl_error_quark(); }
 GdkDisplay * (gdk_gl_context_get_display)(GdkGLContext *context) { return stub_funcs.ptr_gdk_gl_context_get_display(context); }
 GdkSurface * (gdk_gl_context_get_surface)(GdkGLContext *context) { return stub_funcs.ptr_gdk_gl_context_get_surface(context); }
 GdkGLContext * (gdk_gl_context_get_shared_context)(GdkGLContext *context) { return stub_funcs.ptr_gdk_gl_context_get_shared_context(context); }
@@ -14355,6 +14696,7 @@ GType (gdk_gl_texture_get_type)(void) { return stub_funcs.ptr_gdk_gl_texture_get
 GdkTexture * (gdk_gl_texture_new)(GdkGLContext *context, guint id, int width, int height, GDestroyNotify destroy, gpointer data) { return stub_funcs.ptr_gdk_gl_texture_new(context, id, width, height, destroy, data); }
 void (gdk_gl_texture_release)(GdkGLTexture *self) { stub_funcs.ptr_gdk_gl_texture_release(self); }
 GType (gdk_gl_texture_builder_get_type)(void) { return stub_funcs.ptr_gdk_gl_texture_builder_get_type(); }
+GdkGLTextureBuilder * (gdk_gl_texture_builder_new)(void) { return stub_funcs.ptr_gdk_gl_texture_builder_new(); }
 GdkGLContext * (gdk_gl_texture_builder_get_context)(GdkGLTextureBuilder *self) { return stub_funcs.ptr_gdk_gl_texture_builder_get_context(self); }
 void (gdk_gl_texture_builder_set_context)(GdkGLTextureBuilder *self, GdkGLContext *context) { stub_funcs.ptr_gdk_gl_texture_builder_set_context(self, context); }
 guint (gdk_gl_texture_builder_get_id)(GdkGLTextureBuilder *self) { return stub_funcs.ptr_gdk_gl_texture_builder_get_id(self); }
@@ -14383,6 +14725,7 @@ gboolean (gdk_keyval_is_lower)(guint keyval) { return stub_funcs.ptr_gdk_keyval_
 guint32 (gdk_keyval_to_unicode)(guint keyval) { return stub_funcs.ptr_gdk_keyval_to_unicode(keyval); }
 guint (gdk_unicode_to_keyval)(guint32 wc) { return stub_funcs.ptr_gdk_unicode_to_keyval(wc); }
 const char* (gdk_keyval_name)(guint keyval) { return stub_funcs.ptr_gdk_keyval_name(keyval); }
+GType (gdk_memory_texture_get_type)(void) { return stub_funcs.ptr_gdk_memory_texture_get_type(); }
 GdkTexture * (gdk_memory_texture_new)(int width, int height, GdkMemoryFormat format, GBytes *bytes, gsize stride) { return stub_funcs.ptr_gdk_memory_texture_new(width, height, format, bytes, stride); }
 GType (gdk_monitor_get_type)(void) { return stub_funcs.ptr_gdk_monitor_get_type(); }
 GdkDisplay * (gdk_monitor_get_display)(GdkMonitor *monitor) { return stub_funcs.ptr_gdk_monitor_get_display(monitor); }
@@ -14398,6 +14741,7 @@ int (gdk_monitor_get_refresh_rate)(GdkMonitor *monitor) { return stub_funcs.ptr_
 GdkSubpixelLayout (gdk_monitor_get_subpixel_layout)(GdkMonitor *monitor) { return stub_funcs.ptr_gdk_monitor_get_subpixel_layout(monitor); }
 gboolean (gdk_monitor_is_valid)(GdkMonitor *monitor) { return stub_funcs.ptr_gdk_monitor_is_valid(monitor); }
 const char * (gdk_monitor_get_description)(GdkMonitor *monitor) { return stub_funcs.ptr_gdk_monitor_get_description(monitor); }
+GType (gdk_paintable_get_type)(void) { return stub_funcs.ptr_gdk_paintable_get_type(); }
 GdkPaintable * (gdk_paintable_get_current_image)(GdkPaintable *paintable) { return stub_funcs.ptr_gdk_paintable_get_current_image(paintable); }
 GdkPaintableFlags (gdk_paintable_get_flags)(GdkPaintable *paintable) { return stub_funcs.ptr_gdk_paintable_get_flags(paintable); }
 int (gdk_paintable_get_intrinsic_width)(GdkPaintable *paintable) { return stub_funcs.ptr_gdk_paintable_get_intrinsic_width(paintable); }
@@ -14409,6 +14753,7 @@ void (gdk_paintable_invalidate_size)(GdkPaintable *paintable) { stub_funcs.ptr_g
 GdkPaintable * (gdk_paintable_new_empty)(int intrinsic_width, int intrinsic_height) { return stub_funcs.ptr_gdk_paintable_new_empty(intrinsic_width, intrinsic_height); }
 cairo_region_t* (gdk_pango_layout_get_clip_region)(PangoLayout *layout, int x_origin, int y_origin, const int *index_ranges, int n_ranges) { return stub_funcs.ptr_gdk_pango_layout_get_clip_region(layout, x_origin, y_origin, index_ranges, n_ranges); }
 cairo_region_t* (gdk_pango_layout_line_get_clip_region)(PangoLayoutLine *line, int x_origin, int y_origin, const int *index_ranges, int n_ranges) { return stub_funcs.ptr_gdk_pango_layout_line_get_clip_region(line, x_origin, y_origin, index_ranges, n_ranges); }
+GType (gdk_popup_get_type)(void) { return stub_funcs.ptr_gdk_popup_get_type(); }
 GdkGravity (gdk_popup_get_surface_anchor)(GdkPopup *popup) { return stub_funcs.ptr_gdk_popup_get_surface_anchor(popup); }
 GdkGravity (gdk_popup_get_rect_anchor)(GdkPopup *popup) { return stub_funcs.ptr_gdk_popup_get_rect_anchor(popup); }
 GdkSurface * (gdk_popup_get_parent)(GdkPopup *popup) { return stub_funcs.ptr_gdk_popup_get_parent(popup); }
@@ -14484,6 +14829,7 @@ GdkCairoContext* (gdk_surface_create_cairo_context)(GdkSurface *surface) { retur
 GdkGLContext * (gdk_surface_create_gl_context)(GdkSurface *surface, GError **error) { return stub_funcs.ptr_gdk_surface_create_gl_context(surface, error); }
 GdkVulkanContext * (gdk_surface_create_vulkan_context)(GdkSurface *surface, GError **error) { return stub_funcs.ptr_gdk_surface_create_vulkan_context(surface, error); }
 GType (gdk_texture_get_type)(void) { return stub_funcs.ptr_gdk_texture_get_type(); }
+GQuark (gdk_texture_error_quark)(void) { return stub_funcs.ptr_gdk_texture_error_quark(); }
 GdkTexture * (gdk_texture_new_for_pixbuf)(GdkPixbuf *pixbuf) { return stub_funcs.ptr_gdk_texture_new_for_pixbuf(pixbuf); }
 GdkTexture * (gdk_texture_new_from_resource)(const char *resource_path) { return stub_funcs.ptr_gdk_texture_new_from_resource(resource_path); }
 GdkTexture * (gdk_texture_new_from_file)(GFile *file, GError **error) { return stub_funcs.ptr_gdk_texture_new_from_file(file, error); }
@@ -14507,6 +14853,7 @@ void (gdk_texture_downloader_set_format)(GdkTextureDownloader *self, GdkMemoryFo
 GdkMemoryFormat (gdk_texture_downloader_get_format)(const GdkTextureDownloader *self) { return stub_funcs.ptr_gdk_texture_downloader_get_format(self); }
 void (gdk_texture_downloader_download_into)(const GdkTextureDownloader *self, guchar *data, gsize stride) { stub_funcs.ptr_gdk_texture_downloader_download_into(self, data, stride); }
 GBytes * (gdk_texture_downloader_download_bytes)(const GdkTextureDownloader *self, gsize *out_stride) { return stub_funcs.ptr_gdk_texture_downloader_download_bytes(self, out_stride); }
+GType (gdk_toplevel_get_type)(void) { return stub_funcs.ptr_gdk_toplevel_get_type(); }
 gboolean (gdk_toplevel_minimize)(GdkToplevel *toplevel) { return stub_funcs.ptr_gdk_toplevel_minimize(toplevel); }
 gboolean (gdk_toplevel_lower)(GdkToplevel *toplevel) { return stub_funcs.ptr_gdk_toplevel_lower(toplevel); }
 void (gdk_toplevel_focus)(GdkToplevel *toplevel, guint32 timestamp) { stub_funcs.ptr_gdk_toplevel_focus(toplevel, timestamp); }
@@ -14544,6 +14891,7 @@ void (gdk_toplevel_size_set_size)(GdkToplevelSize *size, int width, int height) 
 void (gdk_toplevel_size_set_min_size)(GdkToplevelSize *size, int min_width, int min_height) { stub_funcs.ptr_gdk_toplevel_size_set_min_size(size, min_width, min_height); }
 void (gdk_toplevel_size_set_shadow_width)(GdkToplevelSize *size, int left, int right, int top, int bottom) { stub_funcs.ptr_gdk_toplevel_size_set_shadow_width(size, left, right, top, bottom); }
 GType (gdk_vulkan_context_get_type)(void) { return stub_funcs.ptr_gdk_vulkan_context_get_type(); }
+GQuark (gdk_vulkan_error_quark)(void) { return stub_funcs.ptr_gdk_vulkan_error_quark(); }
 GType (gsk_broadway_renderer_get_type)(void) { return stub_funcs.ptr_gsk_broadway_renderer_get_type(); }
 GskRenderer * (gsk_broadway_renderer_new)(void) { return stub_funcs.ptr_gsk_broadway_renderer_new(); }
 GType (gsk_gl_renderer_get_type)(void) { return stub_funcs.ptr_gsk_gl_renderer_get_type(); }
@@ -14570,6 +14918,7 @@ GType (gsk_mask_mode_get_type)(void) { return stub_funcs.ptr_gsk_mask_mode_get_t
 GType (gsk_path_foreach_flags_get_type)(void) { return stub_funcs.ptr_gsk_path_foreach_flags_get_type(); }
 GType (gsk_shader_args_builder_get_type)(void) { return stub_funcs.ptr_gsk_shader_args_builder_get_type(); }
 GType (gsk_gl_shader_get_type)(void) { return stub_funcs.ptr_gsk_gl_shader_get_type(); }
+GskGLShader * (gsk_gl_shader_new_from_bytes)(GBytes *sourcecode) { return stub_funcs.ptr_gsk_gl_shader_new_from_bytes(sourcecode); }
 GskGLShader * (gsk_gl_shader_new_from_resource)(const char *resource_path) { return stub_funcs.ptr_gsk_gl_shader_new_from_resource(resource_path); }
 gboolean (gsk_gl_shader_compile)(GskGLShader *shader, GskRenderer *renderer, GError **error) { return stub_funcs.ptr_gsk_gl_shader_compile(shader, renderer, error); }
 GBytes * (gsk_gl_shader_get_source)(GskGLShader *shader) { return stub_funcs.ptr_gsk_gl_shader_get_source(shader); }
