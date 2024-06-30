@@ -5,7 +5,7 @@
 #include <gdk/broadway/gdkbroadway.h>
 
 void initialize_gtk4(void);
-void close_gtk4();
+void close_gtk4(void);
 
 GType (gtk_css_parser_error_get_type)(void);
 GType (gtk_css_parser_warning_get_type)(void);

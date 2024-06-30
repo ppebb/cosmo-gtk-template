@@ -14894,6 +14894,6 @@ GskTransform * (gsk_transform_perspective)(GskTransform *next, float depth) { re
 void (gsk_transform_transform_bounds)(GskTransform *self, const graphene_rect_t *rect, graphene_rect_t *out_rect) { stub_funcs.ptr_gsk_transform_transform_bounds(self, rect, out_rect); }
 void (gsk_transform_transform_point)(GskTransform *self, const graphene_point_t *point, graphene_point_t *out_point) { stub_funcs.ptr_gsk_transform_transform_point(self, point, out_point); }
 
-void close_gtk4() {
+void close_gtk4(void) {
     cosmo_dlclose(gtk);
 }

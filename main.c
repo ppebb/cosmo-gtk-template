@@ -1,6 +1,5 @@
 #include "glib_stub.h"
 #include "gtk4_stub.h"
-#include <libc/dlopen/dlfcn.h>
 
 static void print_hello(GtkWidget *widget, gpointer data) { printf("Hello\n"); }
 

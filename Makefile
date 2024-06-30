@@ -13,11 +13,10 @@ CC=cosmocc
 CFLAGS=-Wall -Wextra -std=c99 -O0 -Wno-deprecated-declarations $(STUBS) $(LIBS) $(LIBS_2)
 LDFLAGS=-ldl
 BIN=cosmo-gtk.com
-PROCDIR=proc
 OBJDIR=obj
 
 # Finds all c files but excludes the headers directory
-SRCS=$(shell find . -name "*.c" -not -path '*/headers/*' -and -not -path '*/$(PROCDIR)/*')
+SRCS=$(shell find . -name "*.c" -not -path '*/headers/*')
 OBJS=$(patsubst %.c, $(OBJDIR)/%.o, $(SRCS))
 
 .PHONY: all
@@ -37,4 +36,4 @@ $(BIN): $(OBJS) $(OBJDIR)
 
 .PHONY: clean
 clean:
-	rm -rf $(PROCDIR) $(OBJDIR) cosmo-gtk.*
+	rm -rf $(OBJDIR) cosmo-gtk.*

@@ -12336,7 +12336,7 @@ void ** (gi_callable_info_get_closure_native_address)(GICallableInfo *callable_i
 void (gi_callable_info_destroy_closure)(GICallableInfo *callable_info, ffi_closure *closure) { stub_funcs.ptr_gi_callable_info_destroy_closure(callable_info, closure); }
 ffi_type * (gi_type_tag_get_ffi_type)(GITypeTag type_tag, gboolean is_pointer) { return stub_funcs.ptr_gi_type_tag_get_ffi_type(type_tag, is_pointer); }
 
-void close_glib() {
+void close_glib(void) {
     cosmo_dlclose(glib);
     cosmo_dlclose(gobject);
     cosmo_dlclose(gio);

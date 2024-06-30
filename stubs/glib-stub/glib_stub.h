@@ -7,7 +7,7 @@
 #include <girepository/girffi.h>
 
 void initialize_glib(void);
-void close_glib();
+void close_glib(void);
 
 void (g_mem_chunk_destroy)(GMemChunk *mem_chunk);
 gpointer (g_mem_chunk_alloc)(GMemChunk *mem_chunk);

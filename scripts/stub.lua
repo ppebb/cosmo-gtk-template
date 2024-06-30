@@ -281,13 +281,13 @@ function M:write()
         .. utils.tbl_join(self.c_struct_inst, "\n    ")
         .. "\n}\n\n"
         .. utils.tbl_join(self.c_func_impls, "\n")
-        .. string.format("\n\nvoid close_%s() {\n    ", self.name)
+        .. string.format("\n\nvoid close_%s(void) {\n    ", self.name)
         .. utils.tbl_join(self.c_lib_free, "\n    ")
         .. "\n}"
 
     local h_out = self.h
         .. string.format("\nvoid initialize_%s(void);", self.name)
-        .. string.format("\nvoid close_%s();\n\n", self.name)
+        .. string.format("\nvoid close_%s(void);\n\n", self.name)
         .. utils.tbl_join(self.h_func_defs, "\n")
 
     utils.fprintf(io.stdout, "Writing %s_stub.c\n", self.name)
