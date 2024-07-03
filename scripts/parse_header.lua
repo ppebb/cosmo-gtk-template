@@ -142,7 +142,7 @@ function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
         local line = _line
 
         if line:match("^#define [A-Z]+_TYPE_") then
-            local type_func = line:match("^#define [A-Z]+_TYPE_[A-Z_0-9]+[ ]*%(([a-z_0-9]+)[ ]*%(%)%)")
+            local type_func = line:match("^#define [A-Z]+_TYPE_[A-Z_0-9]+[ ]*%(*([a-z_0-9]+)[ ]*%(%)%)*")
 
             if type_func then
                 return "GType", type_func, "void"

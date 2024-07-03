@@ -3175,6 +3175,7 @@ static struct glibFuncs {
     gboolean (*ptr_g_io_stream_has_pending)(GIOStream *stream);
     gboolean (*ptr_g_io_stream_set_pending)(GIOStream *stream, GError **error);
     void (*ptr_g_io_stream_clear_pending)(GIOStream *stream);
+    GType (*ptr_g_list_model_get_type)(void);
     guint (*ptr_g_list_model_get_n_items)(GListModel *list);
     gpointer (*ptr_g_list_model_get_item)(GListModel *list, guint position);
     GObject * (*ptr_g_list_model_get_object)(GListModel *list, guint position);
@@ -7309,6 +7310,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_io_stream_has_pending = cosmo_dlsym(gio, "g_io_stream_has_pending");
     stub_funcs.ptr_g_io_stream_set_pending = cosmo_dlsym(gio, "g_io_stream_set_pending");
     stub_funcs.ptr_g_io_stream_clear_pending = cosmo_dlsym(gio, "g_io_stream_clear_pending");
+    stub_funcs.ptr_g_list_model_get_type = cosmo_dlsym(gio, "g_list_model_get_type");
     stub_funcs.ptr_g_list_model_get_n_items = cosmo_dlsym(gio, "g_list_model_get_n_items");
     stub_funcs.ptr_g_list_model_get_item = cosmo_dlsym(gio, "g_list_model_get_item");
     stub_funcs.ptr_g_list_model_get_object = cosmo_dlsym(gio, "g_list_model_get_object");
@@ -11451,6 +11453,7 @@ gboolean (g_io_stream_is_closed)(GIOStream *stream) { return stub_funcs.ptr_g_io
 gboolean (g_io_stream_has_pending)(GIOStream *stream) { return stub_funcs.ptr_g_io_stream_has_pending(stream); }
 gboolean (g_io_stream_set_pending)(GIOStream *stream, GError **error) { return stub_funcs.ptr_g_io_stream_set_pending(stream, error); }
 void (g_io_stream_clear_pending)(GIOStream *stream) { stub_funcs.ptr_g_io_stream_clear_pending(stream); }
+GType (g_list_model_get_type)(void) { return stub_funcs.ptr_g_list_model_get_type(); }
 guint (g_list_model_get_n_items)(GListModel *list) { return stub_funcs.ptr_g_list_model_get_n_items(list); }
 gpointer (g_list_model_get_item)(GListModel *list, guint position) { return stub_funcs.ptr_g_list_model_get_item(list, position); }
 GObject * (g_list_model_get_object)(GListModel *list, guint position) { return stub_funcs.ptr_g_list_model_get_object(list, position); }

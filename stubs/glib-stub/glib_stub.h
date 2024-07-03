@@ -3176,6 +3176,7 @@ gboolean (g_io_stream_is_closed)(GIOStream *stream);
 gboolean (g_io_stream_has_pending)(GIOStream *stream);
 gboolean (g_io_stream_set_pending)(GIOStream *stream, GError **error);
 void (g_io_stream_clear_pending)(GIOStream *stream);
+GType (g_list_model_get_type)(void);
 guint (g_list_model_get_n_items)(GListModel *list);
 gpointer (g_list_model_get_item)(GListModel *list, guint position);
 GObject * (g_list_model_get_object)(GListModel *list, guint position);
