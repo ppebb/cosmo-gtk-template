@@ -3,16 +3,11 @@ local utils = require("scripts.utils")
 local M = {}
 M.__index = M
 
---- @class func
---- @field ret string
---- @field name string
---- @field args string
-
 --- @param path string
 --- @param match_access string[]
 --- @param prefix string
 --- @param trim_prefix boolean
---- @return func[]|nil
+--- @return table|nil
 function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
     local ret = {}
 
@@ -136,23 +131,26 @@ function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
     collected = utils.transform(collected, function(_, v) return v:gsub("%s+", " ") end)
 
     --- @param _line string
-    --- @return string, string, string, boolean|nil
+    --- @return string, string, string, table, boolean|nil
     local function crack_line(_line)
         local ret_type, fname, args
+        local extras = {
+            no_return = false,
+        }
         local line = _line
 
         if line:match("^#define [A-Z]+_TYPE_") then
             local type_func = line:match("^#define [A-Z]+_TYPE_[A-Z_0-9]+[ ]*%(*([a-z_0-9]+)[ ]*%(%)%)*")
 
             if type_func then
-                return "GType", type_func, "void"
+                return "GType", type_func, "void", extras
             else
                 utils.fprintf(
                     io.stderr,
                     "Matched type function declaration %s but could not resolve the function name\n",
                     line
                 )
-                return "", "", "", true
+                return "", "", "", extras, true
             end
         end
 
@@ -166,9 +164,13 @@ function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
         line = utils.remove_match(line, " G_GNUC_FORMAT[ ]*%([0-9, ]*%)")
         line = utils.remove_match(line, " G_GNUC_ALLOC_SIZE[ ]*%([0-9, ]*%)")
         line = utils.remove_match(line, " G_GNUC_ALLOC_SIZE2[ ]*%([0-9, ]*%)")
-        line = utils.remove_match(line, " G_ANALYZER_NORETURN")
+        line, extras.no_return = utils.remove_match(line, " G_ANALYZER_NORETURN")
         line = utils.remove_match(line, " G_GNUC_WARN_UNUSED_RESULT")
         line = utils.remove_match(line, " G_GNUC_PURE")
+
+        if not extras.no_return then
+            extras.no_return = line:find("G_NORETURN")
+        end
 
         local line_split = utils.split(line, " ")
 
@@ -238,7 +240,7 @@ function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
             args_trimmed = "void"
         end
 
-        return ret_type, fname, args_trimmed
+        return ret_type, fname, args_trimmed, extras
     end
 
     for _, _v in pairs(collected) do
@@ -261,13 +263,21 @@ function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
 
         if not utils.is_whitespace_or_nil(v) then
             print(v)
-            local ret_type, fname, args, err = crack_line(v)
+            local ret_type, fname, args, extras, err = crack_line(v)
 
             if err then
                 goto continue
             end
 
-            utils.fprintf(io.stdout, "ret: %s\nname: %s\nargs: %s\n\n", ret_type, fname, args)
+            utils.fprintf(
+                io.stdout,
+                "ret: %s\nname: %s\nargs: %s\n%s\n\n",
+                ret_type,
+                fname,
+                args,
+                -- TODO: Extend this if more extras are needed
+                extras.no_return and "extras: no_return" or ""
+            )
 
             assert(
                 not utils.is_whitespace_or_nil(ret_type),
@@ -306,7 +316,7 @@ function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
 
             fname = trim_prefix and fname:gsub("^" .. prefix, "") or fname
 
-            table.insert(ret, { ret = ret_type, name = fname, args = args })
+            table.insert(ret, { ret = ret_type, name = fname, args = args, extras = extras })
         end
 
         ::continue::

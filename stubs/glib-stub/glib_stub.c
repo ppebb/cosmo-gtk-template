@@ -9054,9 +9054,9 @@ void (g_log_writer_default_set_debug_domains)(const gchar * const *domains) { st
 gboolean (g_log_get_debug_enabled)(void) { return stub_funcs.ptr_g_log_get_debug_enabled(); }
 void (g_log_set_debug_enabled)(gboolean enabled) { stub_funcs.ptr_g_log_set_debug_enabled(enabled); }
 void (_g_log_fallback_handler)(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer unused_data) { stub_funcs.ptr__g_log_fallback_handler(log_domain, log_level, message, unused_data); }
-void (g_return_if_fail_warning)(const char *log_domain, const char *pretty_function, const char *expression) { stub_funcs.ptr_g_return_if_fail_warning(log_domain, pretty_function, expression); }
-void (g_warn_message)(const char *domain, const char *file, int line, const char *func, const char *warnexpr) { stub_funcs.ptr_g_warn_message(domain, file, line, func, warnexpr); }
-void (g_assert_warning)(const char *log_domain, const char *file, const int line, const char *pretty_function, const char *expression) { stub_funcs.ptr_g_assert_warning(log_domain, file, line, pretty_function, expression); }
+void (g_return_if_fail_warning)(const char *log_domain, const char *pretty_function, const char *expression) { stub_funcs.ptr_g_return_if_fail_warning(log_domain, pretty_function, expression); __builtin_unreachable(); /* oops rayo cosmico */  }
+void (g_warn_message)(const char *domain, const char *file, int line, const char *func, const char *warnexpr) { stub_funcs.ptr_g_warn_message(domain, file, line, func, warnexpr); __builtin_unreachable(); /* oops rayo cosmico */  }
+void (g_assert_warning)(const char *log_domain, const char *file, const int line, const char *pretty_function, const char *expression) { stub_funcs.ptr_g_assert_warning(log_domain, file, line, pretty_function, expression); __builtin_unreachable(); /* oops rayo cosmico */  }
 // Unable to locate va_equiv for g_log_structured_standard
 // Unable to locate va_equiv for g_error
 // Unable to locate va_equiv for g_critical
@@ -9561,13 +9561,13 @@ int (g_test_run_suite)(GTestSuite *suite) { return stub_funcs.ptr_g_test_run_sui
 void (g_test_case_free)(GTestCase *test_case) { stub_funcs.ptr_g_test_case_free(test_case); }
 void (g_test_suite_free)(GTestSuite *suite) { stub_funcs.ptr_g_test_suite_free(suite); }
 void (g_test_trap_assertions)(const char *domain, const char *file, int line, const char *func, guint64 assertion_flags, const char *pattern) { stub_funcs.ptr_g_test_trap_assertions(domain, file, line, func, assertion_flags, pattern); }
-void (g_assertion_message)(const char *domain, const char *file, int line, const char *func, const char *message) { stub_funcs.ptr_g_assertion_message(domain, file, line, func, message); }
-void (g_assertion_message_expr)(const char *domain, const char *file, int line, const char *func, const char *expr) { stub_funcs.ptr_g_assertion_message_expr(domain, file, line, func, expr); }
-void (g_assertion_message_cmpstr)(const char *domain, const char *file, int line, const char *func, const char *expr, const char *arg1, const char *cmp, const char *arg2) { stub_funcs.ptr_g_assertion_message_cmpstr(domain, file, line, func, expr, arg1, cmp, arg2); }
-void (g_assertion_message_cmpstrv)(const char *domain, const char *file, int line, const char *func, const char *expr, const char * const *arg1, const char * const *arg2, gsize first_wrong_idx) { stub_funcs.ptr_g_assertion_message_cmpstrv(domain, file, line, func, expr, arg1, arg2, first_wrong_idx); }
-void (g_assertion_message_cmpint)(const char *domain, const char *file, int line, const char *func, const char *expr, guint64 arg1, const char *cmp, guint64 arg2, char numtype) { stub_funcs.ptr_g_assertion_message_cmpint(domain, file, line, func, expr, arg1, cmp, arg2, numtype); }
-void (g_assertion_message_cmpnum)(const char *domain, const char *file, int line, const char *func, const char *expr, long double arg1, const char *cmp, long double arg2, char numtype) { stub_funcs.ptr_g_assertion_message_cmpnum(domain, file, line, func, expr, arg1, cmp, arg2, numtype); }
-void (g_assertion_message_error)(const char *domain, const char *file, int line, const char *func, const char *expr, const GError *error, GQuark error_domain, int error_code) { stub_funcs.ptr_g_assertion_message_error(domain, file, line, func, expr, error, error_domain, error_code); }
+void (g_assertion_message)(const char *domain, const char *file, int line, const char *func, const char *message) { stub_funcs.ptr_g_assertion_message(domain, file, line, func, message); __builtin_unreachable(); /* oops rayo cosmico */  }
+void (g_assertion_message_expr)(const char *domain, const char *file, int line, const char *func, const char *expr) { stub_funcs.ptr_g_assertion_message_expr(domain, file, line, func, expr); __builtin_unreachable(); /* oops rayo cosmico */  }
+void (g_assertion_message_cmpstr)(const char *domain, const char *file, int line, const char *func, const char *expr, const char *arg1, const char *cmp, const char *arg2) { stub_funcs.ptr_g_assertion_message_cmpstr(domain, file, line, func, expr, arg1, cmp, arg2); __builtin_unreachable(); /* oops rayo cosmico */  }
+void (g_assertion_message_cmpstrv)(const char *domain, const char *file, int line, const char *func, const char *expr, const char * const *arg1, const char * const *arg2, gsize first_wrong_idx) { stub_funcs.ptr_g_assertion_message_cmpstrv(domain, file, line, func, expr, arg1, arg2, first_wrong_idx); __builtin_unreachable(); /* oops rayo cosmico */  }
+void (g_assertion_message_cmpint)(const char *domain, const char *file, int line, const char *func, const char *expr, guint64 arg1, const char *cmp, guint64 arg2, char numtype) { stub_funcs.ptr_g_assertion_message_cmpint(domain, file, line, func, expr, arg1, cmp, arg2, numtype); __builtin_unreachable(); /* oops rayo cosmico */  }
+void (g_assertion_message_cmpnum)(const char *domain, const char *file, int line, const char *func, const char *expr, long double arg1, const char *cmp, long double arg2, char numtype) { stub_funcs.ptr_g_assertion_message_cmpnum(domain, file, line, func, expr, arg1, cmp, arg2, numtype); __builtin_unreachable(); /* oops rayo cosmico */  }
+void (g_assertion_message_error)(const char *domain, const char *file, int line, const char *func, const char *expr, const GError *error, GQuark error_domain, int error_code) { stub_funcs.ptr_g_assertion_message_error(domain, file, line, func, expr, error, error_domain, error_code); __builtin_unreachable(); /* oops rayo cosmico */  }
 void (g_test_add_vtable)(const char *testpath, gsize data_size, gconstpointer test_data, GTestFixtureFunc data_setup, GTestFixtureFunc data_test, GTestFixtureFunc data_teardown) { stub_funcs.ptr_g_test_add_vtable(testpath, data_size, test_data, data_setup, data_test, data_teardown); }
 const char* (g_test_log_type_name)(GTestLogType log_type) { return stub_funcs.ptr_g_test_log_type_name(log_type); }
 GTestLogBuffer* (g_test_log_buffer_new)(void) { return stub_funcs.ptr_g_test_log_buffer_new(); }
@@ -9587,7 +9587,7 @@ void (g_thread_unref)(GThread *thread) { stub_funcs.ptr_g_thread_unref(thread); 
 GThread * (g_thread_new)(const gchar *name, GThreadFunc func, gpointer data) { return stub_funcs.ptr_g_thread_new(name, func, data); }
 GThread * (g_thread_try_new)(const gchar *name, GThreadFunc func, gpointer data, GError **error) { return stub_funcs.ptr_g_thread_try_new(name, func, data, error); }
 GThread * (g_thread_self)(void) { return stub_funcs.ptr_g_thread_self(); }
-void (g_thread_exit)(gpointer retval) { stub_funcs.ptr_g_thread_exit(retval); }
+void (g_thread_exit)(gpointer retval) { stub_funcs.ptr_g_thread_exit(retval); __builtin_unreachable(); /* oops rayo cosmico */  }
 gpointer (g_thread_join)(GThread *thread) { return stub_funcs.ptr_g_thread_join(thread); }
 void (g_thread_yield)(void) { stub_funcs.ptr_g_thread_yield(); }
 void (g_mutex_init)(GMutex *mutex) { stub_funcs.ptr_g_mutex_init(mutex); }
@@ -9831,7 +9831,7 @@ gchar* (g_find_program_in_path)(const gchar *program) { return stub_funcs.ptr_g_
 gint (g_bit_nth_lsf)(gulong mask, gint nth_bit) { return stub_funcs.ptr_g_bit_nth_lsf(mask, nth_bit); }
 gint (g_bit_nth_msf)(gulong mask, gint nth_bit) { return stub_funcs.ptr_g_bit_nth_msf(mask, nth_bit); }
 guint (g_bit_storage)(gulong number) { return stub_funcs.ptr_g_bit_storage(number); }
-void (g_abort)(void) { stub_funcs.ptr_g_abort(); }
+void (g_abort)(void) { stub_funcs.ptr_g_abort(); __builtin_unreachable(); /* oops rayo cosmico */  }
 const gchar * (g_get_user_name)(void) { return stub_funcs.ptr_g_get_user_name(); }
 gchar * (g_uuid_string_random)(void) { return stub_funcs.ptr_g_uuid_string_random(); }
 gboolean (g_uuid_string_is_valid)(const gchar *str) { return stub_funcs.ptr_g_uuid_string_is_valid(str); }

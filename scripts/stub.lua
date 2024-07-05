@@ -37,6 +37,8 @@ local INIT_LIB_TEMPLATE = [[
     }
 ]]
 
+local RAYO_COSMICO = " __builtin_unreachable(); /* oops rayo cosmico */ "
+
 --- @param names_to_args table<string, string>
 --- @param fname string
 --- @return string|nil, string|nil, string|nil, string|nil
@@ -185,6 +187,7 @@ function M:process_headers(headers)
                 local ret = func.ret
                 local name = func.name
                 local args = func.args
+                local extras = func.extras
 
                 local arg_names = {}
                 for arg_name in (args .. ","):gmatch("[ *]([A-Za-z_0-9]+)[%[0-9%]]*,") do
@@ -207,10 +210,11 @@ function M:process_headers(headers)
                     table.insert(
                         self.c_func_impls,
                         string.format(
-                            sig .. " { %sstub_funcs.ptr_%s(%s); }",
+                            sig .. " { %sstub_funcs.ptr_%s(%s);%s }",
                             ret ~= "void" and "return " or "",
                             name,
-                            utils.tbl_join(arg_names, ", ")
+                            utils.tbl_join(arg_names, ", "),
+                            extras.no_return and RAYO_COSMICO or ""
                         )
                     )
                     table.insert(self.h_func_defs, sig .. ";")
@@ -233,20 +237,19 @@ function M:process_headers(headers)
                             )
                         )
                     else
+                        local nonvoid = ret ~= "void"
                         table.insert(
                             self.c_func_impls,
                             string.format(
                                 sig
-                                    .. (
-                                        ret ~= "void"
-                                            and " { %s ret; va_list vaargs; va_start(vaargs, %s); ret = stub_funcs.ptr_%s(%s); va_end(vaargs); return ret; }"
-                                        or " { %sva_list vaargs; va_start(vaargs, %s); stub_funcs.ptr_%s(%s); va_end(vaargs); }"
-                                    ),
-                                ret ~= "void" and ret or "",
+                                    .. " { %sva_list vaargs; va_start(vaargs, %s); %sstub_funcs.ptr_%s(%s); va_end(vaargs); %s}",
+                                nonvoid and (ret .. " ret; ") or "",
                                 arg_names[#arg_names],
+                                nonvoid and "ret = " or "",
                                 va_equiv,
                                 utils.tbl_join(arg_names, ", ")
-                                    .. string.format(", %svaargs", info == "ptr" and "&" or "")
+                                    .. string.format(", %svaargs", info == "ptr" and "&" or ""),
+                                extras.no_return and RAYO_COSMICO or nonvoid and "return ret; " or ""
                             )
                         )
                         utils.fprintf(

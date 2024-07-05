@@ -218,7 +218,7 @@ end
 
 --- @param line string
 --- @param match string
---- @return string
+--- @return string, boolean
 function M.remove_match(line, match)
     local ret = line
     local vs, ve = ret:find(match)
@@ -226,7 +226,7 @@ function M.remove_match(line, match)
         ret = ret:sub(1, vs - 1) .. ret:sub(ve + 1, #ret)
     end
 
-    return ret
+    return ret, #ret ~= #line
 end
 
 return M
