@@ -201,7 +201,7 @@ function M:process_headers(headers)
                     table.insert(
                         self.c_struct_inst,
                         string.format(
-                            'stub_funcs.ptr_%s = cosmo_dlsym(%s, "%s");',
+                            'stub_funcs.ptr_%s = try_find_sym(%s, "%s");',
                             name,
                             self.current_shared_object,
                             name
