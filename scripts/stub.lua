@@ -39,10 +39,23 @@ local INIT_LIB_TEMPLATE = [[
 
 local RAYO_COSMICO = " __builtin_unreachable(); /* oops rayo cosmico */ "
 
+--- @param args string
+--- @return string[]
+local function args_split(args)
+    local ret = {}
+
+    for arg_name in (args .. ","):gmatch("[ *]([A-Za-z_0-9]+)[%[0-9%]]*,") do
+        table.insert(ret, arg_name)
+    end
+
+    return ret
+end
+
 --- @param names_to_args table<string, string>
 --- @param fname string
+--- @param fargs string[]
 --- @return string|nil, string|nil, string|nil, string|nil
-function M:try_find_va_equivalent(names_to_args, fname)
+function M:try_find_va_equivalent(names_to_args, fname, fargs)
     local prefixless = self.prefix and utils.remove_match(fname, self.prefix) or nil
     local f_split = utils.split(prefixless or fname, "_")
     local patterns = {}
@@ -61,6 +74,18 @@ function M:try_find_va_equivalent(names_to_args, fname)
     end
 
     local matched, pattern, err
+    local function print_err(name, args)
+        utils.fprintf(
+            io.stderr,
+            "Found va_equiv for func %s as func %s(%s) with pattern %s, but err: %s\n",
+            fname,
+            name,
+            args,
+            pattern,
+            err
+        )
+    end
+
     for name, args in pairs(names_to_args) do
         for _, p_temp in ipairs(patterns) do
             if name:match(p_temp) then
@@ -68,17 +93,16 @@ function M:try_find_va_equivalent(names_to_args, fname)
                     matched = name
                     pattern = p_temp
                     err = "va_list missing"
-                    utils.fprintf(
-                        io.stderr,
-                        "Found va_equiv for func %s as func %s(%s) with pattern %s, but err: %s\n",
-                        fname,
-                        name,
-                        args,
-                        pattern,
-                        err
-                    )
+                    print_err(name, args)
                 else
-                    return name, p_temp, args:match("va_list[ ]*%*") and "ptr" or "", nil
+                    if #args_split(args) ~= #fargs + 1 then
+                        matched = name
+                        pattern = p_temp
+                        err = "args count mismatch"
+                        print_err(name, args)
+                    else
+                        return name, p_temp, args:match("va_list[ ]*%*") and "ptr" or "", nil
+                    end
                 end
             end
         end
@@ -193,10 +217,7 @@ function M:process_headers(headers)
                 local args = func.args
                 local extras = func.extras
 
-                local arg_names = {}
-                for arg_name in (args .. ","):gmatch("[ *]([A-Za-z_0-9]+)[%[0-9%]]*,") do
-                    table.insert(arg_names, arg_name)
-                end
+                local arg_names = args_split(args)
 
                 local sig = string.format("%s (%s)(%s)", ret, name, args)
 
@@ -223,7 +244,8 @@ function M:process_headers(headers)
                     )
                     table.insert(self.h_func_defs, sig .. ";")
                 else
-                    local va_equiv, pattern, info, err = self:try_find_va_equivalent(self.parser.names_to_args, name)
+                    local va_equiv, pattern, info, err =
+                        self:try_find_va_equivalent(self.parser.names_to_args, name, arg_names)
 
                     if not va_equiv then
                         local msg = "Unable to locate va_equiv for " .. name

@@ -10671,8 +10671,8 @@ void (g_variant_builder_close)(GVariantBuilder *builder) { stub_funcs.ptr_g_vari
 void (g_variant_builder_add_value)(GVariantBuilder *builder, GVariant *value) { stub_funcs.ptr_g_variant_builder_add_value(builder, value); }
 // Unable to locate va_equiv for g_variant_builder_add
 // Unable to locate va_equiv for g_variant_builder_add_parsed
-GVariant * (g_variant_new)(const gchar *format_string, ...) { GVariant * ret; va_list vaargs; va_start(vaargs, format_string); ret = stub_funcs.ptr_g_variant_new_va(format_string, &vaargs); va_end(vaargs); return ret; }
-void (g_variant_get)(GVariant *value, const gchar *format_string, ...) { va_list vaargs; va_start(vaargs, format_string); stub_funcs.ptr_g_variant_get_va(value, format_string, &vaargs); va_end(vaargs); }
+// Found va_equiv for func g_variant_new as func g_variant_new_va with pattern g_variant_new[_]*va*$, but err: args count mismatch
+// Found va_equiv for func g_variant_get as func g_variant_get_va with pattern g_variant_get[_]*va*$, but err: args count mismatch
 GVariant * (g_variant_new_va)(const gchar *format_string, const gchar **endptr, va_list *app) { return stub_funcs.ptr_g_variant_new_va(format_string, endptr, app); }
 void (g_variant_get_va)(GVariant *value, const gchar *format_string, const gchar **endptr, va_list *app) { stub_funcs.ptr_g_variant_get_va(value, format_string, endptr, app); }
 gboolean (g_variant_check_format_string)(GVariant *value, const gchar *format_string, gboolean copy_only) { return stub_funcs.ptr_g_variant_check_format_string(value, format_string, copy_only); }
