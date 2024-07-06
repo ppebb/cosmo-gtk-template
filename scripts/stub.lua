@@ -183,6 +183,10 @@ function M:process_headers(headers)
                 goto continue
             end
 
+            table.insert(self.c_struct_defs, "// Header " .. header)
+            table.insert(self.c_struct_inst, "// Header " .. header)
+            table.insert(self.h_func_defs, "// Header " .. header)
+
             for _, func in ipairs(funcs) do
                 local ret = func.ret
                 local name = func.name

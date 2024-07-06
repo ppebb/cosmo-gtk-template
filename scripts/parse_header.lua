@@ -100,11 +100,11 @@ function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
             goto continue
         end
 
-        if line:match("{") then
+        if line:match("{") and not line:match("'{'") then
             curly_depth = curly_depth + 1
         end
 
-        if curly_depth > 0 and line:match("}") then
+        if curly_depth > 0 and line:match("}") and not line:match("'}'") then
             curly_depth = curly_depth - 1
 
             if curly_depth == 0 then

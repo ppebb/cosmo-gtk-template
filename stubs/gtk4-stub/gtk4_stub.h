@@ -7,10 +7,14 @@
 void initialize_gtk4(void);
 void close_gtk4(void);
 
+// Header /usr/include/gtk-4.0/gtk/css/gtkcssenumtypes.h
 GType (gtk_css_parser_error_get_type)(void);
 GType (gtk_css_parser_warning_get_type)(void);
+// Header /usr/include/gtk-4.0/gtk/css/gtkcsserror.h
 GQuark (gtk_css_parser_warning_quark)(void);
 GQuark (gtk_css_parser_error_quark)(void);
+// Header /usr/include/gtk-4.0/gtk/css/gtkcsslocation.h
+// Header /usr/include/gtk-4.0/gtk/css/gtkcsssection.h
 GType (gtk_css_section_get_type)(void);
 GtkCssSection * (gtk_css_section_new)(GFile *file, const GtkCssLocation *start, const GtkCssLocation *end);
 GtkCssSection * (gtk_css_section_ref)(GtkCssSection *section);
@@ -21,10 +25,12 @@ GtkCssSection * (gtk_css_section_get_parent)(const GtkCssSection *section);
 GFile * (gtk_css_section_get_file)(const GtkCssSection *section);
 const GtkCssLocation * (gtk_css_section_get_start_location)(const GtkCssSection *section);
 const GtkCssLocation * (gtk_css_section_get_end_location)(const GtkCssSection *section);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkappchooser.h
 GType (gtk_app_chooser_get_type)(void);
 GAppInfo * (gtk_app_chooser_get_app_info)(GtkAppChooser *self);
 char * (gtk_app_chooser_get_content_type)(GtkAppChooser *self);
 void (gtk_app_chooser_refresh)(GtkAppChooser *self);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkappchooserbutton.h
 GType (gtk_app_chooser_button_get_type)(void);
 GtkWidget * (gtk_app_chooser_button_new)(const char *content_type);
 void (gtk_app_chooser_button_append_separator)(GtkAppChooserButton *self);
@@ -38,12 +44,14 @@ void (gtk_app_chooser_button_set_show_default_item)(GtkAppChooserButton *self, g
 gboolean (gtk_app_chooser_button_get_show_default_item)(GtkAppChooserButton *self);
 gboolean (gtk_app_chooser_button_get_modal)(GtkAppChooserButton *self);
 void (gtk_app_chooser_button_set_modal)(GtkAppChooserButton *self, gboolean modal);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkappchooserdialog.h
 GType (gtk_app_chooser_dialog_get_type)(void);
 GtkWidget * (gtk_app_chooser_dialog_new)(GtkWindow *parent, GtkDialogFlags flags, GFile *file);
 GtkWidget * (gtk_app_chooser_dialog_new_for_content_type)(GtkWindow *parent, GtkDialogFlags flags, const char *content_type);
 GtkWidget * (gtk_app_chooser_dialog_get_widget)(GtkAppChooserDialog *self);
 void (gtk_app_chooser_dialog_set_heading)(GtkAppChooserDialog *self, const char *heading);
 const char * (gtk_app_chooser_dialog_get_heading)(GtkAppChooserDialog *self);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkappchooserwidget.h
 GType (gtk_app_chooser_widget_get_type)(void);
 GtkWidget * (gtk_app_chooser_widget_new)(const char *content_type);
 void (gtk_app_chooser_widget_set_show_default)(GtkAppChooserWidget *self, gboolean setting);
@@ -58,6 +66,7 @@ void (gtk_app_chooser_widget_set_show_all)(GtkAppChooserWidget *self, gboolean s
 gboolean (gtk_app_chooser_widget_get_show_all)(GtkAppChooserWidget *self);
 void (gtk_app_chooser_widget_set_default_text)(GtkAppChooserWidget *self, const char *text);
 const char * (gtk_app_chooser_widget_get_default_text)(GtkAppChooserWidget *self);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkassistant.h
 GType (gtk_assistant_get_type)(void);
 GType (gtk_assistant_page_get_type)(void);
 GtkWidget* (gtk_assistant_new)(void);
@@ -85,6 +94,7 @@ void (gtk_assistant_commit)(GtkAssistant *assistant);
 GtkAssistantPage * (gtk_assistant_get_page)(GtkAssistant *assistant, GtkWidget *child);
 GtkWidget * (gtk_assistant_page_get_child)(GtkAssistantPage *page);
 GListModel * (gtk_assistant_get_pages)(GtkAssistant *assistant);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellarea.h
 GType (gtk_cell_area_get_type)(void);
 void (gtk_cell_area_add)(GtkCellArea *area, GtkCellRenderer *renderer);
 void (gtk_cell_area_remove)(GtkCellArea *area, GtkCellRenderer *renderer);
@@ -131,6 +141,7 @@ void (gtk_cell_area_stop_editing)(GtkCellArea *area, gboolean canceled);
 void (gtk_cell_area_inner_cell_area)(GtkCellArea *area, GtkWidget *widget, const GdkRectangle *cell_area, GdkRectangle *inner_area);
 void (gtk_cell_area_request_renderer)(GtkCellArea *area, GtkCellRenderer *renderer, GtkOrientation orientation, GtkWidget *widget, int for_size, int *minimum_size, int *natural_size);
 void (_gtk_cell_area_set_cell_data_func_with_proxy)(GtkCellArea *area, GtkCellRenderer *cell, GFunc func, gpointer func_data, GDestroyNotify destroy, gpointer proxy);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellareabox.h
 GType (gtk_cell_area_box_get_type)(void);
 GtkCellArea* (gtk_cell_area_box_new)(void);
 void (gtk_cell_area_box_pack_start)(GtkCellAreaBox *box, GtkCellRenderer *renderer, gboolean expand, gboolean align, gboolean fixed);
@@ -138,6 +149,7 @@ void (gtk_cell_area_box_pack_end)(GtkCellAreaBox *box, GtkCellRenderer *renderer
 int (gtk_cell_area_box_get_spacing)(GtkCellAreaBox *box);
 void (gtk_cell_area_box_set_spacing)(GtkCellAreaBox *box, int spacing);
 gboolean (_gtk_cell_area_box_group_visible)(GtkCellAreaBox *box, int group_idx);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellareacontext.h
 GType (gtk_cell_area_context_get_type)(void);
 GtkCellArea* (gtk_cell_area_context_get_area)(GtkCellAreaContext *context);
 void (gtk_cell_area_context_allocate)(GtkCellAreaContext *context, int width, int height);
@@ -149,10 +161,12 @@ void (gtk_cell_area_context_get_preferred_width_for_height)(GtkCellAreaContext *
 void (gtk_cell_area_context_get_allocation)(GtkCellAreaContext *context, int *width, int *height);
 void (gtk_cell_area_context_push_preferred_width)(GtkCellAreaContext *context, int minimum_width, int natural_width);
 void (gtk_cell_area_context_push_preferred_height)(GtkCellAreaContext *context, int minimum_height, int natural_height);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcelleditable.h
 GType (gtk_cell_editable_get_type)(void);
 void (gtk_cell_editable_start_editing)(GtkCellEditable *cell_editable, GdkEvent *event);
 void (gtk_cell_editable_editing_done)(GtkCellEditable *cell_editable);
 void (gtk_cell_editable_remove_widget)(GtkCellEditable *cell_editable);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcelllayout.h
 GType (gtk_cell_layout_get_type)(void);
 void (gtk_cell_layout_pack_start)(GtkCellLayout *cell_layout, GtkCellRenderer *cell, gboolean expand);
 void (gtk_cell_layout_pack_end)(GtkCellLayout *cell_layout, GtkCellRenderer *cell, gboolean expand);
@@ -166,6 +180,7 @@ GtkCellArea* (gtk_cell_layout_get_area)(GtkCellLayout *cell_layout);
 gboolean (_gtk_cell_layout_buildable_custom_tag_start)(GtkBuildable *buildable, GtkBuilder *builder, GObject *child, const char *tagname, GtkBuildableParser *parser, gpointer *data);
 gboolean (_gtk_cell_layout_buildable_custom_tag_end)(GtkBuildable *buildable, GtkBuilder *builder, GObject *child, const char *tagname, gpointer *data);
 void (_gtk_cell_layout_buildable_add_child)(GtkBuildable *buildable, GtkBuilder *builder, GObject *child, const char *type);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellrenderer.h
 GType (gtk_cell_renderer_get_type)(void);
 GtkSizeRequestMode (gtk_cell_renderer_get_request_mode)(GtkCellRenderer *cell);
 void (gtk_cell_renderer_get_preferred_width)(GtkCellRenderer *cell, GtkWidget *widget, int *minimum_size, int *natural_size);
@@ -195,21 +210,29 @@ gboolean (gtk_cell_renderer_get_is_expanded)(GtkCellRenderer *cell);
 void (gtk_cell_renderer_stop_editing)(GtkCellRenderer *cell, gboolean canceled);
 void (_gtk_cell_renderer_calc_offset)(GtkCellRenderer *cell, const GdkRectangle *cell_area, GtkTextDirection direction, int width, int height, int *x_offset, int *y_offset);
 GtkStateFlags (gtk_cell_renderer_get_state)(GtkCellRenderer *cell, GtkWidget *widget, GtkCellRendererState cell_state);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellrendereraccel.h
 GType (gtk_cell_renderer_accel_get_type)(void);
 GtkCellRenderer* (gtk_cell_renderer_accel_new)(void);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellrenderercombo.h
 GType (gtk_cell_renderer_combo_get_type)(void);
 GtkCellRenderer* (gtk_cell_renderer_combo_new)(void);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellrendererpixbuf.h
 GType (gtk_cell_renderer_pixbuf_get_type)(void);
 GtkCellRenderer* (gtk_cell_renderer_pixbuf_new)(void);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellrendererprogress.h
 GType (gtk_cell_renderer_progress_get_type)(void);
 GtkCellRenderer* (gtk_cell_renderer_progress_new)(void);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellrendererspin.h
 GType (gtk_cell_renderer_spin_get_type)(void);
 GtkCellRenderer* (gtk_cell_renderer_spin_new)(void);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellrendererspinner.h
 GType (gtk_cell_renderer_spinner_get_type)(void);
 GtkCellRenderer* (gtk_cell_renderer_spinner_new)(void);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellrenderertext.h
 GType (gtk_cell_renderer_text_get_type)(void);
 GtkCellRenderer* (gtk_cell_renderer_text_new)(void);
 void (gtk_cell_renderer_text_set_fixed_height_from_font)(GtkCellRendererText *renderer, int number_of_rows);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellrenderertoggle.h
 GType (gtk_cell_renderer_toggle_get_type)(void);
 GtkCellRenderer* (gtk_cell_renderer_toggle_new)(void);
 gboolean (gtk_cell_renderer_toggle_get_radio)(GtkCellRendererToggle *toggle);
@@ -218,6 +241,7 @@ gboolean (gtk_cell_renderer_toggle_get_active)(GtkCellRendererToggle *toggle);
 void (gtk_cell_renderer_toggle_set_active)(GtkCellRendererToggle *toggle, gboolean setting);
 gboolean (gtk_cell_renderer_toggle_get_activatable)(GtkCellRendererToggle *toggle);
 void (gtk_cell_renderer_toggle_set_activatable)(GtkCellRendererToggle *toggle, gboolean setting);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcellview.h
 GType (gtk_cell_view_get_type)(void);
 GtkWidget* (gtk_cell_view_new)(void);
 GtkWidget* (gtk_cell_view_new_with_context)(GtkCellArea *area, GtkCellAreaContext *context);
@@ -232,6 +256,7 @@ gboolean (gtk_cell_view_get_draw_sensitive)(GtkCellView *cell_view);
 void (gtk_cell_view_set_draw_sensitive)(GtkCellView *cell_view, gboolean draw_sensitive);
 gboolean (gtk_cell_view_get_fit_model)(GtkCellView *cell_view);
 void (gtk_cell_view_set_fit_model)(GtkCellView *cell_view, gboolean fit_model);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcolorbutton.h
 GType (gtk_color_button_get_type)(void);
 GtkWidget * (gtk_color_button_new)(void);
 GtkWidget * (gtk_color_button_new_with_rgba)(const GdkRGBA *rgba);
@@ -239,16 +264,20 @@ void (gtk_color_button_set_title)(GtkColorButton *button, const char *title);
 const char* (gtk_color_button_get_title)(GtkColorButton *button);
 gboolean (gtk_color_button_get_modal)(GtkColorButton *button);
 void (gtk_color_button_set_modal)(GtkColorButton *button, gboolean modal);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcolorchooser.h
 GType (gtk_color_chooser_get_type)(void);
 void (gtk_color_chooser_get_rgba)(GtkColorChooser *chooser, GdkRGBA *color);
 void (gtk_color_chooser_set_rgba)(GtkColorChooser *chooser, const GdkRGBA *color);
 gboolean (gtk_color_chooser_get_use_alpha)(GtkColorChooser *chooser);
 void (gtk_color_chooser_set_use_alpha)(GtkColorChooser *chooser, gboolean use_alpha);
 void (gtk_color_chooser_add_palette)(GtkColorChooser *chooser, GtkOrientation orientation, int colors_per_line, int n_colors, GdkRGBA *colors);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcolorchooserdialog.h
 GType (gtk_color_chooser_dialog_get_type)(void);
 GtkWidget * (gtk_color_chooser_dialog_new)(const char *title, GtkWindow *parent);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcolorchooserwidget.h
 GType (gtk_color_chooser_widget_get_type)(void);
 GtkWidget * (gtk_color_chooser_widget_new)(void);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcombobox.h
 GType (gtk_combo_box_get_type)(void);
 GtkWidget* (gtk_combo_box_new)(void);
 GtkWidget* (gtk_combo_box_new_with_entry)(void);
@@ -278,6 +307,7 @@ const char * (gtk_combo_box_get_active_id)(GtkComboBox *combo_box);
 gboolean (gtk_combo_box_set_active_id)(GtkComboBox *combo_box, const char *active_id);
 void (gtk_combo_box_set_child)(GtkComboBox *combo_box, GtkWidget *child);
 GtkWidget * (gtk_combo_box_get_child)(GtkComboBox *combo_box);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkcomboboxtext.h
 GType (gtk_combo_box_text_get_type)(void);
 GtkWidget* (gtk_combo_box_text_new)(void);
 GtkWidget* (gtk_combo_box_text_new_with_entry)(void);
@@ -290,6 +320,7 @@ char* (gtk_combo_box_text_get_active_text)(GtkComboBoxText *combo_box);
 void (gtk_combo_box_text_insert)(GtkComboBoxText *combo_box, int position, const char *id, const char *text);
 void (gtk_combo_box_text_append)(GtkComboBoxText *combo_box, const char *id, const char *text);
 void (gtk_combo_box_text_prepend)(GtkComboBoxText *combo_box, const char *id, const char *text);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkdialog.h
 GType (gtk_dialog_get_type)(void);
 GtkWidget* (gtk_dialog_new)(void);
 void (gtk_dialog_add_action_widget)(GtkDialog *dialog, GtkWidget *child, int response_id);
@@ -301,6 +332,7 @@ int (gtk_dialog_get_response_for_widget)(GtkDialog *dialog, GtkWidget *widget);
 void (gtk_dialog_response)(GtkDialog *dialog, int response_id);
 GtkWidget * (gtk_dialog_get_content_area)(GtkDialog *dialog);
 GtkWidget * (gtk_dialog_get_header_bar)(GtkDialog *dialog);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkentrycompletion.h
 GType (gtk_entry_completion_get_type)(void);
 GtkEntryCompletion* (gtk_entry_completion_new)(void);
 GtkEntryCompletion* (gtk_entry_completion_new_with_area)(GtkCellArea *area);
@@ -326,6 +358,7 @@ gboolean (gtk_entry_completion_get_popup_single_match)(GtkEntryCompletion *compl
 const char* (gtk_entry_completion_get_completion_prefix)(GtkEntryCompletion *completion);
 void (gtk_entry_completion_set_text_column)(GtkEntryCompletion *completion, int column);
 int (gtk_entry_completion_get_text_column)(GtkEntryCompletion *completion);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkfilechooser.h
 GType (gtk_file_chooser_get_type)(void);
 GQuark (gtk_file_chooser_error_quark)(void);
 void (gtk_file_chooser_set_action)(GtkFileChooser *chooser, GtkFileChooserAction action);
@@ -353,15 +386,19 @@ void (gtk_file_chooser_add_choice)(GtkFileChooser *chooser, const char *id, cons
 void (gtk_file_chooser_remove_choice)(GtkFileChooser *chooser, const char *id);
 void (gtk_file_chooser_set_choice)(GtkFileChooser *chooser, const char *id, const char *option);
 const char * (gtk_file_chooser_get_choice)(GtkFileChooser *chooser, const char *id);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkfilechooserdialog.h
 GType (gtk_file_chooser_dialog_get_type)(void);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkfilechoosernative.h
 GType (gtk_file_chooser_native_get_type)(void);
 GtkFileChooserNative* (gtk_file_chooser_native_new)(const char *title, GtkWindow *parent, GtkFileChooserAction action, const char *accept_label, const char *cancel_label);
 const char* (gtk_file_chooser_native_get_accept_label)(GtkFileChooserNative *self);
 void (gtk_file_chooser_native_set_accept_label)(GtkFileChooserNative *self, const char *accept_label);
 const char* (gtk_file_chooser_native_get_cancel_label)(GtkFileChooserNative *self);
 void (gtk_file_chooser_native_set_cancel_label)(GtkFileChooserNative *self, const char *cancel_label);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkfilechooserwidget.h
 GType (gtk_file_chooser_widget_get_type)(void);
 GtkWidget* (gtk_file_chooser_widget_new)(GtkFileChooserAction action);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkfontbutton.h
 GType (gtk_font_button_get_type)(void);
 GtkWidget* (gtk_font_button_new)(void);
 GtkWidget* (gtk_font_button_new_with_font)(const char *fontname);
@@ -373,6 +410,7 @@ gboolean (gtk_font_button_get_use_font)(GtkFontButton *font_button);
 void (gtk_font_button_set_use_font)(GtkFontButton *font_button, gboolean use_font);
 gboolean (gtk_font_button_get_use_size)(GtkFontButton *font_button);
 void (gtk_font_button_set_use_size)(GtkFontButton *font_button, gboolean use_size);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkfontchooser.h
 GType (gtk_font_chooser_get_type)(void);
 PangoFontFamily* (gtk_font_chooser_get_font_family)(GtkFontChooser *fontchooser);
 PangoFontFace* (gtk_font_chooser_get_font_face)(GtkFontChooser *fontchooser);
@@ -393,10 +431,13 @@ GtkFontChooserLevel (gtk_font_chooser_get_level)(GtkFontChooser *fontchooser);
 char * (gtk_font_chooser_get_font_features)(GtkFontChooser *fontchooser);
 char * (gtk_font_chooser_get_language)(GtkFontChooser *fontchooser);
 void (gtk_font_chooser_set_language)(GtkFontChooser *fontchooser, const char *language);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkfontchooserdialog.h
 GType (gtk_font_chooser_dialog_get_type)(void);
 GtkWidget* (gtk_font_chooser_dialog_new)(const char *title, GtkWindow *parent);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkfontchooserwidget.h
 GType (gtk_font_chooser_widget_get_type)(void);
 GtkWidget* (gtk_font_chooser_widget_new)(void);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkiconview.h
 GType (gtk_icon_view_get_type)(void);
 GtkWidget * (gtk_icon_view_new)(void);
 GtkWidget * (gtk_icon_view_new_with_area)(GtkCellArea *area);
@@ -461,6 +502,7 @@ void (gtk_icon_view_set_tooltip_cell)(GtkIconView *icon_view, GtkTooltip *toolti
 gboolean (gtk_icon_view_get_tooltip_context)(GtkIconView *icon_view, int x, int y, gboolean keyboard_tip, GtkTreeModel **model, GtkTreePath **path, GtkTreeIter *iter);
 void (gtk_icon_view_set_tooltip_column)(GtkIconView *icon_view, int column);
 int (gtk_icon_view_get_tooltip_column)(GtkIconView *icon_view);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkinfobar.h
 GType (gtk_info_bar_get_type)(void);
 GtkWidget* (gtk_info_bar_new)(void);
 void (gtk_info_bar_add_action_widget)(GtkInfoBar *info_bar, GtkWidget *child, int response_id);
@@ -477,6 +519,7 @@ void (gtk_info_bar_set_show_close_button)(GtkInfoBar *info_bar, gboolean setting
 gboolean (gtk_info_bar_get_show_close_button)(GtkInfoBar *info_bar);
 void (gtk_info_bar_set_revealed)(GtkInfoBar *info_bar, gboolean revealed);
 gboolean (gtk_info_bar_get_revealed)(GtkInfoBar *info_bar);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkliststore.h
 GType (gtk_list_store_get_type)(void);
 GtkListStore* (gtk_list_store_newv)(int n_columns, GType *types);
 void (gtk_list_store_set_column_types)(GtkListStore *list_store, int n_columns, GType *types);
@@ -496,13 +539,16 @@ void (gtk_list_store_reorder)(GtkListStore *store, int *new_order);
 void (gtk_list_store_swap)(GtkListStore *store, GtkTreeIter *a, GtkTreeIter *b);
 void (gtk_list_store_move_after)(GtkListStore *store, GtkTreeIter *iter, GtkTreeIter *position);
 void (gtk_list_store_move_before)(GtkListStore *store, GtkTreeIter *iter, GtkTreeIter *position);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtklockbutton.h
 GType (gtk_lock_button_get_type)(void);
 GtkWidget* (gtk_lock_button_new)(GPermission *permission);
 GPermission* (gtk_lock_button_get_permission)(GtkLockButton *button);
 void (gtk_lock_button_set_permission)(GtkLockButton *button, GPermission *permission);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkmessagedialog.h
 GType (gtk_message_dialog_get_type)(void);
 void (gtk_message_dialog_set_markup)(GtkMessageDialog *message_dialog, const char *str);
 GtkWidget* (gtk_message_dialog_get_message_area)(GtkMessageDialog *message_dialog);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkrender.h
 void (gtk_render_option)(GtkStyleContext *context, cairo_t *cr, double x, double y, double width, double height);
 void (gtk_render_arrow)(GtkStyleContext *context, cairo_t *cr, double angle, double x, double y, double size);
 void (gtk_render_background)(GtkStyleContext *context, cairo_t *cr, double x, double y, double width, double height);
@@ -520,9 +566,11 @@ void (gtk_snapshot_render_focus)(GtkSnapshot *snapshot, GtkStyleContext *context
 void (gtk_snapshot_render_layout)(GtkSnapshot *snapshot, GtkStyleContext *context, double x, double y, PangoLayout *layout);
 void (gtk_snapshot_render_insertion_cursor)(GtkSnapshot *snapshot, GtkStyleContext *context, double x, double y, PangoLayout *layout, int index, PangoDirection direction);
 void (gtk_render_check)(GtkStyleContext *context, cairo_t *cr, double x, double y, double width, double height);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkshow.h
 gboolean (gtk_show_uri_full_finish)(GtkWindow *parent, GAsyncResult *result, GError **error);
 void (gtk_show_uri)(GtkWindow *parent, const char *uri, guint32 timestamp);
 void (gtk_show_uri_full)(GtkWindow *parent, const char *uri, guint32 timestamp, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkstatusbar.h
 GType (gtk_statusbar_get_type)(void);
 GtkWidget* (gtk_statusbar_new)(void);
 guint (gtk_statusbar_get_context_id)(GtkStatusbar *statusbar, const char *context_description);
@@ -530,6 +578,7 @@ guint (gtk_statusbar_push)(GtkStatusbar *statusbar, guint context_id, const char
 void (gtk_statusbar_pop)(GtkStatusbar *statusbar, guint context_id);
 void (gtk_statusbar_remove)(GtkStatusbar *statusbar, guint context_id, guint message_id);
 void (gtk_statusbar_remove_all)(GtkStatusbar *statusbar, guint context_id);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkstylecontext.h
 GType (gtk_style_context_get_type)(void);
 void (gtk_style_context_add_provider)(GtkStyleContext *context, GtkStyleProvider *provider, guint priority);
 void (gtk_style_context_remove_provider)(GtkStyleContext *context, GtkStyleProvider *provider);
@@ -550,6 +599,7 @@ void (gtk_style_context_get_border)(GtkStyleContext *context, GtkBorder *border)
 void (gtk_style_context_get_padding)(GtkStyleContext *context, GtkBorder *padding);
 void (gtk_style_context_get_margin)(GtkStyleContext *context, GtkBorder *margin);
 char * (gtk_style_context_to_string)(GtkStyleContext *context, GtkStyleContextPrintFlags flags);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtktreednd.h
 GType (gtk_tree_row_data_get_type)(void);
 GType (gtk_tree_drag_source_get_type)(void);
 gboolean (gtk_tree_drag_source_row_draggable)(GtkTreeDragSource *drag_source, GtkTreePath *path);
@@ -560,6 +610,7 @@ gboolean (gtk_tree_drag_dest_drag_data_received)(GtkTreeDragDest *drag_dest, Gtk
 gboolean (gtk_tree_drag_dest_row_drop_possible)(GtkTreeDragDest *drag_dest, GtkTreePath *dest_path, const GValue *value);
 GdkContentProvider * (gtk_tree_create_row_drag_content)(GtkTreeModel *tree_model, GtkTreePath *path);
 gboolean (gtk_tree_get_row_drag_data)(const GValue *value, GtkTreeModel **tree_model, GtkTreePath **path);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtktreemodel.h
 GType (gtk_tree_model_get_type)(void);
 GType (gtk_tree_iter_get_type)(void);
 GType (gtk_tree_path_get_type)(void);
@@ -621,6 +672,7 @@ void (gtk_tree_model_row_has_child_toggled)(GtkTreeModel *tree_model, GtkTreePat
 void (gtk_tree_model_row_deleted)(GtkTreeModel *tree_model, GtkTreePath *path);
 void (gtk_tree_model_rows_reordered)(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *iter, int *new_order);
 void (gtk_tree_model_rows_reordered_with_length)(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *iter, int *new_order, int length);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtktreemodelfilter.h
 GType (gtk_tree_model_filter_get_type)(void);
 GtkTreeModel* (gtk_tree_model_filter_new)(GtkTreeModel *child_model, GtkTreePath *root);
 void (gtk_tree_model_filter_set_visible_func)(GtkTreeModelFilter *filter, GtkTreeModelFilterVisibleFunc func, gpointer data, GDestroyNotify destroy);
@@ -633,6 +685,7 @@ GtkTreePath* (gtk_tree_model_filter_convert_child_path_to_path)(GtkTreeModelFilt
 GtkTreePath* (gtk_tree_model_filter_convert_path_to_child_path)(GtkTreeModelFilter *filter, GtkTreePath *filter_path);
 void (gtk_tree_model_filter_refilter)(GtkTreeModelFilter *filter);
 void (gtk_tree_model_filter_clear_cache)(GtkTreeModelFilter *filter);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtktreemodelsort.h
 GType (gtk_tree_model_sort_get_type)(void);
 GtkTreeModel* (gtk_tree_model_sort_new_with_model)(GtkTreeModel *child_model);
 GtkTreeModel* (gtk_tree_model_sort_get_model)(GtkTreeModelSort *tree_model);
@@ -643,6 +696,7 @@ void (gtk_tree_model_sort_convert_iter_to_child_iter)(GtkTreeModelSort *tree_mod
 void (gtk_tree_model_sort_reset_default_sort_func)(GtkTreeModelSort *tree_model_sort);
 void (gtk_tree_model_sort_clear_cache)(GtkTreeModelSort *tree_model_sort);
 gboolean (gtk_tree_model_sort_iter_is_valid)(GtkTreeModelSort *tree_model_sort, GtkTreeIter *iter);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtktreeselection.h
 GType (gtk_tree_selection_get_type)(void);
 void (gtk_tree_selection_set_mode)(GtkTreeSelection *selection, GtkSelectionMode type);
 GtkSelectionMode (gtk_tree_selection_get_mode)(GtkTreeSelection *selection);
@@ -664,6 +718,7 @@ void (gtk_tree_selection_select_all)(GtkTreeSelection *selection);
 void (gtk_tree_selection_unselect_all)(GtkTreeSelection *selection);
 void (gtk_tree_selection_select_range)(GtkTreeSelection *selection, GtkTreePath *start_path, GtkTreePath *end_path);
 void (gtk_tree_selection_unselect_range)(GtkTreeSelection *selection, GtkTreePath *start_path, GtkTreePath *end_path);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtktreesortable.h
 GType (gtk_tree_sortable_get_type)(void);
 void (gtk_tree_sortable_sort_column_changed)(GtkTreeSortable *sortable);
 gboolean (gtk_tree_sortable_get_sort_column_id)(GtkTreeSortable *sortable, int *sort_column_id, GtkSortType *order);
@@ -671,6 +726,7 @@ void (gtk_tree_sortable_set_sort_column_id)(GtkTreeSortable *sortable, int sort_
 void (gtk_tree_sortable_set_sort_func)(GtkTreeSortable *sortable, int sort_column_id, GtkTreeIterCompareFunc sort_func, gpointer user_data, GDestroyNotify destroy);
 void (gtk_tree_sortable_set_default_sort_func)(GtkTreeSortable *sortable, GtkTreeIterCompareFunc sort_func, gpointer user_data, GDestroyNotify destroy);
 gboolean (gtk_tree_sortable_has_default_sort_func)(GtkTreeSortable *sortable);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtktreestore.h
 GType (gtk_tree_store_get_type)(void);
 GtkTreeStore* (gtk_tree_store_newv)(int n_columns, GType *types);
 void (gtk_tree_store_set_column_types)(GtkTreeStore *tree_store, int n_columns, GType *types);
@@ -692,6 +748,7 @@ void (gtk_tree_store_reorder)(GtkTreeStore *tree_store, GtkTreeIter *parent, int
 void (gtk_tree_store_swap)(GtkTreeStore *tree_store, GtkTreeIter *a, GtkTreeIter *b);
 void (gtk_tree_store_move_before)(GtkTreeStore *tree_store, GtkTreeIter *iter, GtkTreeIter *position);
 void (gtk_tree_store_move_after)(GtkTreeStore *tree_store, GtkTreeIter *iter, GtkTreeIter *position);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtktreeview.h
 GType (gtk_tree_view_get_type)(void);
 GtkWidget* (gtk_tree_view_new)(void);
 GtkWidget* (gtk_tree_view_new_with_model)(GtkTreeModel *model);
@@ -783,6 +840,7 @@ void (gtk_tree_view_set_tooltip_cell)(GtkTreeView *tree_view, GtkTooltip *toolti
 gboolean (gtk_tree_view_get_tooltip_context)(GtkTreeView *tree_view, int x, int y, gboolean keyboard_tip, GtkTreeModel **model, GtkTreePath **path, GtkTreeIter *iter);
 void (gtk_tree_view_set_tooltip_column)(GtkTreeView *tree_view, int column);
 int (gtk_tree_view_get_tooltip_column)(GtkTreeView *tree_view);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtktreeviewcolumn.h
 GType (gtk_tree_view_column_get_type)(void);
 GtkTreeViewColumn* (gtk_tree_view_column_new)(void);
 GtkTreeViewColumn* (gtk_tree_view_column_new_with_area)(GtkCellArea *area);
@@ -835,8 +893,10 @@ gboolean (gtk_tree_view_column_cell_get_position)(GtkTreeViewColumn *tree_column
 void (gtk_tree_view_column_queue_resize)(GtkTreeViewColumn *tree_column);
 GtkWidget* (gtk_tree_view_column_get_tree_view)(GtkTreeViewColumn *tree_column);
 GtkWidget* (gtk_tree_view_column_get_button)(GtkTreeViewColumn *tree_column);
+// Header /usr/include/gtk-4.0/gtk/deprecated/gtkvolumebutton.h
 GType (gtk_volume_button_get_type)(void);
 GtkWidget* (gtk_volume_button_new)(void);
+// Header /usr/include/gtk-4.0/gtk/print/gtkpagesetup.h
 GType (gtk_page_setup_get_type)(void);
 GtkPageSetup * (gtk_page_setup_new)(void);
 GtkPageSetup * (gtk_page_setup_copy)(GtkPageSetup *other);
@@ -865,6 +925,7 @@ gboolean (gtk_page_setup_load_key_file)(GtkPageSetup *setup, GKeyFile *key_file,
 void (gtk_page_setup_to_key_file)(GtkPageSetup *setup, GKeyFile *key_file, const char *group_name);
 GVariant* (gtk_page_setup_to_gvariant)(GtkPageSetup *setup);
 GtkPageSetup* (gtk_page_setup_new_from_gvariant)(GVariant *variant);
+// Header /usr/include/gtk-4.0/gtk/print/gtkpapersize.h
 GType (gtk_paper_size_get_type)(void);
 GtkPaperSize* (gtk_paper_size_new)(const char *name);
 GtkPaperSize* (gtk_paper_size_new_from_ppd)(const char *ppd_name, const char *ppd_display_name, double width, double height);
@@ -891,6 +952,7 @@ GtkPaperSize* (gtk_paper_size_new_from_key_file)(GKeyFile *key_file, const char 
 void (gtk_paper_size_to_key_file)(GtkPaperSize *size, GKeyFile *key_file, const char *group_name);
 GtkPaperSize* (gtk_paper_size_new_from_gvariant)(GVariant *variant);
 GVariant* (gtk_paper_size_to_gvariant)(GtkPaperSize *paper_size);
+// Header /usr/include/gtk-4.0/gtk/print/gtkprintcontext.h
 GType (gtk_print_context_get_type)(void);
 cairo_t* (gtk_print_context_get_cairo_context)(GtkPrintContext *context);
 GtkPageSetup* (gtk_print_context_get_page_setup)(GtkPrintContext *context);
@@ -903,6 +965,7 @@ PangoFontMap* (gtk_print_context_get_pango_fontmap)(GtkPrintContext *context);
 PangoContext* (gtk_print_context_create_pango_context)(GtkPrintContext *context);
 PangoLayout* (gtk_print_context_create_pango_layout)(GtkPrintContext *context);
 void (gtk_print_context_set_cairo_context)(GtkPrintContext *context, cairo_t *cr, double dpi_x, double dpi_y);
+// Header /usr/include/gtk-4.0/gtk/print/gtkprintoperation.h
 GType (gtk_print_operation_get_type)(void);
 GQuark (gtk_print_error_quark)(void);
 GtkPrintOperation * (gtk_print_operation_new)(void);
@@ -937,10 +1000,12 @@ gboolean (gtk_print_operation_get_embed_page_setup)(GtkPrintOperation *op);
 int (gtk_print_operation_get_n_pages_to_print)(GtkPrintOperation *op);
 GtkPageSetup* (gtk_print_run_page_setup_dialog)(GtkWindow *parent, GtkPageSetup *page_setup, GtkPrintSettings *settings);
 void (gtk_print_run_page_setup_dialog_async)(GtkWindow *parent, GtkPageSetup *page_setup, GtkPrintSettings *settings, GtkPageSetupDoneFunc done_cb, gpointer data);
+// Header /usr/include/gtk-4.0/gtk/print/gtkprintoperationpreview.h
 GType (gtk_print_operation_preview_get_type)(void);
 void (gtk_print_operation_preview_render_page)(GtkPrintOperationPreview *preview, int page_nr);
 void (gtk_print_operation_preview_end_preview)(GtkPrintOperationPreview *preview);
 gboolean (gtk_print_operation_preview_is_selected)(GtkPrintOperationPreview *preview, int page_nr);
+// Header /usr/include/gtk-4.0/gtk/print/gtkprintsettings.h
 GType (gtk_print_settings_get_type)(void);
 GtkPrintSettings* (gtk_print_settings_new)(void);
 GtkPrintSettings* (gtk_print_settings_copy)(GtkPrintSettings *other);
@@ -1018,10 +1083,12 @@ const char * (gtk_print_settings_get_output_bin)(GtkPrintSettings *settings);
 void (gtk_print_settings_set_output_bin)(GtkPrintSettings *settings, const char *output_bin);
 GVariant* (gtk_print_settings_to_gvariant)(GtkPrintSettings *settings);
 GtkPrintSettings* (gtk_print_settings_new_from_gvariant)(GVariant *variant);
+// Header /usr/include/gtk-4.0/gtk/a11y/gtkatspisocket.h
 GType (gtk_at_spi_socket_get_type)(void);
 GtkAccessible * (gtk_at_spi_socket_new)(const char *bus_name, const char *object_path, GError **error);
 const char * (gtk_at_spi_socket_get_bus_name)(GtkAtSpiSocket *self);
 const char * (gtk_at_spi_socket_get_object_path)(GtkAtSpiSocket *self);
+// Header /usr/include/gtk-4.0/gtk/gtkaboutdialog.h
 GType (gtk_about_dialog_get_type)(void);
 GtkWidget* (gtk_about_dialog_new)(void);
 const char * (gtk_about_dialog_get_program_name)(GtkAboutDialog *about);
@@ -1057,6 +1124,7 @@ void (gtk_about_dialog_set_logo)(GtkAboutDialog *about, GdkPaintable *logo);
 const char * (gtk_about_dialog_get_logo_icon_name)(GtkAboutDialog *about);
 void (gtk_about_dialog_set_logo_icon_name)(GtkAboutDialog *about, const char *icon_name);
 void (gtk_about_dialog_add_credit_section)(GtkAboutDialog *about, const char *section_name, const char **people);
+// Header /usr/include/gtk-4.0/gtk/gtkaccelgroup.h
 gboolean (gtk_accelerator_parse)(const char *accelerator, guint *accelerator_key, GdkModifierType *accelerator_mods);
 gboolean (gtk_accelerator_parse_with_keycode)(const char *accelerator, GdkDisplay *display, guint *accelerator_key, guint **accelerator_codes, GdkModifierType *accelerator_mods);
 char * (gtk_accelerator_name)(guint accelerator_key, GdkModifierType accelerator_mods);
@@ -1065,6 +1133,7 @@ char * (gtk_accelerator_get_label)(guint accelerator_key, GdkModifierType accele
 char * (gtk_accelerator_get_label_with_keycode)(GdkDisplay *display, guint accelerator_key, guint keycode, GdkModifierType accelerator_mods);
 GdkModifierType (gtk_accelerator_get_default_mod_mask)(void);
 gboolean (gtk_accelerator_valid)(guint keyval, GdkModifierType modifiers);
+// Header /usr/include/gtk-4.0/gtk/gtkaccessible.h
 GType (gtk_accessible_get_type)(void);
 gboolean (gtk_accessible_get_platform_state)(GtkAccessible *self, GtkAccessiblePlatformState state);
 GtkAccessible * (gtk_accessible_get_accessible_parent)(GtkAccessible *self);
@@ -1088,16 +1157,20 @@ GList * (gtk_accessible_list_get_objects)(GtkAccessibleList *accessible_list);
 GtkAccessibleList * (gtk_accessible_list_new_from_list)(GList *list);
 GtkAccessibleList * (gtk_accessible_list_new_from_array)(GtkAccessible **accessibles, gsize n_accessibles);
 void (gtk_accessible_announce)(GtkAccessible *self, const char *message, GtkAccessibleAnnouncementPriority priority);
+// Header /usr/include/gtk-4.0/gtk/gtkaccessiblerange.h
 GType (gtk_accessible_range_get_type)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkaccessibletext.h
 GType (gtk_accessible_text_get_type)(void);
 void (gtk_accessible_text_update_selection_bound)(GtkAccessibleText *self);
 void (gtk_accessible_text_update_contents)(GtkAccessibleText *self, GtkAccessibleTextContentChange change, unsigned int start, unsigned int end);
+// Header /usr/include/gtk-4.0/gtk/gtkactionable.h
 GType (gtk_actionable_get_type)(void);
 const char * (gtk_actionable_get_action_name)(GtkActionable *actionable);
 void (gtk_actionable_set_action_name)(GtkActionable *actionable, const char *action_name);
 GVariant * (gtk_actionable_get_action_target_value)(GtkActionable *actionable);
 void (gtk_actionable_set_action_target_value)(GtkActionable *actionable, GVariant *target_value);
 void (gtk_actionable_set_detailed_action_name)(GtkActionable *actionable, const char *detailed_action_name);
+// Header /usr/include/gtk-4.0/gtk/gtkactionbar.h
 GType (gtk_action_bar_get_type)(void);
 GtkWidget* (gtk_action_bar_new)(void);
 GtkWidget* (gtk_action_bar_get_center_widget)(GtkActionBar *action_bar);
@@ -1107,6 +1180,7 @@ void (gtk_action_bar_pack_end)(GtkActionBar *action_bar, GtkWidget *child);
 void (gtk_action_bar_remove)(GtkActionBar *action_bar, GtkWidget *child);
 void (gtk_action_bar_set_revealed)(GtkActionBar *action_bar, gboolean revealed);
 gboolean (gtk_action_bar_get_revealed)(GtkActionBar *action_bar);
+// Header /usr/include/gtk-4.0/gtk/gtkadjustment.h
 GType (gtk_adjustment_get_type)(void);
 GtkAdjustment* (gtk_adjustment_new)(double value, double lower, double upper, double step_increment, double page_increment, double page_size);
 void (gtk_adjustment_clamp_page)(GtkAdjustment *adjustment, double lower, double upper);
@@ -1124,6 +1198,7 @@ double (gtk_adjustment_get_page_size)(GtkAdjustment *adjustment);
 void (gtk_adjustment_set_page_size)(GtkAdjustment *adjustment, double page_size);
 void (gtk_adjustment_configure)(GtkAdjustment *adjustment, double value, double lower, double upper, double step_increment, double page_increment, double page_size);
 double (gtk_adjustment_get_minimum_increment)(GtkAdjustment *adjustment);
+// Header /usr/include/gtk-4.0/gtk/gtkalertdialog.h
 GType (gtk_alert_dialog_get_type)(void);
 gboolean (gtk_alert_dialog_get_modal)(GtkAlertDialog *self);
 void (gtk_alert_dialog_set_modal)(GtkAlertDialog *self, gboolean modal);
@@ -1140,6 +1215,7 @@ void (gtk_alert_dialog_set_default_button)(GtkAlertDialog *self, int button);
 void (gtk_alert_dialog_choose)(GtkAlertDialog *self, GtkWindow *parent, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 int (gtk_alert_dialog_choose_finish)(GtkAlertDialog *self, GAsyncResult *result, GError **error);
 void (gtk_alert_dialog_show)(GtkAlertDialog *self, GtkWindow *parent);
+// Header /usr/include/gtk-4.0/gtk/gtkapplication.h
 GType (gtk_application_get_type)(void);
 GtkApplication * (gtk_application_new)(const char *application_id, GApplicationFlags flags);
 void (gtk_application_add_window)(GtkApplication *application, GtkWindow *window);
@@ -1156,6 +1232,7 @@ char ** (gtk_application_get_accels_for_action)(GtkApplication *application, con
 char ** (gtk_application_get_actions_for_accel)(GtkApplication *application, const char *accel);
 void (gtk_application_set_accels_for_action)(GtkApplication *application, const char *detailed_action_name, const char * const *accels);
 GMenu * (gtk_application_get_menu_by_id)(GtkApplication *application, const char *id);
+// Header /usr/include/gtk-4.0/gtk/gtkapplicationwindow.h
 GType (gtk_application_window_get_type)(void);
 GtkWidget * (gtk_application_window_new)(GtkApplication *application);
 void (gtk_application_window_set_show_menubar)(GtkApplicationWindow *window, gboolean show_menubar);
@@ -1163,6 +1240,7 @@ gboolean (gtk_application_window_get_show_menubar)(GtkApplicationWindow *window)
 guint (gtk_application_window_get_id)(GtkApplicationWindow *window);
 void (gtk_application_window_set_help_overlay)(GtkApplicationWindow *window, GtkShortcutsWindow *help_overlay);
 GtkShortcutsWindow * (gtk_application_window_get_help_overlay)(GtkApplicationWindow *window);
+// Header /usr/include/gtk-4.0/gtk/gtkaspectframe.h
 GType (gtk_aspect_frame_get_type)(void);
 GtkWidget* (gtk_aspect_frame_new)(float xalign, float yalign, float ratio, gboolean obey_child);
 void (gtk_aspect_frame_set_xalign)(GtkAspectFrame *self, float xalign);
@@ -1175,12 +1253,15 @@ void (gtk_aspect_frame_set_obey_child)(GtkAspectFrame *self, gboolean obey_child
 gboolean (gtk_aspect_frame_get_obey_child)(GtkAspectFrame *self);
 void (gtk_aspect_frame_set_child)(GtkAspectFrame *self, GtkWidget *child);
 GtkWidget* (gtk_aspect_frame_get_child)(GtkAspectFrame *self);
+// Header /usr/include/gtk-4.0/gtk/gtkatcontext.h
 GType (gtk_at_context_get_type)(void);
 GtkAccessible * (gtk_at_context_get_accessible)(GtkATContext *self);
 GtkAccessibleRole (gtk_at_context_get_accessible_role)(GtkATContext *self);
 GtkATContext * (gtk_at_context_create)(GtkAccessibleRole accessible_role, GtkAccessible *accessible, GdkDisplay *display);
+// Header /usr/include/gtk-4.0/gtk/gtkbinlayout.h
 GType (gtk_bin_layout_get_type)(void);
 GtkLayoutManager * (gtk_bin_layout_new)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkbitset.h
 GType (gtk_bitset_get_type)(void);
 GtkBitset * (gtk_bitset_ref)(GtkBitset *self);
 void (gtk_bitset_unref)(GtkBitset *self);
@@ -1218,6 +1299,7 @@ gboolean (gtk_bitset_iter_next)(GtkBitsetIter *iter, guint *value);
 gboolean (gtk_bitset_iter_previous)(GtkBitsetIter *iter, guint *value);
 guint (gtk_bitset_iter_get_value)(const GtkBitsetIter *iter);
 gboolean (gtk_bitset_iter_is_valid)(const GtkBitsetIter *iter);
+// Header /usr/include/gtk-4.0/gtk/gtkbookmarklist.h
 GType (gtk_bookmark_list_get_type)(void);
 GtkBookmarkList * (gtk_bookmark_list_new)(const char *filename, const char *attributes);
 const char * (gtk_bookmark_list_get_filename)(GtkBookmarkList *self);
@@ -1226,16 +1308,19 @@ const char * (gtk_bookmark_list_get_attributes)(GtkBookmarkList *self);
 void (gtk_bookmark_list_set_io_priority)(GtkBookmarkList *self, int io_priority);
 int (gtk_bookmark_list_get_io_priority)(GtkBookmarkList *self);
 gboolean (gtk_bookmark_list_is_loading)(GtkBookmarkList *self);
+// Header /usr/include/gtk-4.0/gtk/gtkboolfilter.h
 GType (gtk_bool_filter_get_type)(void);
 GtkBoolFilter * (gtk_bool_filter_new)(GtkExpression *expression);
 GtkExpression * (gtk_bool_filter_get_expression)(GtkBoolFilter *self);
 void (gtk_bool_filter_set_expression)(GtkBoolFilter *self, GtkExpression *expression);
 gboolean (gtk_bool_filter_get_invert)(GtkBoolFilter *self);
 void (gtk_bool_filter_set_invert)(GtkBoolFilter *self, gboolean invert);
+// Header /usr/include/gtk-4.0/gtk/gtkborder.h
 GType (gtk_border_get_type)(void);
 GtkBorder* (gtk_border_new)(void);
 GtkBorder* (gtk_border_copy)(const GtkBorder *border_);
 void (gtk_border_free)(GtkBorder *border_);
+// Header /usr/include/gtk-4.0/gtk/gtkbox.h
 GType (gtk_box_get_type)(void);
 GtkWidget* (gtk_box_new)(GtkOrientation orientation, int spacing);
 void (gtk_box_set_homogeneous)(GtkBox *box, gboolean homogeneous);
@@ -1251,6 +1336,7 @@ void (gtk_box_prepend)(GtkBox *box, GtkWidget *child);
 void (gtk_box_remove)(GtkBox *box, GtkWidget *child);
 void (gtk_box_insert_child_after)(GtkBox *box, GtkWidget *child, GtkWidget *sibling);
 void (gtk_box_reorder_child_after)(GtkBox *box, GtkWidget *child, GtkWidget *sibling);
+// Header /usr/include/gtk-4.0/gtk/gtkboxlayout.h
 GType (gtk_box_layout_get_type)(void);
 GtkLayoutManager * (gtk_box_layout_new)(GtkOrientation orientation);
 void (gtk_box_layout_set_homogeneous)(GtkBoxLayout *box_layout, gboolean homogeneous);
@@ -1261,6 +1347,7 @@ void (gtk_box_layout_set_baseline_position)(GtkBoxLayout *box_layout, GtkBaselin
 GtkBaselinePosition (gtk_box_layout_get_baseline_position)(GtkBoxLayout *box_layout);
 void (gtk_box_layout_set_baseline_child)(GtkBoxLayout *box_layout, int child);
 int (gtk_box_layout_get_baseline_child)(GtkBoxLayout *box_layout);
+// Header /usr/include/gtk-4.0/gtk/gtkbuildable.h
 GType (gtk_buildable_get_type)(void);
 const char * (gtk_buildable_get_buildable_id)(GtkBuildable *buildable);
 void (gtk_buildable_parse_context_push)(GtkBuildableParseContext *context, const GtkBuildableParser *parser, gpointer user_data);
@@ -1268,6 +1355,7 @@ gpointer (gtk_buildable_parse_context_pop)(GtkBuildableParseContext *context);
 const char * (gtk_buildable_parse_context_get_element)(GtkBuildableParseContext *context);
 GPtrArray* (gtk_buildable_parse_context_get_element_stack)(GtkBuildableParseContext *context);
 void (gtk_buildable_parse_context_get_position)(GtkBuildableParseContext *context, int *line_number, int *char_number);
+// Header /usr/include/gtk-4.0/gtk/gtkbuilder.h
 GType (gtk_builder_get_type)(void);
 GQuark (gtk_builder_error_quark)(void);
 GtkBuilder* (gtk_builder_new)(void);
@@ -1294,17 +1382,20 @@ GtkBuilder * (gtk_builder_new_from_resource)(const char *resource_path);
 GtkBuilder * (gtk_builder_new_from_string)(const char *string, gssize length);
 GClosure * (gtk_builder_create_closure)(GtkBuilder *builder, const char *function_name, GtkBuilderClosureFlags flags, GObject *object, GError **error);
 gboolean (gtk_builder_extend_with_template)(GtkBuilder *builder, GObject *object, GType template_type, const char *buffer, gssize length, GError **error);
+// Header /usr/include/gtk-4.0/gtk/gtkbuilderlistitemfactory.h
 GType (gtk_builder_list_item_factory_get_type)(void);
 GtkListItemFactory * (gtk_builder_list_item_factory_new_from_bytes)(GtkBuilderScope *scope, GBytes *bytes);
 GtkListItemFactory * (gtk_builder_list_item_factory_new_from_resource)(GtkBuilderScope *scope, const char *resource_path);
 GBytes * (gtk_builder_list_item_factory_get_bytes)(GtkBuilderListItemFactory *self);
 const char * (gtk_builder_list_item_factory_get_resource)(GtkBuilderListItemFactory *self);
 GtkBuilderScope * (gtk_builder_list_item_factory_get_scope)(GtkBuilderListItemFactory *self);
+// Header /usr/include/gtk-4.0/gtk/gtkbuilderscope.h
 GType (gtk_builder_scope_get_type)(void);
 GType (gtk_builder_cscope_get_type)(void);
 GtkBuilderScope * (gtk_builder_cscope_new)(void);
 void (gtk_builder_cscope_add_callback_symbol)(GtkBuilderCScope *self, const char *callback_name, GCallback callback_symbol);
 GCallback (gtk_builder_cscope_lookup_callback_symbol)(GtkBuilderCScope *self, const char *callback_name);
+// Header /usr/include/gtk-4.0/gtk/gtkbutton.h
 GType (gtk_button_get_type)(void);
 GtkWidget* (gtk_button_new)(void);
 GtkWidget* (gtk_button_new_with_label)(const char *label);
@@ -1322,6 +1413,7 @@ void (gtk_button_set_child)(GtkButton *button, GtkWidget *child);
 GtkWidget * (gtk_button_get_child)(GtkButton *button);
 void (gtk_button_set_can_shrink)(GtkButton *button, gboolean can_shrink);
 gboolean (gtk_button_get_can_shrink)(GtkButton *button);
+// Header /usr/include/gtk-4.0/gtk/gtkcalendar.h
 GType (gtk_calendar_get_type)(void);
 GtkWidget* (gtk_calendar_new)(void);
 void (gtk_calendar_select_day)(GtkCalendar *self, GDateTime *date);
@@ -1342,6 +1434,7 @@ void (gtk_calendar_set_year)(GtkCalendar *self, int year);
 int (gtk_calendar_get_year)(GtkCalendar *self);
 GDateTime * (gtk_calendar_get_date)(GtkCalendar *self);
 gboolean (gtk_calendar_get_day_is_marked)(GtkCalendar *calendar, guint day);
+// Header /usr/include/gtk-4.0/gtk/gtkcenterbox.h
 GType (gtk_center_box_get_type)(void);
 GtkWidget* (gtk_center_box_new)(void);
 void (gtk_center_box_set_start_widget)(GtkCenterBox *self, GtkWidget *child);
@@ -1354,6 +1447,7 @@ void (gtk_center_box_set_baseline_position)(GtkCenterBox *self, GtkBaselinePosit
 GtkBaselinePosition (gtk_center_box_get_baseline_position)(GtkCenterBox *self);
 void (gtk_center_box_set_shrink_center_last)(GtkCenterBox *self, gboolean shrink_center_last);
 gboolean (gtk_center_box_get_shrink_center_last)(GtkCenterBox *self);
+// Header /usr/include/gtk-4.0/gtk/gtkcenterlayout.h
 GType (gtk_center_layout_get_type)(void);
 GtkLayoutManager * (gtk_center_layout_new)(void);
 void (gtk_center_layout_set_orientation)(GtkCenterLayout *self, GtkOrientation orientation);
@@ -1368,6 +1462,7 @@ void (gtk_center_layout_set_end_widget)(GtkCenterLayout *self, GtkWidget *widget
 GtkWidget * (gtk_center_layout_get_end_widget)(GtkCenterLayout *self);
 void (gtk_center_layout_set_shrink_center_last)(GtkCenterLayout *self, gboolean shrink_center_last);
 gboolean (gtk_center_layout_get_shrink_center_last)(GtkCenterLayout *self);
+// Header /usr/include/gtk-4.0/gtk/gtkcheckbutton.h
 GType (gtk_check_button_get_type)(void);
 GtkWidget * (gtk_check_button_new)(void);
 GtkWidget * (gtk_check_button_new_with_label)(const char *label);
@@ -1383,6 +1478,7 @@ gboolean (gtk_check_button_get_use_underline)(GtkCheckButton *self);
 void (gtk_check_button_set_use_underline)(GtkCheckButton *self, gboolean setting);
 GtkWidget * (gtk_check_button_get_child)(GtkCheckButton *button);
 void (gtk_check_button_set_child)(GtkCheckButton *button, GtkWidget *child);
+// Header /usr/include/gtk-4.0/gtk/gtkcolordialog.h
 GType (gtk_color_dialog_get_type)(void);
 GtkColorDialog* (gtk_color_dialog_new)(void);
 const char * (gtk_color_dialog_get_title)(GtkColorDialog *self);
@@ -1393,14 +1489,17 @@ gboolean (gtk_color_dialog_get_with_alpha)(GtkColorDialog *self);
 void (gtk_color_dialog_set_with_alpha)(GtkColorDialog *self, gboolean with_alpha);
 void (gtk_color_dialog_choose_rgba)(GtkColorDialog *self, GtkWindow *parent, const GdkRGBA *initial_color, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 GdkRGBA * (gtk_color_dialog_choose_rgba_finish)(GtkColorDialog *self, GAsyncResult *result, GError **error);
+// Header /usr/include/gtk-4.0/gtk/gtkcolordialogbutton.h
 GType (gtk_color_dialog_button_get_type)(void);
 GtkWidget * (gtk_color_dialog_button_new)(GtkColorDialog *dialog);
 GtkColorDialog* (gtk_color_dialog_button_get_dialog)(GtkColorDialogButton *self);
 void (gtk_color_dialog_button_set_dialog)(GtkColorDialogButton *self, GtkColorDialog *dialog);
 const GdkRGBA * (gtk_color_dialog_button_get_rgba)(GtkColorDialogButton *self);
 void (gtk_color_dialog_button_set_rgba)(GtkColorDialogButton *self, const GdkRGBA *color);
+// Header /usr/include/gtk-4.0/gtk/gtkcolorutils.h
 void (gtk_rgb_to_hsv)(float r, float g, float b, float *h, float *s, float *v);
 void (gtk_hsv_to_rgb)(float h, float s, float v, float *r, float *g, float *b);
+// Header /usr/include/gtk-4.0/gtk/gtkcolumnview.h
 GType (gtk_column_view_get_type)(void);
 GtkWidget * (gtk_column_view_new)(GtkSelectionModel *model);
 GListModel * (gtk_column_view_get_columns)(GtkColumnView *self);
@@ -1428,6 +1527,7 @@ GtkListItemFactory * (gtk_column_view_get_row_factory)(GtkColumnView *self);
 void (gtk_column_view_set_header_factory)(GtkColumnView *self, GtkListItemFactory *factory);
 GtkListItemFactory * (gtk_column_view_get_header_factory)(GtkColumnView *self);
 void (gtk_column_view_scroll_to)(GtkColumnView *self, guint pos, GtkColumnViewColumn *column, GtkListScrollFlags flags, GtkScrollInfo *scroll);
+// Header /usr/include/gtk-4.0/gtk/gtkcolumnviewcell.h
 GType (gtk_column_view_cell_get_type)(void);
 gpointer (gtk_column_view_cell_get_item)(GtkColumnViewCell *self);
 guint (gtk_column_view_cell_get_position)(GtkColumnViewCell *self);
@@ -1436,6 +1536,7 @@ gboolean (gtk_column_view_cell_get_focusable)(GtkColumnViewCell *self);
 void (gtk_column_view_cell_set_focusable)(GtkColumnViewCell *self, gboolean focusable);
 void (gtk_column_view_cell_set_child)(GtkColumnViewCell *self, GtkWidget *child);
 GtkWidget * (gtk_column_view_cell_get_child)(GtkColumnViewCell *self);
+// Header /usr/include/gtk-4.0/gtk/gtkcolumnviewcolumn.h
 GType (gtk_column_view_column_get_type)(void);
 GtkColumnViewColumn * (gtk_column_view_column_new)(const char *title, GtkListItemFactory *factory);
 GtkColumnView * (gtk_column_view_column_get_column_view)(GtkColumnViewColumn *self);
@@ -1457,6 +1558,7 @@ void (gtk_column_view_column_set_expand)(GtkColumnViewColumn *self, gboolean exp
 gboolean (gtk_column_view_column_get_expand)(GtkColumnViewColumn *self);
 void (gtk_column_view_column_set_id)(GtkColumnViewColumn *self, const char *id);
 const char * (gtk_column_view_column_get_id)(GtkColumnViewColumn *self);
+// Header /usr/include/gtk-4.0/gtk/gtkcolumnviewrow.h
 GType (gtk_column_view_row_get_type)(void);
 gpointer (gtk_column_view_row_get_item)(GtkColumnViewRow *self);
 guint (gtk_column_view_row_get_position)(GtkColumnViewRow *self);
@@ -1471,11 +1573,14 @@ const char * (gtk_column_view_row_get_accessible_description)(GtkColumnViewRow *
 void (gtk_column_view_row_set_accessible_description)(GtkColumnViewRow *self, const char *description);
 const char * (gtk_column_view_row_get_accessible_label)(GtkColumnViewRow *self);
 void (gtk_column_view_row_set_accessible_label)(GtkColumnViewRow *self, const char *label);
+// Header /usr/include/gtk-4.0/gtk/gtkcolumnviewsorter.h
 GType (gtk_column_view_sorter_get_type)(void);
 GtkColumnViewColumn * (gtk_column_view_sorter_get_primary_sort_column)(GtkColumnViewSorter *self);
 GtkSortType (gtk_column_view_sorter_get_primary_sort_order)(GtkColumnViewSorter *self);
 guint (gtk_column_view_sorter_get_n_sort_columns)(GtkColumnViewSorter *self);
 GtkColumnViewColumn * (gtk_column_view_sorter_get_nth_sort_column)(GtkColumnViewSorter *self, guint position, GtkSortType *sort_order);
+// Header /usr/include/gtk-4.0/gtk/gtkconfig.h
+// Header /usr/include/gtk-4.0/gtk/gtkconstraint.h
 GType (gtk_constraint_target_get_type)(void);
 GType (gtk_constraint_get_type)(void);
 GtkConstraint * (gtk_constraint_new)(gpointer target, GtkConstraintAttribute target_attribute, GtkConstraintRelation relation, gpointer source, GtkConstraintAttribute source_attribute, double multiplier, double constant, int strength);
@@ -1491,6 +1596,7 @@ int (gtk_constraint_get_strength)(GtkConstraint *constraint);
 gboolean (gtk_constraint_is_required)(GtkConstraint *constraint);
 gboolean (gtk_constraint_is_attached)(GtkConstraint *constraint);
 gboolean (gtk_constraint_is_constant)(GtkConstraint *constraint);
+// Header /usr/include/gtk-4.0/gtk/gtkconstraintguide.h
 GType (gtk_constraint_guide_get_type)(void);
 GtkConstraintGuide * (gtk_constraint_guide_new)(void);
 void (gtk_constraint_guide_set_min_size)(GtkConstraintGuide *guide, int width, int height);
@@ -1503,6 +1609,7 @@ GtkConstraintStrength (gtk_constraint_guide_get_strength)(GtkConstraintGuide *gu
 void (gtk_constraint_guide_set_strength)(GtkConstraintGuide *guide, GtkConstraintStrength strength);
 void (gtk_constraint_guide_set_name)(GtkConstraintGuide *guide, const char *name);
 const char * (gtk_constraint_guide_get_name)(GtkConstraintGuide *guide);
+// Header /usr/include/gtk-4.0/gtk/gtkconstraintlayout.h
 GType (gtk_constraint_layout_get_type)(void);
 GType (gtk_constraint_layout_child_get_type)(void);
 GQuark (gtk_constraint_vfl_parser_error_quark)(void);
@@ -1515,6 +1622,7 @@ void (gtk_constraint_layout_remove_all_constraints)(GtkConstraintLayout *layout)
 GList * (gtk_constraint_layout_add_constraints_from_descriptionv)(GtkConstraintLayout *layout, const char * const lines[], gsize n_lines, int hspacing, int vspacing, GHashTable *views, GError **error);
 GListModel * (gtk_constraint_layout_observe_constraints)(GtkConstraintLayout *layout);
 GListModel * (gtk_constraint_layout_observe_guides)(GtkConstraintLayout *layout);
+// Header /usr/include/gtk-4.0/gtk/gtkcssprovider.h
 GType (gtk_css_provider_get_type)(void);
 GtkCssProvider * (gtk_css_provider_new)(void);
 char * (gtk_css_provider_to_string)(GtkCssProvider *provider);
@@ -1525,17 +1633,23 @@ void (gtk_css_provider_load_from_file)(GtkCssProvider *css_provider, GFile *file
 void (gtk_css_provider_load_from_path)(GtkCssProvider *css_provider, const char *path);
 void (gtk_css_provider_load_from_resource)(GtkCssProvider *css_provider, const char *resource_path);
 void (gtk_css_provider_load_named)(GtkCssProvider *provider, const char *name, const char *variant);
+// Header /usr/include/gtk-4.0/gtk/gtkcustomfilter.h
 GType (gtk_custom_filter_get_type)(void);
 GtkCustomFilter * (gtk_custom_filter_new)(GtkCustomFilterFunc match_func, gpointer user_data, GDestroyNotify user_destroy);
 void (gtk_custom_filter_set_filter_func)(GtkCustomFilter *self, GtkCustomFilterFunc match_func, gpointer user_data, GDestroyNotify user_destroy);
+// Header /usr/include/gtk-4.0/gtk/gtkcustomlayout.h
 GType (gtk_custom_layout_get_type)(void);
 GtkLayoutManager * (gtk_custom_layout_new)(GtkCustomRequestModeFunc request_mode, GtkCustomMeasureFunc measure, GtkCustomAllocateFunc allocate);
+// Header /usr/include/gtk-4.0/gtk/gtkcustomsorter.h
 GType (gtk_custom_sorter_get_type)(void);
 GtkCustomSorter * (gtk_custom_sorter_new)(GCompareDataFunc sort_func, gpointer user_data, GDestroyNotify user_destroy);
 void (gtk_custom_sorter_set_sort_func)(GtkCustomSorter *self, GCompareDataFunc sort_func, gpointer user_data, GDestroyNotify user_destroy);
+// Header /usr/include/gtk-4.0/gtk/gtkdebug.h
 void (gtk_set_debug_flags)(GtkDebugFlags flags);
 GtkDebugFlags (gtk_get_debug_flags)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkdialogerror.h
 GQuark (gtk_dialog_error_quark)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkdirectorylist.h
 GType (gtk_directory_list_get_type)(void);
 GtkDirectoryList * (gtk_directory_list_new)(const char *attributes, GFile *file);
 void (gtk_directory_list_set_file)(GtkDirectoryList *self, GFile *file);
@@ -1548,12 +1662,14 @@ gboolean (gtk_directory_list_is_loading)(GtkDirectoryList *self);
 const GError * (gtk_directory_list_get_error)(GtkDirectoryList *self);
 void (gtk_directory_list_set_monitored)(GtkDirectoryList *self, gboolean monitored);
 gboolean (gtk_directory_list_get_monitored)(GtkDirectoryList *self);
+// Header /usr/include/gtk-4.0/gtk/gtkdragicon.h
 GType (gtk_drag_icon_get_type)(void);
 GtkWidget * (gtk_drag_icon_get_for_drag)(GdkDrag *drag);
 void (gtk_drag_icon_set_child)(GtkDragIcon *self, GtkWidget *child);
 GtkWidget * (gtk_drag_icon_get_child)(GtkDragIcon *self);
 void (gtk_drag_icon_set_from_paintable)(GdkDrag *drag, GdkPaintable *paintable, int hot_x, int hot_y);
 GtkWidget * (gtk_drag_icon_create_widget_for_value)(const GValue *value);
+// Header /usr/include/gtk-4.0/gtk/gtkdragsource.h
 GType (gtk_drag_source_get_type)(void);
 GtkDragSource* (gtk_drag_source_new)(void);
 void (gtk_drag_source_set_content)(GtkDragSource *source, GdkContentProvider *content);
@@ -1564,6 +1680,7 @@ void (gtk_drag_source_set_icon)(GtkDragSource *source, GdkPaintable *paintable, 
 void (gtk_drag_source_drag_cancel)(GtkDragSource *source);
 GdkDrag * (gtk_drag_source_get_drag)(GtkDragSource *source);
 gboolean (gtk_drag_check_threshold)(GtkWidget *widget, int start_x, int start_y, int current_x, int current_y);
+// Header /usr/include/gtk-4.0/gtk/gtkdrawingarea.h
 GType (gtk_drawing_area_get_type)(void);
 GtkWidget* (gtk_drawing_area_new)(void);
 void (gtk_drawing_area_set_content_width)(GtkDrawingArea *self, int width);
@@ -1571,11 +1688,13 @@ int (gtk_drawing_area_get_content_width)(GtkDrawingArea *self);
 void (gtk_drawing_area_set_content_height)(GtkDrawingArea *self, int height);
 int (gtk_drawing_area_get_content_height)(GtkDrawingArea *self);
 void (gtk_drawing_area_set_draw_func)(GtkDrawingArea *self, GtkDrawingAreaDrawFunc draw_func, gpointer user_data, GDestroyNotify destroy);
+// Header /usr/include/gtk-4.0/gtk/gtkdropcontrollermotion.h
 GType (gtk_drop_controller_motion_get_type)(void);
 GtkEventController * (gtk_drop_controller_motion_new)(void);
 gboolean (gtk_drop_controller_motion_contains_pointer)(GtkDropControllerMotion *self);
 GdkDrop * (gtk_drop_controller_motion_get_drop)(GtkDropControllerMotion *self);
 gboolean (gtk_drop_controller_motion_is_pointer)(GtkDropControllerMotion *self);
+// Header /usr/include/gtk-4.0/gtk/gtkdropdown.h
 GType (gtk_drop_down_get_type)(void);
 GtkWidget * (gtk_drop_down_new)(GListModel *model, GtkExpression *expression);
 GtkWidget * (gtk_drop_down_new_from_strings)(const char * const * strings);
@@ -1598,6 +1717,7 @@ void (gtk_drop_down_set_show_arrow)(GtkDropDown *self, gboolean show_arrow);
 gboolean (gtk_drop_down_get_show_arrow)(GtkDropDown *self);
 void (gtk_drop_down_set_search_match_mode)(GtkDropDown *self, GtkStringFilterMatchMode search_match_mode);
 GtkStringFilterMatchMode (gtk_drop_down_get_search_match_mode)(GtkDropDown *self);
+// Header /usr/include/gtk-4.0/gtk/gtkdroptarget.h
 GType (gtk_drop_target_get_type)(void);
 GtkDropTarget * (gtk_drop_target_new)(GType type, GdkDragAction actions);
 void (gtk_drop_target_set_gtypes)(GtkDropTarget *self, GType *types, gsize n_types);
@@ -1611,6 +1731,7 @@ GdkDrop * (gtk_drop_target_get_drop)(GtkDropTarget *self);
 GdkDrop * (gtk_drop_target_get_current_drop)(GtkDropTarget *self);
 const GValue * (gtk_drop_target_get_value)(GtkDropTarget *self);
 void (gtk_drop_target_reject)(GtkDropTarget *self);
+// Header /usr/include/gtk-4.0/gtk/gtkdroptargetasync.h
 GType (gtk_drop_target_async_get_type)(void);
 GtkDropTargetAsync * (gtk_drop_target_async_new)(GdkContentFormats *formats, GdkDragAction actions);
 void (gtk_drop_target_async_set_formats)(GtkDropTargetAsync *self, GdkContentFormats *formats);
@@ -1618,6 +1739,7 @@ GdkContentFormats * (gtk_drop_target_async_get_formats)(GtkDropTargetAsync *self
 void (gtk_drop_target_async_set_actions)(GtkDropTargetAsync *self, GdkDragAction actions);
 GdkDragAction (gtk_drop_target_async_get_actions)(GtkDropTargetAsync *self);
 void (gtk_drop_target_async_reject_drop)(GtkDropTargetAsync *self, GdkDrop *drop);
+// Header /usr/include/gtk-4.0/gtk/gtkeditable.h
 GType (gtk_editable_get_type)(void);
 const char * (gtk_editable_get_text)(GtkEditable *editable);
 void (gtk_editable_set_text)(GtkEditable *editable, const char *text);
@@ -1646,13 +1768,16 @@ void (gtk_editable_finish_delegate)(GtkEditable *editable);
 gboolean (gtk_editable_delegate_set_property)(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 gboolean (gtk_editable_delegate_get_property)(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 gboolean (gtk_editable_delegate_get_accessible_platform_state)(GtkEditable *editable, GtkAccessiblePlatformState state);
+// Header /usr/include/gtk-4.0/gtk/gtkeditablelabel.h
 GType (gtk_editable_label_get_type)(void);
 GtkWidget * (gtk_editable_label_new)(const char *str);
 gboolean (gtk_editable_label_get_editing)(GtkEditableLabel *self);
 void (gtk_editable_label_start_editing)(GtkEditableLabel *self);
 void (gtk_editable_label_stop_editing)(GtkEditableLabel *self, gboolean commit);
+// Header /usr/include/gtk-4.0/gtk/gtkemojichooser.h
 GType (gtk_emoji_chooser_get_type)(void);
 GtkWidget* (gtk_emoji_chooser_new)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkentry.h
 GType (gtk_entry_get_type)(void);
 GtkWidget* (gtk_entry_new)(void);
 GtkWidget* (gtk_entry_new_with_buffer)(GtkEntryBuffer *buffer);
@@ -1714,6 +1839,7 @@ PangoTabArray* (gtk_entry_get_tabs)(GtkEntry *entry);
 gboolean (gtk_entry_grab_focus_without_selecting)(GtkEntry *entry);
 void (gtk_entry_set_extra_menu)(GtkEntry *entry, GMenuModel *model);
 GMenuModel * (gtk_entry_get_extra_menu)(GtkEntry *entry);
+// Header /usr/include/gtk-4.0/gtk/gtkentrybuffer.h
 GType (gtk_entry_buffer_get_type)(void);
 GtkEntryBuffer* (gtk_entry_buffer_new)(const char *initial_chars, int n_initial_chars);
 gsize (gtk_entry_buffer_get_bytes)(GtkEntryBuffer *buffer);
@@ -1726,6 +1852,8 @@ guint (gtk_entry_buffer_insert_text)(GtkEntryBuffer *buffer, guint position, con
 guint (gtk_entry_buffer_delete_text)(GtkEntryBuffer *buffer, guint position, int n_chars);
 void (gtk_entry_buffer_emit_inserted_text)(GtkEntryBuffer *buffer, guint position, const char *chars, guint n_chars);
 void (gtk_entry_buffer_emit_deleted_text)(GtkEntryBuffer *buffer, guint position, guint n_chars);
+// Header /usr/include/gtk-4.0/gtk/gtkenums.h
+// Header /usr/include/gtk-4.0/gtk/gtkeventcontroller.h
 GType (gtk_event_controller_get_type)(void);
 GtkWidget * (gtk_event_controller_get_widget)(GtkEventController *controller);
 void (gtk_event_controller_reset)(GtkEventController *controller);
@@ -1740,27 +1868,33 @@ GdkEvent * (gtk_event_controller_get_current_event)(GtkEventController *controll
 guint32 (gtk_event_controller_get_current_event_time)(GtkEventController *controller);
 GdkDevice * (gtk_event_controller_get_current_event_device)(GtkEventController *controller);
 GdkModifierType (gtk_event_controller_get_current_event_state)(GtkEventController *controller);
+// Header /usr/include/gtk-4.0/gtk/gtkeventcontrollerfocus.h
 GType (gtk_event_controller_focus_get_type)(void);
 GtkEventController* (gtk_event_controller_focus_new)(void);
 gboolean (gtk_event_controller_focus_contains_focus)(GtkEventControllerFocus *self);
 gboolean (gtk_event_controller_focus_is_focus)(GtkEventControllerFocus *self);
+// Header /usr/include/gtk-4.0/gtk/gtkeventcontrollerkey.h
 GType (gtk_event_controller_key_get_type)(void);
 GtkEventController* (gtk_event_controller_key_new)(void);
 void (gtk_event_controller_key_set_im_context)(GtkEventControllerKey *controller, GtkIMContext *im_context);
 GtkIMContext * (gtk_event_controller_key_get_im_context)(GtkEventControllerKey *controller);
 gboolean (gtk_event_controller_key_forward)(GtkEventControllerKey *controller, GtkWidget *widget);
 guint (gtk_event_controller_key_get_group)(GtkEventControllerKey *controller);
+// Header /usr/include/gtk-4.0/gtk/gtkeventcontrollerlegacy.h
 GType (gtk_event_controller_legacy_get_type)(void);
 GtkEventController* (gtk_event_controller_legacy_new)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkeventcontrollermotion.h
 GType (gtk_event_controller_motion_get_type)(void);
 GtkEventController* (gtk_event_controller_motion_new)(void);
 gboolean (gtk_event_controller_motion_contains_pointer)(GtkEventControllerMotion *self);
 gboolean (gtk_event_controller_motion_is_pointer)(GtkEventControllerMotion *self);
+// Header /usr/include/gtk-4.0/gtk/gtkeventcontrollerscroll.h
 GType (gtk_event_controller_scroll_get_type)(void);
 GtkEventController* (gtk_event_controller_scroll_new)(GtkEventControllerScrollFlags flags);
 void (gtk_event_controller_scroll_set_flags)(GtkEventControllerScroll *scroll, GtkEventControllerScrollFlags flags);
 GtkEventControllerScrollFlags (gtk_event_controller_scroll_get_flags)(GtkEventControllerScroll *scroll);
 GdkScrollUnit (gtk_event_controller_scroll_get_unit)(GtkEventControllerScroll *scroll);
+// Header /usr/include/gtk-4.0/gtk/gtkexpander.h
 GType (gtk_expander_get_type)(void);
 GtkWidget* (gtk_expander_new)(const char *label);
 GtkWidget* (gtk_expander_new_with_mnemonic)(const char *label);
@@ -1778,6 +1912,7 @@ void (gtk_expander_set_resize_toplevel)(GtkExpander *expander, gboolean resize_t
 gboolean (gtk_expander_get_resize_toplevel)(GtkExpander *expander);
 void (gtk_expander_set_child)(GtkExpander *expander, GtkWidget *child);
 GtkWidget * (gtk_expander_get_child)(GtkExpander *expander);
+// Header /usr/include/gtk-4.0/gtk/gtkexpression.h
 GType (gtk_expression_get_type)(void);
 GType (gtk_expression_watch_get_type)(void);
 GtkExpression * (gtk_expression_ref)(GtkExpression *self);
@@ -1811,6 +1946,7 @@ GtkExpression * (gtk_value_get_expression)(const GValue *value);
 GtkExpression * (gtk_value_dup_expression)(const GValue *value);
 GType (gtk_param_expression_get_type)(void);
 GParamSpec * (gtk_param_spec_expression)(const char *name, const char *nick, const char *blurb, GParamFlags flags);
+// Header /usr/include/gtk-4.0/gtk/gtkfiledialog.h
 GType (gtk_file_dialog_get_type)(void);
 GtkFileDialog * (gtk_file_dialog_new)(void);
 const char * (gtk_file_dialog_get_title)(GtkFileDialog *self);
@@ -1839,6 +1975,7 @@ void (gtk_file_dialog_open_multiple)(GtkFileDialog *self, GtkWindow *parent, GCa
 GListModel * (gtk_file_dialog_open_multiple_finish)(GtkFileDialog *self, GAsyncResult *result, GError **error);
 void (gtk_file_dialog_select_multiple_folders)(GtkFileDialog *self, GtkWindow *parent, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 GListModel * (gtk_file_dialog_select_multiple_folders_finish)(GtkFileDialog *self, GAsyncResult *result, GError **error);
+// Header /usr/include/gtk-4.0/gtk/gtkfilefilter.h
 GType (gtk_file_filter_get_type)(void);
 GtkFileFilter * (gtk_file_filter_new)(void);
 void (gtk_file_filter_set_name)(GtkFileFilter *filter, const char *name);
@@ -1850,6 +1987,7 @@ void (gtk_file_filter_add_pixbuf_formats)(GtkFileFilter *filter);
 const char ** (gtk_file_filter_get_attributes)(GtkFileFilter *filter);
 GVariant * (gtk_file_filter_to_gvariant)(GtkFileFilter *filter);
 GtkFileFilter * (gtk_file_filter_new_from_gvariant)(GVariant *variant);
+// Header /usr/include/gtk-4.0/gtk/gtkfilelauncher.h
 GType (gtk_file_launcher_get_type)(void);
 GtkFileLauncher * (gtk_file_launcher_new)(GFile *file);
 GFile * (gtk_file_launcher_get_file)(GtkFileLauncher *self);
@@ -1862,10 +2000,12 @@ void (gtk_file_launcher_launch)(GtkFileLauncher *self, GtkWindow *parent, GCance
 gboolean (gtk_file_launcher_launch_finish)(GtkFileLauncher *self, GAsyncResult *result, GError **error);
 void (gtk_file_launcher_open_containing_folder)(GtkFileLauncher *self, GtkWindow *parent, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 gboolean (gtk_file_launcher_open_containing_folder_finish)(GtkFileLauncher *self, GAsyncResult *result, GError **error);
+// Header /usr/include/gtk-4.0/gtk/gtkfilter.h
 GType (gtk_filter_get_type)(void);
 gboolean (gtk_filter_match)(GtkFilter *self, gpointer item);
 GtkFilterMatch (gtk_filter_get_strictness)(GtkFilter *self);
 void (gtk_filter_changed)(GtkFilter *self, GtkFilterChange change);
+// Header /usr/include/gtk-4.0/gtk/gtkfilterlistmodel.h
 GType (gtk_filter_list_model_get_type)(void);
 GtkFilterListModel * (gtk_filter_list_model_new)(GListModel *model, GtkFilter *filter);
 void (gtk_filter_list_model_set_filter)(GtkFilterListModel *self, GtkFilter *filter);
@@ -1875,6 +2015,7 @@ GListModel * (gtk_filter_list_model_get_model)(GtkFilterListModel *self);
 void (gtk_filter_list_model_set_incremental)(GtkFilterListModel *self, gboolean incremental);
 gboolean (gtk_filter_list_model_get_incremental)(GtkFilterListModel *self);
 guint (gtk_filter_list_model_get_pending)(GtkFilterListModel *self);
+// Header /usr/include/gtk-4.0/gtk/gtkfixed.h
 GType (gtk_fixed_get_type)(void);
 GtkWidget * (gtk_fixed_new)(void);
 void (gtk_fixed_put)(GtkFixed *fixed, GtkWidget *widget, double x, double y);
@@ -1883,16 +2024,19 @@ void (gtk_fixed_move)(GtkFixed *fixed, GtkWidget *widget, double x, double y);
 void (gtk_fixed_get_child_position)(GtkFixed *fixed, GtkWidget *widget, double *x, double *y);
 void (gtk_fixed_set_child_transform)(GtkFixed *fixed, GtkWidget *widget, GskTransform *transform);
 GskTransform * (gtk_fixed_get_child_transform)(GtkFixed *fixed, GtkWidget *widget);
+// Header /usr/include/gtk-4.0/gtk/gtkfixedlayout.h
 GType (gtk_fixed_layout_get_type)(void);
 GType (gtk_fixed_layout_child_get_type)(void);
 GtkLayoutManager * (gtk_fixed_layout_new)(void);
 void (gtk_fixed_layout_child_set_transform)(GtkFixedLayoutChild *child, GskTransform *transform);
 GskTransform * (gtk_fixed_layout_child_get_transform)(GtkFixedLayoutChild *child);
+// Header /usr/include/gtk-4.0/gtk/gtkflattenlistmodel.h
 GType (gtk_flatten_list_model_get_type)(void);
 GtkFlattenListModel * (gtk_flatten_list_model_new)(GListModel *model);
 void (gtk_flatten_list_model_set_model)(GtkFlattenListModel *self, GListModel *model);
 GListModel * (gtk_flatten_list_model_get_model)(GtkFlattenListModel *self);
 GListModel * (gtk_flatten_list_model_get_model_for_item)(GtkFlattenListModel *self, guint position);
+// Header /usr/include/gtk-4.0/gtk/gtkflowbox.h
 GType (gtk_flow_box_get_type)(void);
 GType (gtk_flow_box_child_get_type)(void);
 GtkWidget* (gtk_flow_box_child_new)(void);
@@ -1936,6 +2080,7 @@ void (gtk_flow_box_set_filter_func)(GtkFlowBox *box, GtkFlowBoxFilterFunc filter
 void (gtk_flow_box_invalidate_filter)(GtkFlowBox *box);
 void (gtk_flow_box_set_sort_func)(GtkFlowBox *box, GtkFlowBoxSortFunc sort_func, gpointer user_data, GDestroyNotify destroy);
 void (gtk_flow_box_invalidate_sort)(GtkFlowBox *box);
+// Header /usr/include/gtk-4.0/gtk/gtkfontdialog.h
 GType (gtk_font_dialog_get_type)(void);
 GtkFontDialog * (gtk_font_dialog_new)(void);
 const char * (gtk_font_dialog_get_title)(GtkFontDialog *self);
@@ -1956,6 +2101,7 @@ void (gtk_font_dialog_choose_font)(GtkFontDialog *self, GtkWindow *parent, Pango
 PangoFontDescription * (gtk_font_dialog_choose_font_finish)(GtkFontDialog *self, GAsyncResult *result, GError **error);
 void (gtk_font_dialog_choose_font_and_features)(GtkFontDialog *self, GtkWindow *parent, PangoFontDescription *initial_value, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 gboolean (gtk_font_dialog_choose_font_and_features_finish)(GtkFontDialog *self, GAsyncResult *result, PangoFontDescription **font_desc, char **font_features, PangoLanguage **language, GError **error);
+// Header /usr/include/gtk-4.0/gtk/gtkfontdialogbutton.h
 GType (gtk_font_dialog_button_get_type)(void);
 GtkWidget * (gtk_font_dialog_button_new)(GtkFontDialog *dialog);
 GtkFontDialog * (gtk_font_dialog_button_get_dialog)(GtkFontDialogButton *self);
@@ -1972,6 +2118,7 @@ gboolean (gtk_font_dialog_button_get_use_font)(GtkFontDialogButton *self);
 void (gtk_font_dialog_button_set_use_font)(GtkFontDialogButton *self, gboolean use_font);
 gboolean (gtk_font_dialog_button_get_use_size)(GtkFontDialogButton *self);
 void (gtk_font_dialog_button_set_use_size)(GtkFontDialogButton *self, gboolean use_size);
+// Header /usr/include/gtk-4.0/gtk/gtkframe.h
 GType (gtk_frame_get_type)(void);
 GtkWidget* (gtk_frame_new)(const char *label);
 void (gtk_frame_set_label)(GtkFrame *frame, const char *label);
@@ -1982,6 +2129,7 @@ void (gtk_frame_set_label_align)(GtkFrame *frame, float xalign);
 float (gtk_frame_get_label_align)(GtkFrame *frame);
 void (gtk_frame_set_child)(GtkFrame *frame, GtkWidget *child);
 GtkWidget* (gtk_frame_get_child)(GtkFrame *frame);
+// Header /usr/include/gtk-4.0/gtk/gtkgesture.h
 GType (gtk_gesture_get_type)(void);
 GdkDevice * (gtk_gesture_get_device)(GtkGesture *gesture);
 gboolean (gtk_gesture_set_state)(GtkGesture *gesture, GtkEventSequenceState state);
@@ -2000,23 +2148,29 @@ void (gtk_gesture_group)(GtkGesture *group_gesture, GtkGesture *gesture);
 void (gtk_gesture_ungroup)(GtkGesture *gesture);
 GList * (gtk_gesture_get_group)(GtkGesture *gesture);
 gboolean (gtk_gesture_is_grouped_with)(GtkGesture *gesture, GtkGesture *other);
+// Header /usr/include/gtk-4.0/gtk/gtkgestureclick.h
 GType (gtk_gesture_click_get_type)(void);
 GtkGesture * (gtk_gesture_click_new)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkgesturedrag.h
 GType (gtk_gesture_drag_get_type)(void);
 GtkGesture * (gtk_gesture_drag_new)(void);
 gboolean (gtk_gesture_drag_get_start_point)(GtkGestureDrag *gesture, double *x, double *y);
 gboolean (gtk_gesture_drag_get_offset)(GtkGestureDrag *gesture, double *x, double *y);
+// Header /usr/include/gtk-4.0/gtk/gtkgesturelongpress.h
 GType (gtk_gesture_long_press_get_type)(void);
 GtkGesture * (gtk_gesture_long_press_new)(void);
 void (gtk_gesture_long_press_set_delay_factor)(GtkGestureLongPress *gesture, double delay_factor);
 double (gtk_gesture_long_press_get_delay_factor)(GtkGestureLongPress *gesture);
+// Header /usr/include/gtk-4.0/gtk/gtkgesturepan.h
 GType (gtk_gesture_pan_get_type)(void);
 GtkGesture * (gtk_gesture_pan_new)(GtkOrientation orientation);
 GtkOrientation (gtk_gesture_pan_get_orientation)(GtkGesturePan *gesture);
 void (gtk_gesture_pan_set_orientation)(GtkGesturePan *gesture, GtkOrientation orientation);
+// Header /usr/include/gtk-4.0/gtk/gtkgesturerotate.h
 GType (gtk_gesture_rotate_get_type)(void);
 GtkGesture * (gtk_gesture_rotate_new)(void);
 double (gtk_gesture_rotate_get_angle_delta)(GtkGestureRotate *gesture);
+// Header /usr/include/gtk-4.0/gtk/gtkgesturesingle.h
 GType (gtk_gesture_single_get_type)(void);
 gboolean (gtk_gesture_single_get_touch_only)(GtkGestureSingle *gesture);
 void (gtk_gesture_single_set_touch_only)(GtkGestureSingle *gesture, gboolean touch_only);
@@ -2026,6 +2180,7 @@ guint (gtk_gesture_single_get_button)(GtkGestureSingle *gesture);
 void (gtk_gesture_single_set_button)(GtkGestureSingle *gesture, guint button);
 guint (gtk_gesture_single_get_current_button)(GtkGestureSingle *gesture);
 GdkEventSequence * (gtk_gesture_single_get_current_sequence)(GtkGestureSingle *gesture);
+// Header /usr/include/gtk-4.0/gtk/gtkgesturestylus.h
 GType (gtk_gesture_stylus_get_type)(void);
 GtkGesture * (gtk_gesture_stylus_new)(void);
 gboolean (gtk_gesture_stylus_get_stylus_only)(GtkGestureStylus *gesture);
@@ -2034,12 +2189,15 @@ gboolean (gtk_gesture_stylus_get_axis)(GtkGestureStylus *gesture, GdkAxisUse axi
 gboolean (gtk_gesture_stylus_get_axes)(GtkGestureStylus *gesture, GdkAxisUse axes[], double **values);
 gboolean (gtk_gesture_stylus_get_backlog)(GtkGestureStylus *gesture, GdkTimeCoord **backlog, guint *n_elems);
 GdkDeviceTool * (gtk_gesture_stylus_get_device_tool)(GtkGestureStylus *gesture);
+// Header /usr/include/gtk-4.0/gtk/gtkgestureswipe.h
 GType (gtk_gesture_swipe_get_type)(void);
 GtkGesture * (gtk_gesture_swipe_new)(void);
 gboolean (gtk_gesture_swipe_get_velocity)(GtkGestureSwipe *gesture, double *velocity_x, double *velocity_y);
+// Header /usr/include/gtk-4.0/gtk/gtkgesturezoom.h
 GType (gtk_gesture_zoom_get_type)(void);
 GtkGesture * (gtk_gesture_zoom_new)(void);
 double (gtk_gesture_zoom_get_scale_delta)(GtkGestureZoom *gesture);
+// Header /usr/include/gtk-4.0/gtk/gtkglarea.h
 GType (gtk_gl_area_get_type)(void);
 GtkWidget * (gtk_gl_area_new)(void);
 void (gtk_gl_area_set_allowed_apis)(GtkGLArea *area, GdkGLAPI apis);
@@ -2061,12 +2219,14 @@ void (gtk_gl_area_make_current)(GtkGLArea *area);
 void (gtk_gl_area_attach_buffers)(GtkGLArea *area);
 void (gtk_gl_area_set_error)(GtkGLArea *area, const GError *error);
 GError * (gtk_gl_area_get_error)(GtkGLArea *area);
+// Header /usr/include/gtk-4.0/gtk/gtkgraphicsoffload.h
 GType (gtk_graphics_offload_get_type)(void);
 GtkWidget * (gtk_graphics_offload_new)(GtkWidget *child);
 void (gtk_graphics_offload_set_child)(GtkGraphicsOffload *self, GtkWidget *child);
 GtkWidget * (gtk_graphics_offload_get_child)(GtkGraphicsOffload *self);
 void (gtk_graphics_offload_set_enabled)(GtkGraphicsOffload *self, GtkGraphicsOffloadEnabled enabled);
 GtkGraphicsOffloadEnabled (gtk_graphics_offload_get_enabled)(GtkGraphicsOffload *self);
+// Header /usr/include/gtk-4.0/gtk/gtkgrid.h
 GType (gtk_grid_get_type)(void);
 GtkWidget* (gtk_grid_new)(void);
 void (gtk_grid_attach)(GtkGrid *grid, GtkWidget *child, int column, int row, int width, int height);
@@ -2091,6 +2251,7 @@ GtkBaselinePosition (gtk_grid_get_row_baseline_position)(GtkGrid *grid, int row)
 void (gtk_grid_set_baseline_row)(GtkGrid *grid, int row);
 int (gtk_grid_get_baseline_row)(GtkGrid *grid);
 void (gtk_grid_query_child)(GtkGrid *grid, GtkWidget *child, int *column, int *row, int *width, int *height);
+// Header /usr/include/gtk-4.0/gtk/gtkgridlayout.h
 GType (gtk_grid_layout_get_type)(void);
 GType (gtk_grid_layout_child_get_type)(void);
 GtkLayoutManager * (gtk_grid_layout_new)(void);
@@ -2114,6 +2275,7 @@ void (gtk_grid_layout_child_set_column_span)(GtkGridLayoutChild *child, int span
 int (gtk_grid_layout_child_get_column_span)(GtkGridLayoutChild *child);
 void (gtk_grid_layout_child_set_row_span)(GtkGridLayoutChild *child, int span);
 int (gtk_grid_layout_child_get_row_span)(GtkGridLayoutChild *child);
+// Header /usr/include/gtk-4.0/gtk/gtkgridview.h
 GType (gtk_grid_view_get_type)(void);
 GtkWidget * (gtk_grid_view_new)(GtkSelectionModel *model, GtkListItemFactory *factory);
 GtkSelectionModel * (gtk_grid_view_get_model)(GtkGridView *self);
@@ -2131,6 +2293,7 @@ GtkListTabBehavior (gtk_grid_view_get_tab_behavior)(GtkGridView *self);
 void (gtk_grid_view_set_single_click_activate)(GtkGridView *self, gboolean single_click_activate);
 gboolean (gtk_grid_view_get_single_click_activate)(GtkGridView *self);
 void (gtk_grid_view_scroll_to)(GtkGridView *self, guint pos, GtkListScrollFlags flags, GtkScrollInfo *scroll);
+// Header /usr/include/gtk-4.0/gtk/gtkheaderbar.h
 GType (gtk_header_bar_get_type)(void);
 GtkWidget* (gtk_header_bar_new)(void);
 void (gtk_header_bar_set_title_widget)(GtkHeaderBar *bar, GtkWidget *title_widget);
@@ -2142,6 +2305,7 @@ gboolean (gtk_header_bar_get_show_title_buttons)(GtkHeaderBar *bar);
 void (gtk_header_bar_set_show_title_buttons)(GtkHeaderBar *bar, gboolean setting);
 void (gtk_header_bar_set_decoration_layout)(GtkHeaderBar *bar, const char *layout);
 const char* (gtk_header_bar_get_decoration_layout)(GtkHeaderBar *bar);
+// Header /usr/include/gtk-4.0/gtk/gtkicontheme.h
 GType (gtk_icon_paintable_get_type)(void);
 GType (gtk_icon_theme_get_type)(void);
 GQuark (gtk_icon_theme_error_quark)(void);
@@ -2166,6 +2330,7 @@ char ** (gtk_icon_theme_get_icon_names)(GtkIconTheme *self);
 GFile * (gtk_icon_paintable_get_file)(GtkIconPaintable *self);
 const char * (gtk_icon_paintable_get_icon_name)(GtkIconPaintable *self);
 gboolean (gtk_icon_paintable_is_symbolic)(GtkIconPaintable *self);
+// Header /usr/include/gtk-4.0/gtk/gtkimage.h
 GType (gtk_image_get_type)(void);
 GtkWidget* (gtk_image_new)(void);
 GtkWidget* (gtk_image_new_from_file)(const char *filename);
@@ -2189,6 +2354,7 @@ const char* (gtk_image_get_icon_name)(GtkImage *image);
 GIcon * (gtk_image_get_gicon)(GtkImage *image);
 int (gtk_image_get_pixel_size)(GtkImage *image);
 GtkIconSize (gtk_image_get_icon_size)(GtkImage *image);
+// Header /usr/include/gtk-4.0/gtk/gtkimcontext.h
 GType (gtk_im_context_get_type)(void);
 void (gtk_im_context_set_client_widget)(GtkIMContext *context, GtkWidget *widget);
 void (gtk_im_context_get_preedit_string)(GtkIMContext *context, char **str, PangoAttrList **attrs, int *cursor_pos);
@@ -2205,14 +2371,18 @@ void (gtk_im_context_set_surrounding_with_selection)(GtkIMContext *context, cons
 gboolean (gtk_im_context_get_surrounding_with_selection)(GtkIMContext *context, char **text, int *cursor_index, int *anchor_index);
 gboolean (gtk_im_context_delete_surrounding)(GtkIMContext *context, int offset, int n_chars);
 gboolean (gtk_im_context_activate_osk)(GtkIMContext *context, GdkEvent *event);
+// Header /usr/include/gtk-4.0/gtk/gtkimcontextsimple.h
 GType (gtk_im_context_simple_get_type)(void);
 GtkIMContext* (gtk_im_context_simple_new)(void);
 void (gtk_im_context_simple_add_table)(GtkIMContextSimple *context_simple, guint16 *data, int max_seq_len, int n_seqs);
 void (gtk_im_context_simple_add_compose_file)(GtkIMContextSimple *context_simple, const char *compose_file);
+// Header /usr/include/gtk-4.0/gtk/gtkimmodule.h
+// Header /usr/include/gtk-4.0/gtk/gtkimmulticontext.h
 GType (gtk_im_multicontext_get_type)(void);
 GtkIMContext* (gtk_im_multicontext_new)(void);
 const char * (gtk_im_multicontext_get_context_id)(GtkIMMulticontext *context);
 void (gtk_im_multicontext_set_context_id)(GtkIMMulticontext *context, const char *context_id);
+// Header /usr/include/gtk-4.0/gtk/gtkinscription.h
 GType (gtk_inscription_get_type)(void);
 GtkWidget * (gtk_inscription_new)(const char *text);
 const char * (gtk_inscription_get_text)(GtkInscription *self);
@@ -2236,6 +2406,7 @@ float (gtk_inscription_get_xalign)(GtkInscription *self);
 void (gtk_inscription_set_xalign)(GtkInscription *self, float xalign);
 float (gtk_inscription_get_yalign)(GtkInscription *self);
 void (gtk_inscription_set_yalign)(GtkInscription *self, float yalign);
+// Header /usr/include/gtk-4.0/gtk/gtklabel.h
 GType (gtk_label_get_type)(void);
 GtkWidget* (gtk_label_new)(const char *str);
 GtkWidget* (gtk_label_new_with_mnemonic)(const char *str);
@@ -2288,9 +2459,11 @@ void (gtk_label_set_extra_menu)(GtkLabel *self, GMenuModel *model);
 GMenuModel * (gtk_label_get_extra_menu)(GtkLabel *self);
 void (gtk_label_set_tabs)(GtkLabel *self, PangoTabArray *tabs);
 PangoTabArray * (gtk_label_get_tabs)(GtkLabel *self);
+// Header /usr/include/gtk-4.0/gtk/gtklayoutchild.h
 GType (gtk_layout_child_get_type)(void);
 GtkLayoutManager * (gtk_layout_child_get_layout_manager)(GtkLayoutChild *layout_child);
 GtkWidget * (gtk_layout_child_get_child_widget)(GtkLayoutChild *layout_child);
+// Header /usr/include/gtk-4.0/gtk/gtklayoutmanager.h
 GType (gtk_layout_manager_get_type)(void);
 void (gtk_layout_manager_measure)(GtkLayoutManager *manager, GtkWidget *widget, GtkOrientation orientation, int for_size, int *minimum, int *natural, int *minimum_baseline, int *natural_baseline);
 void (gtk_layout_manager_allocate)(GtkLayoutManager *manager, GtkWidget *widget, int width, int height, int baseline);
@@ -2298,6 +2471,7 @@ GtkSizeRequestMode (gtk_layout_manager_get_request_mode)(GtkLayoutManager *manag
 GtkWidget * (gtk_layout_manager_get_widget)(GtkLayoutManager *manager);
 void (gtk_layout_manager_layout_changed)(GtkLayoutManager *manager);
 GtkLayoutChild * (gtk_layout_manager_get_layout_child)(GtkLayoutManager *manager, GtkWidget *child);
+// Header /usr/include/gtk-4.0/gtk/gtklevelbar.h
 GType (gtk_level_bar_get_type)(void);
 GtkWidget* (gtk_level_bar_new)(void);
 GtkWidget* (gtk_level_bar_new_for_interval)(double min_value, double max_value);
@@ -2314,6 +2488,7 @@ gboolean (gtk_level_bar_get_inverted)(GtkLevelBar *self);
 void (gtk_level_bar_add_offset_value)(GtkLevelBar *self, const char *name, double value);
 void (gtk_level_bar_remove_offset_value)(GtkLevelBar *self, const char *name);
 gboolean (gtk_level_bar_get_offset_value)(GtkLevelBar *self, const char *name, double *value);
+// Header /usr/include/gtk-4.0/gtk/gtklinkbutton.h
 GType (gtk_link_button_get_type)(void);
 GtkWidget * (gtk_link_button_new)(const char *uri);
 GtkWidget * (gtk_link_button_new_with_label)(const char *uri, const char *label);
@@ -2321,7 +2496,9 @@ const char * (gtk_link_button_get_uri)(GtkLinkButton *link_button);
 void (gtk_link_button_set_uri)(GtkLinkButton *link_button, const char *uri);
 gboolean (gtk_link_button_get_visited)(GtkLinkButton *link_button);
 void (gtk_link_button_set_visited)(GtkLinkButton *link_button, gboolean visited);
+// Header /usr/include/gtk-4.0/gtk/gtklistbase.h
 GType (gtk_list_base_get_type)(void);
+// Header /usr/include/gtk-4.0/gtk/gtklistbox.h
 GType (gtk_list_box_get_type)(void);
 GType (gtk_list_box_row_get_type)(void);
 GtkWidget* (gtk_list_box_row_new)(void);
@@ -2369,6 +2546,7 @@ GtkWidget* (gtk_list_box_new)(void);
 void (gtk_list_box_bind_model)(GtkListBox *box, GListModel *model, GtkListBoxCreateWidgetFunc create_widget_func, gpointer user_data, GDestroyNotify user_data_free_func);
 void (gtk_list_box_set_show_separators)(GtkListBox *box, gboolean show_separators);
 gboolean (gtk_list_box_get_show_separators)(GtkListBox *box);
+// Header /usr/include/gtk-4.0/gtk/gtklistheader.h
 GType (gtk_list_header_get_type)(void);
 gpointer (gtk_list_header_get_item)(GtkListHeader *self);
 guint (gtk_list_header_get_start)(GtkListHeader *self);
@@ -2376,6 +2554,7 @@ guint (gtk_list_header_get_end)(GtkListHeader *self);
 guint (gtk_list_header_get_n_items)(GtkListHeader *self);
 void (gtk_list_header_set_child)(GtkListHeader *self, GtkWidget *child);
 GtkWidget * (gtk_list_header_get_child)(GtkListHeader *self);
+// Header /usr/include/gtk-4.0/gtk/gtklistitem.h
 GType (gtk_list_item_get_type)(void);
 gpointer (gtk_list_item_get_item)(GtkListItem *self);
 guint (gtk_list_item_get_position)(GtkListItem *self);
@@ -2392,7 +2571,9 @@ void (gtk_list_item_set_accessible_description)(GtkListItem *self, const char *d
 const char * (gtk_list_item_get_accessible_description)(GtkListItem *self);
 void (gtk_list_item_set_accessible_label)(GtkListItem *self, const char *label);
 const char * (gtk_list_item_get_accessible_label)(GtkListItem *self);
+// Header /usr/include/gtk-4.0/gtk/gtklistitemfactory.h
 GType (gtk_list_item_factory_get_type)(void);
+// Header /usr/include/gtk-4.0/gtk/gtklistview.h
 GType (gtk_list_view_get_type)(void);
 GtkWidget * (gtk_list_view_new)(GtkSelectionModel *model, GtkListItemFactory *factory);
 GtkSelectionModel * (gtk_list_view_get_model)(GtkListView *self);
@@ -2410,6 +2591,7 @@ gboolean (gtk_list_view_get_enable_rubberband)(GtkListView *self);
 void (gtk_list_view_set_tab_behavior)(GtkListView *self, GtkListTabBehavior tab_behavior);
 GtkListTabBehavior (gtk_list_view_get_tab_behavior)(GtkListView *self);
 void (gtk_list_view_scroll_to)(GtkListView *self, guint pos, GtkListScrollFlags flags, GtkScrollInfo *scroll);
+// Header /usr/include/gtk-4.0/gtk/gtkmain.h
 gboolean (gtk_init_check)(void);
 gboolean (gtk_is_initialized)(void);
 void (gtk_init_abi_check)(int num_checks, size_t sizeof_GtkWindow, size_t sizeof_GtkBox);
@@ -2418,16 +2600,19 @@ void (gtk_disable_setlocale)(void);
 PangoLanguage * (gtk_get_default_language)(void);
 GtkTextDirection (gtk_get_locale_direction)(void);
 void (gtk_init)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkmaplistmodel.h
 GType (gtk_map_list_model_get_type)(void);
 GtkMapListModel * (gtk_map_list_model_new)(GListModel *model, GtkMapListModelMapFunc map_func, gpointer user_data, GDestroyNotify user_destroy);
 void (gtk_map_list_model_set_map_func)(GtkMapListModel *self, GtkMapListModelMapFunc map_func, gpointer user_data, GDestroyNotify user_destroy);
 void (gtk_map_list_model_set_model)(GtkMapListModel *self, GListModel *model);
 GListModel * (gtk_map_list_model_get_model)(GtkMapListModel *self);
 gboolean (gtk_map_list_model_has_map)(GtkMapListModel *self);
+// Header /usr/include/gtk-4.0/gtk/gtkmediacontrols.h
 GType (gtk_media_controls_get_type)(void);
 GtkWidget* (gtk_media_controls_new)(GtkMediaStream *stream);
 GtkMediaStream* (gtk_media_controls_get_media_stream)(GtkMediaControls *controls);
 void (gtk_media_controls_set_media_stream)(GtkMediaControls *controls, GtkMediaStream *stream);
+// Header /usr/include/gtk-4.0/gtk/gtkmediafile.h
 GType (gtk_media_file_get_type)(void);
 GtkMediaStream * (gtk_media_file_new)(void);
 GtkMediaStream * (gtk_media_file_new_for_filename)(const char *filename);
@@ -2441,6 +2626,7 @@ void (gtk_media_file_set_file)(GtkMediaFile *self, GFile *file);
 GFile * (gtk_media_file_get_file)(GtkMediaFile *self);
 void (gtk_media_file_set_input_stream)(GtkMediaFile *self, GInputStream *stream);
 GInputStream * (gtk_media_file_get_input_stream)(GtkMediaFile *self);
+// Header /usr/include/gtk-4.0/gtk/gtkmediastream.h
 GType (gtk_media_stream_get_type)(void);
 gboolean (gtk_media_stream_is_prepared)(GtkMediaStream *self);
 const GError * (gtk_media_stream_get_error)(GtkMediaStream *self);
@@ -2475,6 +2661,7 @@ void (gtk_media_stream_seek_success)(GtkMediaStream *self);
 void (gtk_media_stream_seek_failed)(GtkMediaStream *self);
 void (gtk_media_stream_gerror)(GtkMediaStream *self, GError *error);
 void (gtk_media_stream_error_valist)(GtkMediaStream *self, GQuark domain, int code, const char *format, va_list args);
+// Header /usr/include/gtk-4.0/gtk/gtkmenubutton.h
 GType (gtk_menu_button_get_type)(void);
 GtkWidget* (gtk_menu_button_new)(void);
 void (gtk_menu_button_set_popover)(GtkMenuButton *menu_button, GtkWidget *popover);
@@ -2504,6 +2691,7 @@ void (gtk_menu_button_set_active)(GtkMenuButton *menu_button, gboolean active);
 gboolean (gtk_menu_button_get_active)(GtkMenuButton *menu_button);
 void (gtk_menu_button_set_can_shrink)(GtkMenuButton *menu_button, gboolean can_shrink);
 gboolean (gtk_menu_button_get_can_shrink)(GtkMenuButton *menu_button);
+// Header /usr/include/gtk-4.0/gtk/gtkmountoperation.h
 GType (gtk_mount_operation_get_type)(void);
 GMountOperation* (gtk_mount_operation_new)(GtkWindow *parent);
 gboolean (gtk_mount_operation_is_showing)(GtkMountOperation *op);
@@ -2511,6 +2699,7 @@ void (gtk_mount_operation_set_parent)(GtkMountOperation *op, GtkWindow *parent);
 GtkWindow * (gtk_mount_operation_get_parent)(GtkMountOperation *op);
 void (gtk_mount_operation_set_display)(GtkMountOperation *op, GdkDisplay *display);
 GdkDisplay * (gtk_mount_operation_get_display)(GtkMountOperation *op);
+// Header /usr/include/gtk-4.0/gtk/gtkmultifilter.h
 GType (gtk_multi_filter_get_type)(void);
 void (gtk_multi_filter_append)(GtkMultiFilter *self, GtkFilter *filter);
 void (gtk_multi_filter_remove)(GtkMultiFilter *self, guint position);
@@ -2518,20 +2707,24 @@ GType (gtk_any_filter_get_type)(void);
 GtkAnyFilter * (gtk_any_filter_new)(void);
 GType (gtk_every_filter_get_type)(void);
 GtkEveryFilter * (gtk_every_filter_new)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkmultiselection.h
 GType (gtk_multi_selection_get_type)(void);
 GtkMultiSelection * (gtk_multi_selection_new)(GListModel *model);
 GListModel * (gtk_multi_selection_get_model)(GtkMultiSelection *self);
 void (gtk_multi_selection_set_model)(GtkMultiSelection *self, GListModel *model);
+// Header /usr/include/gtk-4.0/gtk/gtkmultisorter.h
 GType (gtk_multi_sorter_get_type)(void);
 GtkMultiSorter * (gtk_multi_sorter_new)(void);
 void (gtk_multi_sorter_append)(GtkMultiSorter *self, GtkSorter *sorter);
 void (gtk_multi_sorter_remove)(GtkMultiSorter *self, guint position);
+// Header /usr/include/gtk-4.0/gtk/gtknative.h
 GType (gtk_native_get_type)(void);
 void (gtk_native_unrealize)(GtkNative *self);
 GtkNative * (gtk_native_get_for_surface)(GdkSurface *surface);
 GdkSurface* (gtk_native_get_surface)(GtkNative *self);
 GskRenderer* (gtk_native_get_renderer)(GtkNative *self);
 void (gtk_native_get_surface_transform)(GtkNative *self, double *x, double *y);
+// Header /usr/include/gtk-4.0/gtk/gtknativedialog.h
 GType (gtk_native_dialog_get_type)(void);
 void (gtk_native_dialog_show)(GtkNativeDialog *self);
 void (gtk_native_dialog_hide)(GtkNativeDialog *self);
@@ -2543,10 +2736,12 @@ void (gtk_native_dialog_set_title)(GtkNativeDialog *self, const char *title);
 const char * (gtk_native_dialog_get_title)(GtkNativeDialog *self);
 void (gtk_native_dialog_set_transient_for)(GtkNativeDialog *self, GtkWindow *parent);
 GtkWindow * (gtk_native_dialog_get_transient_for)(GtkNativeDialog *self);
+// Header /usr/include/gtk-4.0/gtk/gtknoselection.h
 GType (gtk_no_selection_get_type)(void);
 GtkNoSelection * (gtk_no_selection_new)(GListModel *model);
 GListModel * (gtk_no_selection_get_model)(GtkNoSelection *self);
 void (gtk_no_selection_set_model)(GtkNoSelection *self, GListModel *model);
+// Header /usr/include/gtk-4.0/gtk/gtknotebook.h
 GType (gtk_notebook_get_type)(void);
 GType (gtk_notebook_page_get_type)(void);
 GtkWidget * (gtk_notebook_new)(void);
@@ -2595,15 +2790,18 @@ void (gtk_notebook_set_action_widget)(GtkNotebook *notebook, GtkWidget *widget, 
 GtkNotebookPage* (gtk_notebook_get_page)(GtkNotebook *notebook, GtkWidget *child);
 GtkWidget* (gtk_notebook_page_get_child)(GtkNotebookPage *page);
 GListModel* (gtk_notebook_get_pages)(GtkNotebook *notebook);
+// Header /usr/include/gtk-4.0/gtk/gtknumericsorter.h
 GType (gtk_numeric_sorter_get_type)(void);
 GtkNumericSorter * (gtk_numeric_sorter_new)(GtkExpression *expression);
 GtkExpression * (gtk_numeric_sorter_get_expression)(GtkNumericSorter *self);
 void (gtk_numeric_sorter_set_expression)(GtkNumericSorter *self, GtkExpression *expression);
 GtkSortType (gtk_numeric_sorter_get_sort_order)(GtkNumericSorter *self);
 void (gtk_numeric_sorter_set_sort_order)(GtkNumericSorter *self, GtkSortType sort_order);
+// Header /usr/include/gtk-4.0/gtk/gtkorientable.h
 GType (gtk_orientable_get_type)(void);
 void (gtk_orientable_set_orientation)(GtkOrientable *orientable, GtkOrientation orientation);
 GtkOrientation (gtk_orientable_get_orientation)(GtkOrientable *orientable);
+// Header /usr/include/gtk-4.0/gtk/gtkoverlay.h
 GType (gtk_overlay_get_type)(void);
 GtkWidget* (gtk_overlay_new)(void);
 void (gtk_overlay_add_overlay)(GtkOverlay *overlay, GtkWidget *widget);
@@ -2614,6 +2812,7 @@ gboolean (gtk_overlay_get_measure_overlay)(GtkOverlay *overlay, GtkWidget *widge
 void (gtk_overlay_set_measure_overlay)(GtkOverlay *overlay, GtkWidget *widget, gboolean measure);
 gboolean (gtk_overlay_get_clip_overlay)(GtkOverlay *overlay, GtkWidget *widget);
 void (gtk_overlay_set_clip_overlay)(GtkOverlay *overlay, GtkWidget *widget, gboolean clip_overlay);
+// Header /usr/include/gtk-4.0/gtk/gtkoverlaylayout.h
 GType (gtk_overlay_layout_get_type)(void);
 GType (gtk_overlay_layout_child_get_type)(void);
 GtkLayoutManager * (gtk_overlay_layout_new)(void);
@@ -2621,10 +2820,12 @@ void (gtk_overlay_layout_child_set_measure)(GtkOverlayLayoutChild *child, gboole
 gboolean (gtk_overlay_layout_child_get_measure)(GtkOverlayLayoutChild *child);
 void (gtk_overlay_layout_child_set_clip_overlay)(GtkOverlayLayoutChild *child, gboolean clip_overlay);
 gboolean (gtk_overlay_layout_child_get_clip_overlay)(GtkOverlayLayoutChild *child);
+// Header /usr/include/gtk-4.0/gtk/gtkpadcontroller.h
 GType (gtk_pad_controller_get_type)(void);
 GtkPadController* (gtk_pad_controller_new)(GActionGroup *group, GdkDevice *pad);
 void (gtk_pad_controller_set_action_entries)(GtkPadController *controller, const GtkPadActionEntry *entries, int n_entries);
 void (gtk_pad_controller_set_action)(GtkPadController *controller, GtkPadActionType type, int index, int mode, const char *label, const char *action_name);
+// Header /usr/include/gtk-4.0/gtk/gtkpaned.h
 GType (gtk_paned_get_type)(void);
 GtkWidget * (gtk_paned_new)(GtkOrientation orientation);
 void (gtk_paned_set_start_child)(GtkPaned *paned, GtkWidget *child);
@@ -2643,14 +2844,17 @@ int (gtk_paned_get_position)(GtkPaned *paned);
 void (gtk_paned_set_position)(GtkPaned *paned, int position);
 void (gtk_paned_set_wide_handle)(GtkPaned *paned, gboolean wide);
 gboolean (gtk_paned_get_wide_handle)(GtkPaned *paned);
+// Header /usr/include/gtk-4.0/gtk/gtkpasswordentry.h
 GType (gtk_password_entry_get_type)(void);
 GtkWidget * (gtk_password_entry_new)(void);
 void (gtk_password_entry_set_show_peek_icon)(GtkPasswordEntry *entry, gboolean show_peek_icon);
 gboolean (gtk_password_entry_get_show_peek_icon)(GtkPasswordEntry *entry);
 void (gtk_password_entry_set_extra_menu)(GtkPasswordEntry *entry, GMenuModel *model);
 GMenuModel * (gtk_password_entry_get_extra_menu)(GtkPasswordEntry *entry);
+// Header /usr/include/gtk-4.0/gtk/gtkpasswordentrybuffer.h
 GType (gtk_password_entry_buffer_get_type)(void);
 GtkEntryBuffer * (gtk_password_entry_buffer_new)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkpicture.h
 GType (gtk_picture_get_type)(void);
 GtkWidget* (gtk_picture_new)(void);
 GtkWidget* (gtk_picture_new_for_paintable)(GdkPaintable *paintable);
@@ -2673,6 +2877,7 @@ void (gtk_picture_set_content_fit)(GtkPicture *self, GtkContentFit content_fit);
 GtkContentFit (gtk_picture_get_content_fit)(GtkPicture *self);
 void (gtk_picture_set_alternative_text)(GtkPicture *self, const char *alternative_text);
 const char * (gtk_picture_get_alternative_text)(GtkPicture *self);
+// Header /usr/include/gtk-4.0/gtk/gtkpopover.h
 GType (gtk_popover_get_type)(void);
 GtkWidget * (gtk_popover_new)(void);
 void (gtk_popover_set_child)(GtkPopover *popover, GtkWidget *child);
@@ -2695,6 +2900,7 @@ void (gtk_popover_set_cascade_popdown)(GtkPopover *popover, gboolean cascade_pop
 gboolean (gtk_popover_get_cascade_popdown)(GtkPopover *popover);
 void (gtk_popover_set_default_widget)(GtkPopover *popover, GtkWidget *widget);
 void (gtk_popover_present)(GtkPopover *popover);
+// Header /usr/include/gtk-4.0/gtk/gtkpopovermenu.h
 GType (gtk_popover_menu_get_type)(void);
 GtkWidget * (gtk_popover_menu_new_from_model)(GMenuModel *model);
 GtkWidget * (gtk_popover_menu_new_from_model_full)(GMenuModel *model, GtkPopoverMenuFlags flags);
@@ -2704,12 +2910,14 @@ void (gtk_popover_menu_set_flags)(GtkPopoverMenu *popover, GtkPopoverMenuFlags f
 GtkPopoverMenuFlags (gtk_popover_menu_get_flags)(GtkPopoverMenu *popover);
 gboolean (gtk_popover_menu_add_child)(GtkPopoverMenu *popover, GtkWidget *child, const char *id);
 gboolean (gtk_popover_menu_remove_child)(GtkPopoverMenu *popover, GtkWidget *child);
+// Header /usr/include/gtk-4.0/gtk/gtkpopovermenubar.h
 GtkWidget * (gtk_popover_menu_bar_new_from_model)(GMenuModel *model);
 void (gtk_popover_menu_bar_set_menu_model)(GtkPopoverMenuBar *bar, GMenuModel *model);
 GMenuModel * (gtk_popover_menu_bar_get_menu_model)(GtkPopoverMenuBar *bar);
 gboolean (gtk_popover_menu_bar_add_child)(GtkPopoverMenuBar *bar, GtkWidget *child, const char *id);
 gboolean (gtk_popover_menu_bar_remove_child)(GtkPopoverMenuBar *bar, GtkWidget *child);
 GType (gtk_popover_menu_bar_get_type)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkprintdialog.h
 GType (gtk_print_setup_get_type)(void);
 GtkPrintSetup* (gtk_print_setup_ref)(GtkPrintSetup *setup);
 void (gtk_print_setup_unref)(GtkPrintSetup *setup);
@@ -2733,6 +2941,7 @@ void (gtk_print_dialog_print)(GtkPrintDialog *self, GtkWindow *parent, GtkPrintS
 GOutputStream * (gtk_print_dialog_print_finish)(GtkPrintDialog *self, GAsyncResult *result, GError **error);
 void (gtk_print_dialog_print_file)(GtkPrintDialog *self, GtkWindow *parent, GtkPrintSetup *setup, GFile *file, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 gboolean (gtk_print_dialog_print_file_finish)(GtkPrintDialog *self, GAsyncResult *result, GError **error);
+// Header /usr/include/gtk-4.0/gtk/gtkprogressbar.h
 GType (gtk_progress_bar_get_type)(void);
 GtkWidget* (gtk_progress_bar_new)(void);
 void (gtk_progress_bar_pulse)(GtkProgressBar *pbar);
@@ -2748,6 +2957,7 @@ void (gtk_progress_bar_set_ellipsize)(GtkProgressBar *pbar, PangoEllipsizeMode m
 PangoEllipsizeMode (gtk_progress_bar_get_ellipsize)(GtkProgressBar *pbar);
 void (gtk_progress_bar_set_show_text)(GtkProgressBar *pbar, gboolean show_text);
 gboolean (gtk_progress_bar_get_show_text)(GtkProgressBar *pbar);
+// Header /usr/include/gtk-4.0/gtk/gtkrange.h
 GType (gtk_range_get_type)(void);
 void (gtk_range_set_adjustment)(GtkRange *range, GtkAdjustment *adjustment);
 GtkAdjustment* (gtk_range_get_adjustment)(GtkRange *range);
@@ -2771,6 +2981,7 @@ void (gtk_range_set_fill_level)(GtkRange *range, double fill_level);
 double (gtk_range_get_fill_level)(GtkRange *range);
 void (gtk_range_set_round_digits)(GtkRange *range, int round_digits);
 int (gtk_range_get_round_digits)(GtkRange *range);
+// Header /usr/include/gtk-4.0/gtk/gtkrecentmanager.h
 GType (gtk_recent_info_get_type)(void);
 GType (gtk_recent_manager_get_type)(void);
 GQuark (gtk_recent_manager_error_quark)(void);
@@ -2809,6 +3020,7 @@ gboolean (gtk_recent_info_is_local)(GtkRecentInfo *info);
 gboolean (gtk_recent_info_exists)(GtkRecentInfo *info);
 gboolean (gtk_recent_info_match)(GtkRecentInfo *info_a, GtkRecentInfo *info_b);
 void (_gtk_recent_manager_sync)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkrevealer.h
 GType (gtk_revealer_get_type)(void);
 GtkWidget* (gtk_revealer_new)(void);
 gboolean (gtk_revealer_get_reveal_child)(GtkRevealer *revealer);
@@ -2820,9 +3032,11 @@ void (gtk_revealer_set_transition_type)(GtkRevealer *revealer, GtkRevealerTransi
 GtkRevealerTransitionType (gtk_revealer_get_transition_type)(GtkRevealer *revealer);
 void (gtk_revealer_set_child)(GtkRevealer *revealer, GtkWidget *child);
 GtkWidget * (gtk_revealer_get_child)(GtkRevealer *revealer);
+// Header /usr/include/gtk-4.0/gtk/gtkroot.h
 GType (gtk_root_get_type)(void);
 void (gtk_root_set_focus)(GtkRoot *self, GtkWidget *focus);
 GtkWidget * (gtk_root_get_focus)(GtkRoot *self);
+// Header /usr/include/gtk-4.0/gtk/gtkscale.h
 GType (gtk_scale_get_type)(void);
 GtkWidget * (gtk_scale_new)(GtkOrientation orientation, GtkAdjustment *adjustment);
 GtkWidget * (gtk_scale_new_with_range)(GtkOrientation orientation, double min, double max, double step);
@@ -2839,6 +3053,7 @@ void (gtk_scale_get_layout_offsets)(GtkScale *scale, int *x, int *y);
 void (gtk_scale_add_mark)(GtkScale *scale, double value, GtkPositionType position, const char *markup);
 void (gtk_scale_clear_marks)(GtkScale *scale);
 void (gtk_scale_set_format_value_func)(GtkScale *scale, GtkScaleFormatValueFunc func, gpointer user_data, GDestroyNotify destroy_notify);
+// Header /usr/include/gtk-4.0/gtk/gtkscalebutton.h
 GType (gtk_scale_button_get_type)(void);
 GtkWidget * (gtk_scale_button_new)(double min, double max, double step, const char **icons);
 void (gtk_scale_button_set_icons)(GtkScaleButton *button, const char **icons);
@@ -2852,6 +3067,7 @@ GtkWidget * (gtk_scale_button_get_popup)(GtkScaleButton *button);
 gboolean (gtk_scale_button_get_active)(GtkScaleButton *button);
 gboolean (gtk_scale_button_get_has_frame)(GtkScaleButton *button);
 void (gtk_scale_button_set_has_frame)(GtkScaleButton *button, gboolean has_frame);
+// Header /usr/include/gtk-4.0/gtk/gtkscrollable.h
 GType (gtk_scrollable_get_type)(void);
 GtkAdjustment* (gtk_scrollable_get_hadjustment)(GtkScrollable *scrollable);
 void (gtk_scrollable_set_hadjustment)(GtkScrollable *scrollable, GtkAdjustment *hadjustment);
@@ -2862,10 +3078,12 @@ void (gtk_scrollable_set_hscroll_policy)(GtkScrollable *scrollable, GtkScrollabl
 GtkScrollablePolicy (gtk_scrollable_get_vscroll_policy)(GtkScrollable *scrollable);
 void (gtk_scrollable_set_vscroll_policy)(GtkScrollable *scrollable, GtkScrollablePolicy policy);
 gboolean (gtk_scrollable_get_border)(GtkScrollable *scrollable, GtkBorder *border);
+// Header /usr/include/gtk-4.0/gtk/gtkscrollbar.h
 GType (gtk_scrollbar_get_type)(void);
 GtkWidget * (gtk_scrollbar_new)(GtkOrientation orientation, GtkAdjustment *adjustment);
 void (gtk_scrollbar_set_adjustment)(GtkScrollbar *self, GtkAdjustment *adjustment);
 GtkAdjustment* (gtk_scrollbar_get_adjustment)(GtkScrollbar *self);
+// Header /usr/include/gtk-4.0/gtk/gtkscrolledwindow.h
 GType (gtk_scrolled_window_get_type)(void);
 GtkWidget* (gtk_scrolled_window_new)(void);
 void (gtk_scrolled_window_set_hadjustment)(GtkScrolledWindow *scrolled_window, GtkAdjustment *hadjustment);
@@ -2899,6 +3117,7 @@ void (gtk_scrolled_window_set_propagate_natural_height)(GtkScrolledWindow *scrol
 gboolean (gtk_scrolled_window_get_propagate_natural_height)(GtkScrolledWindow *scrolled_window);
 void (gtk_scrolled_window_set_child)(GtkScrolledWindow *scrolled_window, GtkWidget *child);
 GtkWidget* (gtk_scrolled_window_get_child)(GtkScrolledWindow *scrolled_window);
+// Header /usr/include/gtk-4.0/gtk/gtkscrollinfo.h
 GType (gtk_scroll_info_get_type)(void);
 GtkScrollInfo * (gtk_scroll_info_new)(void);
 GtkScrollInfo * (gtk_scroll_info_ref)(GtkScrollInfo *self);
@@ -2907,6 +3126,7 @@ void (gtk_scroll_info_set_enable_horizontal)(GtkScrollInfo *self, gboolean horiz
 gboolean (gtk_scroll_info_get_enable_horizontal)(GtkScrollInfo *self);
 void (gtk_scroll_info_set_enable_vertical)(GtkScrollInfo *self, gboolean vertical);
 gboolean (gtk_scroll_info_get_enable_vertical)(GtkScrollInfo *self);
+// Header /usr/include/gtk-4.0/gtk/gtksearchbar.h
 GType (gtk_search_bar_get_type)(void);
 GtkWidget* (gtk_search_bar_new)(void);
 void (gtk_search_bar_connect_entry)(GtkSearchBar *bar, GtkEditable *entry);
@@ -2918,6 +3138,7 @@ void (gtk_search_bar_set_key_capture_widget)(GtkSearchBar *bar, GtkWidget *widge
 GtkWidget * (gtk_search_bar_get_key_capture_widget)(GtkSearchBar *bar);
 void (gtk_search_bar_set_child)(GtkSearchBar *bar, GtkWidget *child);
 GtkWidget * (gtk_search_bar_get_child)(GtkSearchBar *bar);
+// Header /usr/include/gtk-4.0/gtk/gtksearchentry.h
 GType (gtk_search_entry_get_type)(void);
 GtkWidget* (gtk_search_entry_new)(void);
 void (gtk_search_entry_set_key_capture_widget)(GtkSearchEntry *entry, GtkWidget *widget);
@@ -2930,12 +3151,15 @@ void (gtk_search_entry_set_input_purpose)(GtkSearchEntry *entry, GtkInputPurpose
 GtkInputPurpose (gtk_search_entry_get_input_purpose)(GtkSearchEntry *entry);
 void (gtk_search_entry_set_input_hints)(GtkSearchEntry *entry, GtkInputHints hints);
 GtkInputHints (gtk_search_entry_get_input_hints)(GtkSearchEntry *entry);
+// Header /usr/include/gtk-4.0/gtk/gtksectionmodel.h
 GType (gtk_section_model_get_type)(void);
 void (gtk_section_model_sections_changed)(GtkSectionModel *self, guint position, guint n_items);
+// Header /usr/include/gtk-4.0/gtk/gtkselectionfiltermodel.h
 GType (gtk_selection_filter_model_get_type)(void);
 GtkSelectionFilterModel * (gtk_selection_filter_model_new)(GtkSelectionModel *model);
 void (gtk_selection_filter_model_set_model)(GtkSelectionFilterModel *self, GtkSelectionModel *model);
 GtkSelectionModel * (gtk_selection_filter_model_get_model)(GtkSelectionFilterModel *self);
+// Header /usr/include/gtk-4.0/gtk/gtkselectionmodel.h
 GType (gtk_selection_model_get_type)(void);
 GtkBitset * (gtk_selection_model_get_selection)(GtkSelectionModel *model);
 GtkBitset * (gtk_selection_model_get_selection_in_range)(GtkSelectionModel *model, guint position, guint n_items);
@@ -2947,12 +3171,15 @@ gboolean (gtk_selection_model_select_all)(GtkSelectionModel *model);
 gboolean (gtk_selection_model_unselect_all)(GtkSelectionModel *model);
 gboolean (gtk_selection_model_set_selection)(GtkSelectionModel *model, GtkBitset *selected, GtkBitset *mask);
 void (gtk_selection_model_selection_changed)(GtkSelectionModel *model, guint position, guint n_items);
+// Header /usr/include/gtk-4.0/gtk/gtkseparator.h
 GType (gtk_separator_get_type)(void);
 GtkWidget * (gtk_separator_new)(GtkOrientation orientation);
+// Header /usr/include/gtk-4.0/gtk/gtksettings.h
 GType (gtk_settings_get_type)(void);
 GtkSettings* (gtk_settings_get_default)(void);
 GtkSettings* (gtk_settings_get_for_display)(GdkDisplay *display);
 void (gtk_settings_reset_property)(GtkSettings *settings, const char *name);
+// Header /usr/include/gtk-4.0/gtk/gtkshortcut.h
 GType (gtk_shortcut_get_type)(void);
 GtkShortcut * (gtk_shortcut_new)(GtkShortcutTrigger *trigger, GtkShortcutAction *action);
 GtkShortcutTrigger * (gtk_shortcut_get_trigger)(GtkShortcut *self);
@@ -2961,6 +3188,7 @@ GtkShortcutAction * (gtk_shortcut_get_action)(GtkShortcut *self);
 void (gtk_shortcut_set_action)(GtkShortcut *self, GtkShortcutAction *action);
 GVariant * (gtk_shortcut_get_arguments)(GtkShortcut *self);
 void (gtk_shortcut_set_arguments)(GtkShortcut *self, GVariant *args);
+// Header /usr/include/gtk-4.0/gtk/gtkshortcutaction.h
 GType (gtk_shortcut_action_get_type)(void);
 char * (gtk_shortcut_action_to_string)(GtkShortcutAction *self);
 GtkShortcutAction * (gtk_shortcut_action_parse_string)(const char * string);
@@ -2980,6 +3208,7 @@ const char * (gtk_signal_action_get_signal_name)(GtkSignalAction *self);
 GType (gtk_named_action_get_type)(void);
 GtkShortcutAction * (gtk_named_action_new)(const char *name);
 const char * (gtk_named_action_get_action_name)(GtkNamedAction *self);
+// Header /usr/include/gtk-4.0/gtk/gtkshortcutcontroller.h
 GType (gtk_shortcut_controller_get_type)(void);
 GtkEventController * (gtk_shortcut_controller_new)(void);
 GtkEventController * (gtk_shortcut_controller_new_for_model)(GListModel *model);
@@ -2989,20 +3218,27 @@ void (gtk_shortcut_controller_set_scope)(GtkShortcutController *self, GtkShortcu
 GtkShortcutScope (gtk_shortcut_controller_get_scope)(GtkShortcutController *self);
 void (gtk_shortcut_controller_add_shortcut)(GtkShortcutController *self, GtkShortcut *shortcut);
 void (gtk_shortcut_controller_remove_shortcut)(GtkShortcutController *self, GtkShortcut *shortcut);
+// Header /usr/include/gtk-4.0/gtk/gtkshortcutlabel.h
 GType (gtk_shortcut_label_get_type)(void);
 GtkWidget* (gtk_shortcut_label_new)(const char *accelerator);
 const char* (gtk_shortcut_label_get_accelerator)(GtkShortcutLabel *self);
 void (gtk_shortcut_label_set_accelerator)(GtkShortcutLabel *self, const char *accelerator);
 const char* (gtk_shortcut_label_get_disabled_text)(GtkShortcutLabel *self);
 void (gtk_shortcut_label_set_disabled_text)(GtkShortcutLabel *self, const char *disabled_text);
+// Header /usr/include/gtk-4.0/gtk/gtkshortcutmanager.h
 GType (gtk_shortcut_manager_get_type)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkshortcutsgroup.h
 GType (gtk_shortcuts_group_get_type)(void);
 void (gtk_shortcuts_group_add_shortcut)(GtkShortcutsGroup *self, GtkShortcutsShortcut *shortcut);
+// Header /usr/include/gtk-4.0/gtk/gtkshortcutssection.h
 GType (gtk_shortcuts_section_get_type)(void);
 void (gtk_shortcuts_section_add_group)(GtkShortcutsSection *self, GtkShortcutsGroup *group);
+// Header /usr/include/gtk-4.0/gtk/gtkshortcutsshortcut.h
 GType (gtk_shortcuts_shortcut_get_type)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkshortcutswindow.h
 GType (gtk_shortcuts_window_get_type)(void);
 void (gtk_shortcuts_window_add_section)(GtkShortcutsWindow *self, GtkShortcutsSection *section);
+// Header /usr/include/gtk-4.0/gtk/gtkshortcuttrigger.h
 GType (gtk_shortcut_trigger_get_type)(void);
 GtkShortcutTrigger * (gtk_shortcut_trigger_parse_string)(const char *string);
 char * (gtk_shortcut_trigger_to_string)(GtkShortcutTrigger *self);
@@ -3026,8 +3262,10 @@ GType (gtk_alternative_trigger_get_type)(void);
 GtkShortcutTrigger * (gtk_alternative_trigger_new)(GtkShortcutTrigger *first, GtkShortcutTrigger *second);
 GtkShortcutTrigger * (gtk_alternative_trigger_get_first)(GtkAlternativeTrigger *self);
 GtkShortcutTrigger * (gtk_alternative_trigger_get_second)(GtkAlternativeTrigger *self);
+// Header /usr/include/gtk-4.0/gtk/gtksignallistitemfactory.h
 GType (gtk_signal_list_item_factory_get_type)(void);
 GtkListItemFactory * (gtk_signal_list_item_factory_new)(void);
+// Header /usr/include/gtk-4.0/gtk/gtksingleselection.h
 GType (gtk_single_selection_get_type)(void);
 GtkSingleSelection * (gtk_single_selection_new)(GListModel *model);
 GListModel * (gtk_single_selection_get_model)(GtkSingleSelection *self);
@@ -3039,6 +3277,7 @@ gboolean (gtk_single_selection_get_autoselect)(GtkSingleSelection *self);
 void (gtk_single_selection_set_autoselect)(GtkSingleSelection *self, gboolean autoselect);
 gboolean (gtk_single_selection_get_can_unselect)(GtkSingleSelection *self);
 void (gtk_single_selection_set_can_unselect)(GtkSingleSelection *self, gboolean can_unselect);
+// Header /usr/include/gtk-4.0/gtk/gtksizegroup.h
 GType (gtk_size_group_get_type)(void);
 GtkSizeGroup * (gtk_size_group_new)(GtkSizeGroupMode mode);
 void (gtk_size_group_set_mode)(GtkSizeGroup *size_group, GtkSizeGroupMode mode);
@@ -3046,7 +3285,9 @@ GtkSizeGroupMode (gtk_size_group_get_mode)(GtkSizeGroup *size_group);
 void (gtk_size_group_add_widget)(GtkSizeGroup *size_group, GtkWidget *widget);
 void (gtk_size_group_remove_widget)(GtkSizeGroup *size_group, GtkWidget *widget);
 GSList * (gtk_size_group_get_widgets)(GtkSizeGroup *size_group);
+// Header /usr/include/gtk-4.0/gtk/gtksizerequest.h
 int (gtk_distribute_natural_allocation)(int extra_space, guint n_requested_sizes, GtkRequestedSize *sizes);
+// Header /usr/include/gtk-4.0/gtk/gtkslicelistmodel.h
 GType (gtk_slice_list_model_get_type)(void);
 GtkSliceListModel * (gtk_slice_list_model_new)(GListModel *model, guint offset, guint size);
 void (gtk_slice_list_model_set_model)(GtkSliceListModel *self, GListModel *model);
@@ -3055,6 +3296,7 @@ void (gtk_slice_list_model_set_offset)(GtkSliceListModel *self, guint offset);
 guint (gtk_slice_list_model_get_offset)(GtkSliceListModel *self);
 void (gtk_slice_list_model_set_size)(GtkSliceListModel *self, guint size);
 guint (gtk_slice_list_model_get_size)(GtkSliceListModel *self);
+// Header /usr/include/gtk-4.0/gtk/gtksnapshot.h
 GType (gtk_snapshot_get_type)(void);
 GtkSnapshot * (gtk_snapshot_new)(void);
 GskRenderNode * (gtk_snapshot_free_to_node)(GtkSnapshot *snapshot);
@@ -3103,10 +3345,12 @@ void (gtk_snapshot_append_outset_shadow)(GtkSnapshot *snapshot, const GskRounded
 void (gtk_snapshot_append_layout)(GtkSnapshot *snapshot, PangoLayout *layout, const GdkRGBA *color);
 void (gtk_snapshot_append_fill)(GtkSnapshot *snapshot, GskPath *path, GskFillRule fill_rule, const GdkRGBA *color);
 void (gtk_snapshot_append_stroke)(GtkSnapshot *snapshot, GskPath *path, const GskStroke *stroke, const GdkRGBA *color);
+// Header /usr/include/gtk-4.0/gtk/gtksorter.h
 GType (gtk_sorter_get_type)(void);
 GtkOrdering (gtk_sorter_compare)(GtkSorter *self, gpointer item1, gpointer item2);
 GtkSorterOrder (gtk_sorter_get_order)(GtkSorter *self);
 void (gtk_sorter_changed)(GtkSorter *self, GtkSorterChange change);
+// Header /usr/include/gtk-4.0/gtk/gtksortlistmodel.h
 GType (gtk_sort_list_model_get_type)(void);
 GtkSortListModel * (gtk_sort_list_model_new)(GListModel *model, GtkSorter *sorter);
 void (gtk_sort_list_model_set_sorter)(GtkSortListModel *self, GtkSorter *sorter);
@@ -3118,6 +3362,7 @@ GListModel * (gtk_sort_list_model_get_model)(GtkSortListModel *self);
 void (gtk_sort_list_model_set_incremental)(GtkSortListModel *self, gboolean incremental);
 gboolean (gtk_sort_list_model_get_incremental)(GtkSortListModel *self);
 guint (gtk_sort_list_model_get_pending)(GtkSortListModel *self);
+// Header /usr/include/gtk-4.0/gtk/gtkspinbutton.h
 GType (gtk_spin_button_get_type)(void);
 void (gtk_spin_button_configure)(GtkSpinButton *spin_button, GtkAdjustment *adjustment, double climb_rate, guint digits);
 GtkWidget* (gtk_spin_button_new)(GtkAdjustment *adjustment, double climb_rate, guint digits);
@@ -3147,12 +3392,14 @@ gboolean (gtk_spin_button_get_snap_to_ticks)(GtkSpinButton *spin_button);
 void (gtk_spin_button_set_climb_rate)(GtkSpinButton *spin_button, double climb_rate);
 double (gtk_spin_button_get_climb_rate)(GtkSpinButton *spin_button);
 void (gtk_spin_button_update)(GtkSpinButton *spin_button);
+// Header /usr/include/gtk-4.0/gtk/gtkspinner.h
 GType (gtk_spinner_get_type)(void);
 GtkWidget* (gtk_spinner_new)(void);
 void (gtk_spinner_start)(GtkSpinner *spinner);
 void (gtk_spinner_stop)(GtkSpinner *spinner);
 void (gtk_spinner_set_spinning)(GtkSpinner *spinner, gboolean spinning);
 gboolean (gtk_spinner_get_spinning)(GtkSpinner *spinner);
+// Header /usr/include/gtk-4.0/gtk/gtkstack.h
 GType (gtk_stack_get_type)(void);
 GType (gtk_stack_page_get_type)(void);
 GtkWidget * (gtk_stack_page_get_child)(GtkStackPage *self);
@@ -3192,14 +3439,17 @@ gboolean (gtk_stack_get_transition_running)(GtkStack *stack);
 void (gtk_stack_set_interpolate_size)(GtkStack *stack, gboolean interpolate_size);
 gboolean (gtk_stack_get_interpolate_size)(GtkStack *stack);
 GtkSelectionModel * (gtk_stack_get_pages)(GtkStack *stack);
+// Header /usr/include/gtk-4.0/gtk/gtkstacksidebar.h
 GType (gtk_stack_sidebar_get_type)(void);
 GtkWidget * (gtk_stack_sidebar_new)(void);
 void (gtk_stack_sidebar_set_stack)(GtkStackSidebar *self, GtkStack *stack);
 GtkStack * (gtk_stack_sidebar_get_stack)(GtkStackSidebar *self);
+// Header /usr/include/gtk-4.0/gtk/gtkstackswitcher.h
 GType (gtk_stack_switcher_get_type)(void);
 GtkWidget * (gtk_stack_switcher_new)(void);
 void (gtk_stack_switcher_set_stack)(GtkStackSwitcher *switcher, GtkStack *stack);
 GtkStack * (gtk_stack_switcher_get_stack)(GtkStackSwitcher *switcher);
+// Header /usr/include/gtk-4.0/gtk/gtkstringfilter.h
 GType (gtk_string_filter_get_type)(void);
 GtkStringFilter * (gtk_string_filter_new)(GtkExpression *expression);
 const char * (gtk_string_filter_get_search)(GtkStringFilter *self);
@@ -3210,6 +3460,7 @@ gboolean (gtk_string_filter_get_ignore_case)(GtkStringFilter *self);
 void (gtk_string_filter_set_ignore_case)(GtkStringFilter *self, gboolean ignore_case);
 GtkStringFilterMatchMode (gtk_string_filter_get_match_mode)(GtkStringFilter *self);
 void (gtk_string_filter_set_match_mode)(GtkStringFilter *self, GtkStringFilterMatchMode mode);
+// Header /usr/include/gtk-4.0/gtk/gtkstringlist.h
 GType (gtk_string_object_get_type)(void);
 GtkStringObject * (gtk_string_object_new)(const char *string);
 const char * (gtk_string_object_get_string)(GtkStringObject *self);
@@ -3220,6 +3471,7 @@ void (gtk_string_list_take)(GtkStringList *self, char *string);
 void (gtk_string_list_remove)(GtkStringList *self, guint position);
 void (gtk_string_list_splice)(GtkStringList *self, guint position, guint n_removals, const char * const *additions);
 const char * (gtk_string_list_get_string)(GtkStringList *self, guint position);
+// Header /usr/include/gtk-4.0/gtk/gtkstringsorter.h
 GType (gtk_string_sorter_get_type)(void);
 GtkStringSorter * (gtk_string_sorter_new)(GtkExpression *expression);
 GtkExpression * (gtk_string_sorter_get_expression)(GtkStringSorter *self);
@@ -3228,23 +3480,29 @@ gboolean (gtk_string_sorter_get_ignore_case)(GtkStringSorter *self);
 void (gtk_string_sorter_set_ignore_case)(GtkStringSorter *self, gboolean ignore_case);
 void (gtk_string_sorter_set_collation)(GtkStringSorter *self, GtkCollation collation);
 GtkCollation (gtk_string_sorter_get_collation)(GtkStringSorter *self);
+// Header /usr/include/gtk-4.0/gtk/gtkstyleprovider.h
 GType (gtk_style_provider_get_type)(void);
 void (gtk_style_context_remove_provider_for_display)(GdkDisplay *display, GtkStyleProvider *provider);
+// Header /usr/include/gtk-4.0/gtk/gtkswitch.h
 GType (gtk_switch_get_type)(void);
 GtkWidget * (gtk_switch_new)(void);
 void (gtk_switch_set_active)(GtkSwitch *self, gboolean is_active);
 gboolean (gtk_switch_get_active)(GtkSwitch *self);
 void (gtk_switch_set_state)(GtkSwitch *self, gboolean state);
 gboolean (gtk_switch_get_state)(GtkSwitch *self);
+// Header /usr/include/gtk-4.0/gtk/gtksymbolicpaintable.h
 GType (gtk_symbolic_paintable_get_type)(void);
+// Header /usr/include/gtk-4.0/gtk/gtktestatcontext.h
 gboolean (gtk_test_accessible_has_property)(GtkAccessible *accessible, GtkAccessibleProperty property);
 gboolean (gtk_test_accessible_has_relation)(GtkAccessible *accessible, GtkAccessibleRelation relation);
 gboolean (gtk_test_accessible_has_state)(GtkAccessible *accessible, GtkAccessibleState state);
 void (gtk_test_accessible_assertion_message_role)(const char *domain, const char *file, int line, const char *func, const char *expr, GtkAccessible *accessible, GtkAccessibleRole expected_role, GtkAccessibleRole actual_role);
 gboolean (gtk_test_accessible_has_role)(GtkAccessible *accessible, GtkAccessibleRole role);
+// Header /usr/include/gtk-4.0/gtk/gtktestutils.h
 void (gtk_test_register_all_types)(void);
 const GType* (gtk_test_list_all_types)(guint *n_types);
 void (gtk_test_widget_wait_for_draw)(GtkWidget *widget);
+// Header /usr/include/gtk-4.0/gtk/gtktext.h
 GType (gtk_text_get_type)(void);
 GtkWidget * (gtk_text_new)(void);
 GtkWidget * (gtk_text_new_with_buffer)(GtkEntryBuffer *buffer);
@@ -3282,6 +3540,7 @@ gboolean (gtk_text_get_propagate_text_width)(GtkText *self);
 void (gtk_text_set_truncate_multiline)(GtkText *self, gboolean truncate_multiline);
 gboolean (gtk_text_get_truncate_multiline)(GtkText *self);
 void (gtk_text_compute_cursor_extents)(GtkText *self, gsize position, graphene_rect_t *strong, graphene_rect_t *weak);
+// Header /usr/include/gtk-4.0/gtk/gtktextbuffer.h
 GType (gtk_text_buffer_get_type)(void);
 GtkTextBuffer* (gtk_text_buffer_new)(GtkTextTagTable *table);
 int (gtk_text_buffer_get_line_count)(GtkTextBuffer *buffer);
@@ -3351,11 +3610,13 @@ void (gtk_text_buffer_begin_irreversible_action)(GtkTextBuffer *buffer);
 void (gtk_text_buffer_end_irreversible_action)(GtkTextBuffer *buffer);
 void (gtk_text_buffer_begin_user_action)(GtkTextBuffer *buffer);
 void (gtk_text_buffer_end_user_action)(GtkTextBuffer *buffer);
+// Header /usr/include/gtk-4.0/gtk/gtktextchild.h
 GType (gtk_text_child_anchor_get_type)(void);
 GtkTextChildAnchor* (gtk_text_child_anchor_new)(void);
 GtkTextChildAnchor* (gtk_text_child_anchor_new_with_replacement)(const char *character);
 GtkWidget** (gtk_text_child_anchor_get_widgets)(GtkTextChildAnchor *anchor, guint *out_len);
 gboolean (gtk_text_child_anchor_get_deleted)(GtkTextChildAnchor *anchor);
+// Header /usr/include/gtk-4.0/gtk/gtktextiter.h
 GType (gtk_text_iter_get_type)(void);
 GtkTextBuffer* (gtk_text_iter_get_buffer)(const GtkTextIter *iter);
 GtkTextIter* (gtk_text_iter_copy)(const GtkTextIter *iter);
@@ -3447,6 +3708,7 @@ gboolean (gtk_text_iter_equal)(const GtkTextIter *lhs, const GtkTextIter *rhs);
 int (gtk_text_iter_compare)(const GtkTextIter *lhs, const GtkTextIter *rhs);
 gboolean (gtk_text_iter_in_range)(const GtkTextIter *iter, const GtkTextIter *start, const GtkTextIter *end);
 void (gtk_text_iter_order)(GtkTextIter *first, GtkTextIter *second);
+// Header /usr/include/gtk-4.0/gtk/gtktextmark.h
 GType (gtk_text_mark_get_type)(void);
 GtkTextMark* (gtk_text_mark_new)(const char *name, gboolean left_gravity);
 void (gtk_text_mark_set_visible)(GtkTextMark *mark, gboolean setting);
@@ -3455,11 +3717,13 @@ const char * (gtk_text_mark_get_name)(GtkTextMark *mark);
 gboolean (gtk_text_mark_get_deleted)(GtkTextMark *mark);
 GtkTextBuffer* (gtk_text_mark_get_buffer)(GtkTextMark *mark);
 gboolean (gtk_text_mark_get_left_gravity)(GtkTextMark *mark);
+// Header /usr/include/gtk-4.0/gtk/gtktexttag.h
 GType (gtk_text_tag_get_type)(void);
 GtkTextTag* (gtk_text_tag_new)(const char *name);
 int (gtk_text_tag_get_priority)(GtkTextTag *tag);
 void (gtk_text_tag_set_priority)(GtkTextTag *tag, int priority);
 void (gtk_text_tag_changed)(GtkTextTag *tag, gboolean size_changed);
+// Header /usr/include/gtk-4.0/gtk/gtktexttagtable.h
 GType (gtk_text_tag_table_get_type)(void);
 GtkTextTagTable* (gtk_text_tag_table_new)(void);
 gboolean (gtk_text_tag_table_add)(GtkTextTagTable *table, GtkTextTag *tag);
@@ -3467,6 +3731,7 @@ void (gtk_text_tag_table_remove)(GtkTextTagTable *table, GtkTextTag *tag);
 GtkTextTag* (gtk_text_tag_table_lookup)(GtkTextTagTable *table, const char *name);
 void (gtk_text_tag_table_foreach)(GtkTextTagTable *table, GtkTextTagTableForeach func, gpointer data);
 int (gtk_text_tag_table_get_size)(GtkTextTagTable *table);
+// Header /usr/include/gtk-4.0/gtk/gtktextview.h
 GType (gtk_text_view_get_type)(void);
 GtkWidget * (gtk_text_view_new)(void);
 GtkWidget * (gtk_text_view_new_with_buffer)(GtkTextBuffer *buffer);
@@ -3541,6 +3806,7 @@ void (gtk_text_view_set_extra_menu)(GtkTextView *text_view, GMenuModel *model);
 GMenuModel * (gtk_text_view_get_extra_menu)(GtkTextView *text_view);
 PangoContext* (gtk_text_view_get_rtl_context)(GtkTextView *text_view);
 PangoContext* (gtk_text_view_get_ltr_context)(GtkTextView *text_view);
+// Header /usr/include/gtk-4.0/gtk/gtktogglebutton.h
 GType (gtk_toggle_button_get_type)(void);
 GtkWidget* (gtk_toggle_button_new)(void);
 GtkWidget* (gtk_toggle_button_new_with_label)(const char *label);
@@ -3549,6 +3815,7 @@ void (gtk_toggle_button_set_active)(GtkToggleButton *toggle_button, gboolean is_
 gboolean (gtk_toggle_button_get_active)(GtkToggleButton *toggle_button);
 void (gtk_toggle_button_toggled)(GtkToggleButton *toggle_button);
 void (gtk_toggle_button_set_group)(GtkToggleButton *toggle_button, GtkToggleButton *group);
+// Header /usr/include/gtk-4.0/gtk/gtktooltip.h
 GType (gtk_tooltip_get_type)(void);
 void (gtk_tooltip_set_markup)(GtkTooltip *tooltip, const char *markup);
 void (gtk_tooltip_set_text)(GtkTooltip *tooltip, const char *text);
@@ -3557,6 +3824,7 @@ void (gtk_tooltip_set_icon_from_icon_name)(GtkTooltip *tooltip, const char *icon
 void (gtk_tooltip_set_icon_from_gicon)(GtkTooltip *tooltip, GIcon *gicon);
 void (gtk_tooltip_set_custom)(GtkTooltip *tooltip, GtkWidget *custom_widget);
 void (gtk_tooltip_set_tip_area)(GtkTooltip *tooltip, const GdkRectangle *rect);
+// Header /usr/include/gtk-4.0/gtk/gtktreeexpander.h
 GType (gtk_tree_expander_get_type)(void);
 GtkWidget * (gtk_tree_expander_new)(void);
 GtkWidget * (gtk_tree_expander_get_child)(GtkTreeExpander *self);
@@ -3570,6 +3838,7 @@ gboolean (gtk_tree_expander_get_indent_for_icon)(GtkTreeExpander *self);
 void (gtk_tree_expander_set_indent_for_icon)(GtkTreeExpander *self, gboolean indent_for_icon);
 gboolean (gtk_tree_expander_get_hide_expander)(GtkTreeExpander *self);
 void (gtk_tree_expander_set_hide_expander)(GtkTreeExpander *self, gboolean hide_expander);
+// Header /usr/include/gtk-4.0/gtk/gtktreelistmodel.h
 GType (gtk_tree_list_model_get_type)(void);
 GType (gtk_tree_list_row_get_type)(void);
 GtkTreeListModel * (gtk_tree_list_model_new)(GListModel *root, gboolean passthrough, gboolean autoexpand, GtkTreeListModelCreateModelFunc create_func, gpointer user_data, GDestroyNotify user_destroy);
@@ -3588,10 +3857,12 @@ guint (gtk_tree_list_row_get_depth)(GtkTreeListRow *self);
 GListModel * (gtk_tree_list_row_get_children)(GtkTreeListRow *self);
 GtkTreeListRow * (gtk_tree_list_row_get_parent)(GtkTreeListRow *self);
 GtkTreeListRow * (gtk_tree_list_row_get_child_row)(GtkTreeListRow *self, guint position);
+// Header /usr/include/gtk-4.0/gtk/gtktreelistrowsorter.h
 GType (gtk_tree_list_row_sorter_get_type)(void);
 GtkTreeListRowSorter * (gtk_tree_list_row_sorter_new)(GtkSorter *sorter);
 GtkSorter * (gtk_tree_list_row_sorter_get_sorter)(GtkTreeListRowSorter *self);
 void (gtk_tree_list_row_sorter_set_sorter)(GtkTreeListRowSorter *self, GtkSorter *sorter);
+// Header /usr/include/gtk-4.0/gtk/gtktypebuiltins.h
 GType (gtk_assistant_page_type_get_type)(void);
 GType (gtk_cell_renderer_state_get_type)(void);
 GType (gtk_cell_renderer_mode_get_type)(void);
@@ -3713,18 +3984,22 @@ GType (gtk_print_status_get_type)(void);
 GType (gtk_print_operation_result_get_type)(void);
 GType (gtk_print_operation_action_get_type)(void);
 GType (gtk_print_error_get_type)(void);
+// Header /usr/include/gtk-4.0/gtk/gtktypes.h
+// Header /usr/include/gtk-4.0/gtk/gtkurilauncher.h
 GType (gtk_uri_launcher_get_type)(void);
 GtkUriLauncher * (gtk_uri_launcher_new)(const char *uri);
 const char * (gtk_uri_launcher_get_uri)(GtkUriLauncher *self);
 void (gtk_uri_launcher_set_uri)(GtkUriLauncher *self, const char *uri);
 void (gtk_uri_launcher_launch)(GtkUriLauncher *self, GtkWindow *parent, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 gboolean (gtk_uri_launcher_launch_finish)(GtkUriLauncher *self, GAsyncResult *result, GError **error);
+// Header /usr/include/gtk-4.0/gtk/gtkversion.h
 guint (gtk_get_minor_version)(void);
 guint (gtk_get_micro_version)(void);
 guint (gtk_get_binary_age)(void);
 guint (gtk_get_interface_age)(void);
 const char * (gtk_check_version)(guint required_major, guint required_minor, guint required_micro);
 guint (gtk_get_major_version)(void);
+// Header /usr/include/gtk-4.0/gtk/gtkvideo.h
 GType (gtk_video_get_type)(void);
 GtkWidget * (gtk_video_new)(void);
 GtkWidget * (gtk_video_new_for_media_stream)(GtkMediaStream *stream);
@@ -3743,6 +4018,7 @@ gboolean (gtk_video_get_loop)(GtkVideo *self);
 void (gtk_video_set_loop)(GtkVideo *self, gboolean loop);
 GtkGraphicsOffloadEnabled (gtk_video_get_graphics_offload)(GtkVideo *self);
 void (gtk_video_set_graphics_offload)(GtkVideo *self, GtkGraphicsOffloadEnabled enabled);
+// Header /usr/include/gtk-4.0/gtk/gtkviewport.h
 GType (gtk_viewport_get_type)(void);
 GtkWidget* (gtk_viewport_new)(GtkAdjustment *hadjustment, GtkAdjustment *vadjustment);
 gboolean (gtk_viewport_get_scroll_to_focus)(GtkViewport *viewport);
@@ -3750,6 +4026,7 @@ void (gtk_viewport_set_scroll_to_focus)(GtkViewport *viewport, gboolean scroll_t
 void (gtk_viewport_set_child)(GtkViewport *viewport, GtkWidget *child);
 GtkWidget * (gtk_viewport_get_child)(GtkViewport *viewport);
 void (gtk_viewport_scroll_to)(GtkViewport *viewport, GtkWidget *descendant, GtkScrollInfo *scroll);
+// Header /usr/include/gtk-4.0/gtk/gtkwidget.h
 GType (gtk_widget_get_type)(void);
 GType (gtk_requisition_get_type)(void);
 void (gtk_widget_unparent)(GtkWidget *widget);
@@ -3935,10 +4212,12 @@ gboolean (gtk_widget_class_query_action)(GtkWidgetClass *widget_class, guint ind
 void (gtk_widget_action_set_enabled)(GtkWidget *widget, const char *action_name, gboolean enabled);
 void (gtk_widget_class_set_accessible_role)(GtkWidgetClass *widget_class, GtkAccessibleRole accessible_role);
 GtkAccessibleRole (gtk_widget_class_get_accessible_role)(GtkWidgetClass *widget_class);
+// Header /usr/include/gtk-4.0/gtk/gtkwidgetpaintable.h
 GType (gtk_widget_paintable_get_type)(void);
 GdkPaintable * (gtk_widget_paintable_new)(GtkWidget *widget);
 GtkWidget * (gtk_widget_paintable_get_widget)(GtkWidgetPaintable *self);
 void (gtk_widget_paintable_set_widget)(GtkWidgetPaintable *self, GtkWidget *widget);
+// Header /usr/include/gtk-4.0/gtk/gtkwindow.h
 GType (gtk_window_get_type)(void);
 GtkWidget* (gtk_window_new)(void);
 void (gtk_window_set_title)(GtkWindow *window, const char *title);
@@ -4002,6 +4281,7 @@ void (gtk_window_destroy)(GtkWindow *window);
 void (gtk_window_set_interactive_debugging)(gboolean enable);
 void (gtk_window_set_handle_menubar_accel)(GtkWindow *window, gboolean handle_menubar_accel);
 gboolean (gtk_window_get_handle_menubar_accel)(GtkWindow *window);
+// Header /usr/include/gtk-4.0/gtk/gtkwindowcontrols.h
 GType (gtk_window_controls_get_type)(void);
 GtkWidget * (gtk_window_controls_new)(GtkPackType side);
 GtkPackType (gtk_window_controls_get_side)(GtkWindowControls *self);
@@ -4009,29 +4289,37 @@ void (gtk_window_controls_set_side)(GtkWindowControls *self, GtkPackType side);
 const char * (gtk_window_controls_get_decoration_layout)(GtkWindowControls *self);
 void (gtk_window_controls_set_decoration_layout)(GtkWindowControls *self, const char *layout);
 gboolean (gtk_window_controls_get_empty)(GtkWindowControls *self);
+// Header /usr/include/gtk-4.0/gtk/gtkwindowgroup.h
 GType (gtk_window_group_get_type)(void);
 GtkWindowGroup * (gtk_window_group_new)(void);
 void (gtk_window_group_add_window)(GtkWindowGroup *window_group, GtkWindow *window);
 void (gtk_window_group_remove_window)(GtkWindowGroup *window_group, GtkWindow *window);
 GList * (gtk_window_group_list_windows)(GtkWindowGroup *window_group);
+// Header /usr/include/gtk-4.0/gtk/gtkwindowhandle.h
 GType (gtk_window_handle_get_type)(void);
 GtkWidget * (gtk_window_handle_new)(void);
 GtkWidget * (gtk_window_handle_get_child)(GtkWindowHandle *self);
 void (gtk_window_handle_set_child)(GtkWindowHandle *self, GtkWidget *child);
+// Header /usr/include/gtk-4.0/gdk/broadway/gdkbroadwaycursor.h
 GType (gdk_broadway_cursor_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/broadway/gdkbroadwaydisplay.h
 GType (gdk_broadway_display_get_type)(void);
 void (gdk_broadway_display_show_keyboard)(GdkBroadwayDisplay *display);
 void (gdk_broadway_display_hide_keyboard)(GdkBroadwayDisplay *display);
 int (gdk_broadway_display_get_surface_scale)(GdkDisplay *display);
 void (gdk_broadway_display_set_surface_scale)(GdkDisplay *display, int scale);
+// Header /usr/include/gtk-4.0/gdk/broadway/gdkbroadwaymonitor.h
 GType (gdk_broadway_monitor_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/broadway/gdkbroadwaysurface.h
 GType (gdk_broadway_surface_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/wayland/gdkwaylanddevice.h
 GType (gdk_wayland_device_get_type)(void);
 struct wl_seat* (gdk_wayland_device_get_wl_seat)(GdkDevice *device);
 struct wl_pointer* (gdk_wayland_device_get_wl_pointer)(GdkDevice *device);
 struct wl_keyboard* (gdk_wayland_device_get_wl_keyboard)(GdkDevice *device);
 struct xkb_keymap* (gdk_wayland_device_get_xkb_keymap)(GdkDevice *device);
 const char* (gdk_wayland_device_get_node_path)(GdkDevice *device);
+// Header /usr/include/gtk-4.0/gdk/wayland/gdkwaylanddisplay.h
 GType (gdk_wayland_display_get_type)(void);
 struct wl_display* (gdk_wayland_display_get_wl_display)(GdkDisplay *display);
 struct wl_compositor* (gdk_wayland_display_get_wl_compositor)(GdkDisplay *display);
@@ -4040,25 +4328,37 @@ const char * (gdk_wayland_display_get_startup_notification_id)(GdkDisplay *displ
 void (gdk_wayland_display_set_startup_notification_id)(GdkDisplay *display, const char *startup_id);
 gboolean (gdk_wayland_display_query_registry)(GdkDisplay *display, const char *global);
 gpointer (gdk_wayland_display_get_egl_display)(GdkDisplay *display);
+// Header /usr/include/gtk-4.0/gdk/wayland/gdkwaylandglcontext.h
 GType (gdk_wayland_gl_context_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/wayland/gdkwaylandmonitor.h
 GType (gdk_wayland_monitor_get_type)(void);
 struct wl_output* (gdk_wayland_monitor_get_wl_output)(GdkMonitor *monitor);
+// Header /usr/include/gtk-4.0/gdk/wayland/gdkwaylandpopup.h
 GType (gdk_wayland_popup_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/wayland/gdkwaylandseat.h
 GType (gdk_wayland_seat_get_type)(void);
 struct wl_seat * (gdk_wayland_seat_get_wl_seat)(GdkSeat *seat);
+// Header /usr/include/gtk-4.0/gdk/wayland/gdkwaylandsurface.h
 GType (gdk_wayland_surface_get_type)(void);
 struct wl_surface* (gdk_wayland_surface_get_wl_surface)(GdkSurface *surface);
+// Header /usr/include/gtk-4.0/gdk/wayland/gdkwaylandtoplevel.h
 GType (gdk_wayland_toplevel_get_type)(void);
 gboolean (gdk_wayland_toplevel_export_handle)(GdkToplevel *toplevel, GdkWaylandToplevelExported callback, gpointer user_data, GDestroyNotify destroy_func);
 void (gdk_wayland_toplevel_unexport_handle)(GdkToplevel *toplevel);
 void (gdk_wayland_toplevel_drop_exported_handle)(GdkToplevel *toplevel, const char *handle);
 gboolean (gdk_wayland_toplevel_set_transient_for_exported)(GdkToplevel *toplevel, const char *parent_handle_str);
 void (gdk_wayland_toplevel_set_application_id)(GdkToplevel *toplevel, const char *application_id);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11applaunchcontext.h
 GType (gdk_x11_app_launch_context_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11device-xi2.h
 GType (gdk_x11_device_xi2_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11device.h
 int (gdk_x11_device_get_id)(GdkDevice *device);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11devicemanager-xi2.h
 GType (gdk_x11_device_manager_xi2_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11devicemanager.h
 GdkDevice * (gdk_x11_device_manager_lookup)(GdkX11DeviceManagerXI2 *device_manager, int device_id);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11display.h
 GType (gdk_x11_display_get_type)(void);
 GdkDisplay * (gdk_x11_display_open)(const char *display_name);
 Display * (gdk_x11_display_get_xdisplay)(GdkDisplay *display);
@@ -4081,16 +4381,21 @@ int (gdk_x11_display_error_trap_pop)(GdkDisplay *display);
 void (gdk_x11_display_error_trap_pop_ignored)(GdkDisplay *display);
 void (gdk_x11_set_sm_client_id)(const char *sm_client_id);
 GdkSurface * (gdk_x11_display_get_default_group)(GdkDisplay *display);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11dnd.h
 GType (gdk_x11_drag_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11glcontext.h
 GType (gdk_x11_gl_context_get_type)(void);
 gboolean (gdk_x11_display_get_glx_version)(GdkDisplay *display, int *major, int *minor);
 gboolean (gdk_x11_display_get_egl_version)(GdkDisplay *display, int *major, int *minor);
 gpointer (gdk_x11_display_get_egl_display)(GdkDisplay *display);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11monitor.h
 GType (gdk_x11_monitor_get_type)(void);
 XID (gdk_x11_monitor_get_output)(GdkMonitor *monitor);
 void (gdk_x11_monitor_get_workarea)(GdkMonitor *monitor, GdkRectangle *workarea);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11property.h
 const char * (gdk_x11_get_xatom_name_for_display)(GdkDisplay *display, Atom xatom);
 Atom (gdk_x11_get_xatom_by_name_for_display)(GdkDisplay *display, const char *atom_name);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11screen.h
 GType (gdk_x11_screen_get_type)(void);
 Screen * (gdk_x11_screen_get_xscreen)(GdkX11Screen *screen);
 int (gdk_x11_screen_get_screen_number)(GdkX11Screen *screen);
@@ -4099,11 +4404,13 @@ gboolean (gdk_x11_screen_supports_net_wm_hint)(GdkX11Screen *screen, const char 
 XID (gdk_x11_screen_get_monitor_output)(GdkX11Screen *screen, int monitor_num);
 guint32 (gdk_x11_screen_get_number_of_desktops)(GdkX11Screen *screen);
 guint32 (gdk_x11_screen_get_current_desktop)(GdkX11Screen *screen);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11selection.h
 void (gdk_x11_free_text_list)(char **list);
 int (gdk_x11_display_string_to_compound_text)(GdkDisplay *display, const char *str, const char **encoding, int *format, guchar **ctext, int *length);
 gboolean (gdk_x11_display_utf8_to_compound_text)(GdkDisplay *display, const char *str, const char **encoding, int *format, guchar **ctext, int *length);
 void (gdk_x11_free_compound_text)(guchar *ctext);
 int (gdk_x11_display_text_property_to_text_list)(GdkDisplay *display, const char *encoding, int format, const guchar *text, int length, char ***list);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11surface.h
 GType (gdk_x11_surface_get_type)(void);
 Window (gdk_x11_surface_get_xid)(GdkSurface *surface);
 void (gdk_x11_surface_set_user_time)(GdkSurface *surface, guint32 timestamp);
@@ -4120,22 +4427,28 @@ void (gdk_x11_surface_set_skip_pager_hint)(GdkSurface *surface, gboolean skips_p
 void (gdk_x11_surface_set_urgency_hint)(GdkSurface *surface, gboolean urgent);
 void (gdk_x11_surface_set_group)(GdkSurface *surface, GdkSurface *leader);
 GdkSurface * (gdk_x11_surface_get_group)(GdkSurface *surface);
+// Header /usr/include/gtk-4.0/gdk/x11/gdkx11utils.h
+// Header /usr/include/gtk-4.0/gdk/deprecated/gdkpixbuf.h
 GdkPixbuf* (gdk_pixbuf_get_from_texture)(GdkTexture *texture);
 GdkPixbuf* (gdk_pixbuf_get_from_surface)(cairo_surface_t *surface, int src_x, int src_y, int width, int height);
+// Header /usr/include/gtk-4.0/gdk/gdkapplaunchcontext.h
 GType (gdk_app_launch_context_get_type)(void);
 GdkDisplay * (gdk_app_launch_context_get_display)(GdkAppLaunchContext *context);
 void (gdk_app_launch_context_set_desktop)(GdkAppLaunchContext *context, int desktop);
 void (gdk_app_launch_context_set_timestamp)(GdkAppLaunchContext *context, guint32 timestamp);
 void (gdk_app_launch_context_set_icon)(GdkAppLaunchContext *context, GIcon *icon);
 void (gdk_app_launch_context_set_icon_name)(GdkAppLaunchContext *context, const char *icon_name);
+// Header /usr/include/gtk-4.0/gdk/gdkcairo.h
 void (gdk_cairo_set_source_pixbuf)(cairo_t *cr, const GdkPixbuf *pixbuf, double pixbuf_x, double pixbuf_y);
 void (gdk_cairo_rectangle)(cairo_t *cr, const GdkRectangle *rectangle);
 void (gdk_cairo_region)(cairo_t *cr, const cairo_region_t *region);
 cairo_region_t * (gdk_cairo_region_create_from_surface)(cairo_surface_t *surface);
 void (gdk_cairo_draw_from_gl)(cairo_t *cr, GdkSurface *surface, int source, int source_type, int buffer_scale, int x, int y, int width, int height);
 void (gdk_cairo_set_source_rgba)(cairo_t *cr, const GdkRGBA *rgba);
+// Header /usr/include/gtk-4.0/gdk/gdkcairocontext.h
 GType (gdk_cairo_context_get_type)(void);
 cairo_t * (gdk_cairo_context_cairo_create)(GdkCairoContext *self);
+// Header /usr/include/gtk-4.0/gdk/gdkclipboard.h
 GType (gdk_clipboard_get_type)(void);
 GdkDisplay * (gdk_clipboard_get_display)(GdkClipboard *clipboard);
 GdkContentFormats * (gdk_clipboard_get_formats)(GdkClipboard *clipboard);
@@ -4156,6 +4469,8 @@ void (gdk_clipboard_set_valist)(GdkClipboard *clipboard, GType type, va_list arg
 void (gdk_clipboard_set_value)(GdkClipboard *clipboard, const GValue *value);
 void (gdk_clipboard_set_text)(GdkClipboard *clipboard, const char *text);
 void (gdk_clipboard_set_texture)(GdkClipboard *clipboard, GdkTexture *texture);
+// Header /usr/include/gtk-4.0/gdk/gdkconfig.h
+// Header /usr/include/gtk-4.0/gdk/gdkcontentdeserializer.h
 GType (gdk_content_deserializer_get_type)(void);
 const char * (gdk_content_deserializer_get_mime_type)(GdkContentDeserializer *deserializer);
 GType (gdk_content_deserializer_get_gtype)(GdkContentDeserializer *deserializer);
@@ -4173,6 +4488,7 @@ GdkContentFormats * (gdk_content_formats_union_deserialize_mime_types)(GdkConten
 void (gdk_content_register_deserializer)(const char *mime_type, GType type, GdkContentDeserializeFunc deserialize, gpointer data, GDestroyNotify notify);
 void (gdk_content_deserialize_async)(GInputStream *stream, const char *mime_type, GType type, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 gboolean (gdk_content_deserialize_finish)(GAsyncResult *result, GValue *value, GError **error);
+// Header /usr/include/gtk-4.0/gdk/gdkcontentformats.h
 GType (gdk_content_formats_get_type)(void);
 const char * (gdk_intern_mime_type)(const char *string);
 GdkContentFormats * (gdk_content_formats_new)(const char **mime_types, guint n_mime_types);
@@ -4203,6 +4519,7 @@ GType (gdk_file_list_get_type)(void);
 GSList * (gdk_file_list_get_files)(GdkFileList *file_list);
 GdkFileList * (gdk_file_list_new_from_list)(GSList *files);
 GdkFileList * (gdk_file_list_new_from_array)(GFile **files, gsize n_files);
+// Header /usr/include/gtk-4.0/gdk/gdkcontentprovider.h
 GType (gdk_content_provider_get_type)(void);
 GdkContentFormats * (gdk_content_provider_ref_formats)(GdkContentProvider *provider);
 GdkContentFormats * (gdk_content_provider_ref_storable_formats)(GdkContentProvider *provider);
@@ -4210,9 +4527,11 @@ void (gdk_content_provider_content_changed)(GdkContentProvider *provider);
 void (gdk_content_provider_write_mime_type_async)(GdkContentProvider *provider, const char *mime_type, GOutputStream *stream, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 gboolean (gdk_content_provider_write_mime_type_finish)(GdkContentProvider *provider, GAsyncResult *result, GError **error);
 gboolean (gdk_content_provider_get_value)(GdkContentProvider *provider, GValue *value, GError **error);
+// Header /usr/include/gtk-4.0/gdk/gdkcontentproviderimpl.h
 GdkContentProvider * (gdk_content_provider_new_union)(GdkContentProvider **providers, gsize n_providers);
 GdkContentProvider * (gdk_content_provider_new_for_bytes)(const char *mime_type, GBytes *bytes);
 GdkContentProvider * (gdk_content_provider_new_for_value)(const GValue *value);
+// Header /usr/include/gtk-4.0/gdk/gdkcontentserializer.h
 GType (gdk_content_serializer_get_type)(void);
 const char * (gdk_content_serializer_get_mime_type)(GdkContentSerializer *serializer);
 GType (gdk_content_serializer_get_gtype)(GdkContentSerializer *serializer);
@@ -4230,6 +4549,7 @@ GdkContentFormats * (gdk_content_formats_union_serialize_mime_types)(GdkContentF
 void (gdk_content_register_serializer)(GType type, const char *mime_type, GdkContentSerializeFunc serialize, gpointer data, GDestroyNotify notify);
 void (gdk_content_serialize_async)(GOutputStream *stream, const char *mime_type, const GValue *value, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 gboolean (gdk_content_serialize_finish)(GAsyncResult *result, GError **error);
+// Header /usr/include/gtk-4.0/gdk/gdkcursor.h
 GType (gdk_cursor_get_type)(void);
 GdkCursor* (gdk_cursor_new_from_texture)(GdkTexture *texture, int hotspot_x, int hotspot_y, GdkCursor *fallback);
 GdkCursor* (gdk_cursor_new_from_name)(const char *name, GdkCursor *fallback);
@@ -4238,6 +4558,7 @@ const char* (gdk_cursor_get_name)(GdkCursor *cursor);
 GdkTexture* (gdk_cursor_get_texture)(GdkCursor *cursor);
 int (gdk_cursor_get_hotspot_x)(GdkCursor *cursor);
 int (gdk_cursor_get_hotspot_y)(GdkCursor *cursor);
+// Header /usr/include/gtk-4.0/gdk/gdkdevice.h
 GType (gdk_device_get_type)(void);
 const char * (gdk_device_get_name)(GdkDevice *device);
 const char * (gdk_device_get_vendor_id)(GdkDevice *device);
@@ -4256,16 +4577,19 @@ gboolean (gdk_device_get_num_lock_state)(GdkDevice *device);
 gboolean (gdk_device_get_scroll_lock_state)(GdkDevice *device);
 GdkSurface * (gdk_device_get_surface_at_position)(GdkDevice *device, double *win_x, double *win_y);
 guint32 (gdk_device_get_timestamp)(GdkDevice *device);
+// Header /usr/include/gtk-4.0/gdk/gdkdevicepad.h
 GType (gdk_device_pad_get_type)(void);
 int (gdk_device_pad_get_n_groups)(GdkDevicePad *pad);
 int (gdk_device_pad_get_group_n_modes)(GdkDevicePad *pad, int group_idx);
 int (gdk_device_pad_get_n_features)(GdkDevicePad *pad, GdkDevicePadFeature feature);
 int (gdk_device_pad_get_feature_group)(GdkDevicePad *pad, GdkDevicePadFeature feature, int feature_idx);
+// Header /usr/include/gtk-4.0/gdk/gdkdevicetool.h
 GType (gdk_device_tool_get_type)(void);
 guint64 (gdk_device_tool_get_serial)(GdkDeviceTool *tool);
 guint64 (gdk_device_tool_get_hardware_id)(GdkDeviceTool *tool);
 GdkDeviceToolType (gdk_device_tool_get_tool_type)(GdkDeviceTool *tool);
 GdkAxisFlags (gdk_device_tool_get_axes)(GdkDeviceTool *tool);
+// Header /usr/include/gtk-4.0/gdk/gdkdisplay.h
 GType (gdk_display_get_type)(void);
 GdkDisplay* (gdk_display_open)(const char *display_name);
 const char * (gdk_display_get_name)(GdkDisplay *display);
@@ -4297,6 +4621,7 @@ gboolean (gdk_display_map_keycode)(GdkDisplay *display, guint keycode, GdkKeymap
 gboolean (gdk_display_translate_key)(GdkDisplay *display, guint keycode, GdkModifierType state, int group, guint *keyval, int *effective_group, int *level, GdkModifierType *consumed);
 gboolean (gdk_display_get_setting)(GdkDisplay *display, const char *name, GValue *value);
 GdkDmabufFormats * (gdk_display_get_dmabuf_formats)(GdkDisplay *display);
+// Header /usr/include/gtk-4.0/gdk/gdkdisplaymanager.h
 GType (gdk_display_manager_get_type)(void);
 GdkDisplayManager* (gdk_display_manager_get)(void);
 GdkDisplay * (gdk_display_manager_get_default_display)(GdkDisplayManager *manager);
@@ -4304,6 +4629,7 @@ void (gdk_display_manager_set_default_display)(GdkDisplayManager *manager, GdkDi
 GSList * (gdk_display_manager_list_displays)(GdkDisplayManager *manager);
 GdkDisplay * (gdk_display_manager_open_display)(GdkDisplayManager *manager, const char *name);
 void (gdk_set_allowed_backends)(const char *backends);
+// Header /usr/include/gtk-4.0/gdk/gdkdmabufformats.h
 GType (gdk_dmabuf_formats_get_type)(void);
 GdkDmabufFormats * (gdk_dmabuf_formats_ref)(GdkDmabufFormats *formats);
 void (gdk_dmabuf_formats_unref)(GdkDmabufFormats *formats);
@@ -4311,8 +4637,10 @@ gsize (gdk_dmabuf_formats_get_n_formats)(GdkDmabufFormats *formats);
 void (gdk_dmabuf_formats_get_format)(GdkDmabufFormats *formats, gsize idx, guint32 *fourcc, guint64 *modifier);
 gboolean (gdk_dmabuf_formats_contains)(GdkDmabufFormats *formats, guint32 fourcc, guint64 modifier);
 gboolean (gdk_dmabuf_formats_equal)(const GdkDmabufFormats *formats1, const GdkDmabufFormats *formats2);
+// Header /usr/include/gtk-4.0/gdk/gdkdmabuftexture.h
 GType (gdk_dmabuf_texture_get_type)(void);
 GQuark (gdk_dmabuf_error_quark)(void);
+// Header /usr/include/gtk-4.0/gdk/gdkdmabuftexturebuilder.h
 GType (gdk_dmabuf_texture_builder_get_type)(void);
 GdkDmabufTextureBuilder* (gdk_dmabuf_texture_builder_new)(void);
 GdkDisplay * (gdk_dmabuf_texture_builder_get_display)(GdkDmabufTextureBuilder *self);
@@ -4340,6 +4668,7 @@ void (gdk_dmabuf_texture_builder_set_update_texture)(GdkDmabufTextureBuilder *se
 cairo_region_t * (gdk_dmabuf_texture_builder_get_update_region)(GdkDmabufTextureBuilder *self);
 void (gdk_dmabuf_texture_builder_set_update_region)(GdkDmabufTextureBuilder *self, cairo_region_t *region);
 GdkTexture * (gdk_dmabuf_texture_builder_build)(GdkDmabufTextureBuilder *self, GDestroyNotify destroy, gpointer data, GError **error);
+// Header /usr/include/gtk-4.0/gdk/gdkdrag.h
 GType (gdk_drag_get_type)(void);
 GdkDisplay * (gdk_drag_get_display)(GdkDrag *drag);
 GdkDevice * (gdk_drag_get_device)(GdkDrag *drag);
@@ -4353,9 +4682,12 @@ GdkSurface* (gdk_drag_get_drag_surface)(GdkDrag *drag);
 void (gdk_drag_set_hotspot)(GdkDrag *drag, int hot_x, int hot_y);
 GdkContentProvider * (gdk_drag_get_content)(GdkDrag *drag);
 GdkSurface * (gdk_drag_get_surface)(GdkDrag *drag);
+// Header /usr/include/gtk-4.0/gdk/gdkdragsurface.h
 GType (gdk_drag_surface_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/gdkdragsurfacesize.h
 GType (gdk_drag_surface_size_get_type)(void);
 void (gdk_drag_surface_size_set_size)(GdkDragSurfaceSize *size, int width, int height);
+// Header /usr/include/gtk-4.0/gdk/gdkdrawcontext.h
 GType (gdk_draw_context_get_type)(void);
 GdkDisplay * (gdk_draw_context_get_display)(GdkDrawContext *context);
 GdkSurface * (gdk_draw_context_get_surface)(GdkDrawContext *context);
@@ -4363,6 +4695,7 @@ void (gdk_draw_context_begin_frame)(GdkDrawContext *context, const cairo_region_
 void (gdk_draw_context_end_frame)(GdkDrawContext *context);
 gboolean (gdk_draw_context_is_in_frame)(GdkDrawContext *context);
 const cairo_region_t * (gdk_draw_context_get_frame_region)(GdkDrawContext *context);
+// Header /usr/include/gtk-4.0/gdk/gdkdrop.h
 GType (gdk_drop_get_type)(void);
 GdkDisplay * (gdk_drop_get_display)(GdkDrop *self);
 GdkDevice * (gdk_drop_get_device)(GdkDrop *self);
@@ -4376,6 +4709,8 @@ void (gdk_drop_read_async)(GdkDrop *self, const char **mime_types, int io_priori
 GInputStream * (gdk_drop_read_finish)(GdkDrop *self, GAsyncResult *result, const char **out_mime_type, GError **error);
 void (gdk_drop_read_value_async)(GdkDrop *self, GType type, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 const GValue * (gdk_drop_read_value_finish)(GdkDrop *self, GAsyncResult *result, GError **error);
+// Header /usr/include/gtk-4.0/gdk/gdkenums.h
+// Header /usr/include/gtk-4.0/gdk/gdkenumtypes.h
 GType (gdk_input_source_get_type)(void);
 GType (gdk_device_pad_feature_get_type)(void);
 GType (gdk_device_tool_type_get_type)(void);
@@ -4407,6 +4742,7 @@ GType (gdk_surface_edge_get_type)(void);
 GType (gdk_fullscreen_mode_get_type)(void);
 GType (gdk_toplevel_state_get_type)(void);
 GType (gdk_titlebar_gesture_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/gdkevents.h
 GType (gdk_event_get_type)(void);
 GType (gdk_event_sequence_get_type)(void);
 GType (gdk_button_event_get_type)(void);
@@ -4471,6 +4807,7 @@ gboolean (gdk_events_get_angle)(GdkEvent *event1, GdkEvent *event2, double *angl
 gboolean (gdk_events_get_center)(GdkEvent *event1, GdkEvent *event2, double *x, double *y);
 GdkKeyMatch (gdk_key_event_matches)(GdkEvent *event, guint keyval, GdkModifierType modifiers);
 gboolean (gdk_key_event_get_match)(GdkEvent *event, guint *keyval, GdkModifierType *modifiers);
+// Header /usr/include/gtk-4.0/gdk/gdkframeclock.h
 GType (gdk_frame_clock_get_type)(void);
 gint64 (gdk_frame_clock_get_frame_time)(GdkFrameClock *frame_clock);
 void (gdk_frame_clock_request_phase)(GdkFrameClock *frame_clock, GdkFrameClockPhase phase);
@@ -4482,6 +4819,7 @@ GdkFrameTimings* (gdk_frame_clock_get_timings)(GdkFrameClock *frame_clock, gint6
 GdkFrameTimings* (gdk_frame_clock_get_current_timings)(GdkFrameClock *frame_clock);
 void (gdk_frame_clock_get_refresh_info)(GdkFrameClock *frame_clock, gint64 base_time, gint64 *refresh_interval_return, gint64 *presentation_time_return);
 double (gdk_frame_clock_get_fps)(GdkFrameClock *frame_clock);
+// Header /usr/include/gtk-4.0/gdk/gdkframetimings.h
 GdkFrameTimings* (gdk_frame_timings_ref)(GdkFrameTimings *timings);
 void (gdk_frame_timings_unref)(GdkFrameTimings *timings);
 gint64 (gdk_frame_timings_get_frame_counter)(GdkFrameTimings *timings);
@@ -4491,6 +4829,7 @@ gint64 (gdk_frame_timings_get_presentation_time)(GdkFrameTimings *timings);
 gint64 (gdk_frame_timings_get_refresh_interval)(GdkFrameTimings *timings);
 gint64 (gdk_frame_timings_get_predicted_presentation_time)(GdkFrameTimings *timings);
 GType (gdk_frame_timings_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/gdkglcontext.h
 GType (gdk_gl_context_get_type)(void);
 GQuark (gdk_gl_error_quark)(void);
 GdkDisplay * (gdk_gl_context_get_display)(GdkGLContext *context);
@@ -4514,9 +4853,11 @@ gboolean (gdk_gl_context_realize)(GdkGLContext *context, GError **error);
 void (gdk_gl_context_make_current)(GdkGLContext *context);
 GdkGLContext * (gdk_gl_context_get_current)(void);
 void (gdk_gl_context_clear_current)(void);
+// Header /usr/include/gtk-4.0/gdk/gdkgltexture.h
 GType (gdk_gl_texture_get_type)(void);
 GdkTexture * (gdk_gl_texture_new)(GdkGLContext *context, guint id, int width, int height, GDestroyNotify destroy, gpointer data);
 void (gdk_gl_texture_release)(GdkGLTexture *self);
+// Header /usr/include/gtk-4.0/gdk/gdkgltexturebuilder.h
 GType (gdk_gl_texture_builder_get_type)(void);
 GdkGLTextureBuilder * (gdk_gl_texture_builder_new)(void);
 GdkGLContext * (gdk_gl_texture_builder_get_context)(GdkGLTextureBuilder *self);
@@ -4538,6 +4879,7 @@ void (gdk_gl_texture_builder_set_update_texture)(GdkGLTextureBuilder *self, GdkT
 cairo_region_t * (gdk_gl_texture_builder_get_update_region)(GdkGLTextureBuilder *self);
 void (gdk_gl_texture_builder_set_update_region)(GdkGLTextureBuilder *self, cairo_region_t *region);
 GdkTexture * (gdk_gl_texture_builder_build)(GdkGLTextureBuilder *self, GDestroyNotify destroy, gpointer data);
+// Header /usr/include/gtk-4.0/gdk/gdkkeys.h
 guint (gdk_keyval_from_name)(const char *keyval_name);
 void (gdk_keyval_convert_case)(guint symbol, guint *lower, guint *upper);
 guint (gdk_keyval_to_upper)(guint keyval);
@@ -4547,8 +4889,10 @@ gboolean (gdk_keyval_is_lower)(guint keyval);
 guint32 (gdk_keyval_to_unicode)(guint keyval);
 guint (gdk_unicode_to_keyval)(guint32 wc);
 const char* (gdk_keyval_name)(guint keyval);
+// Header /usr/include/gtk-4.0/gdk/gdkmemorytexture.h
 GType (gdk_memory_texture_get_type)(void);
 GdkTexture * (gdk_memory_texture_new)(int width, int height, GdkMemoryFormat format, GBytes *bytes, gsize stride);
+// Header /usr/include/gtk-4.0/gdk/gdkmonitor.h
 GType (gdk_monitor_get_type)(void);
 GdkDisplay * (gdk_monitor_get_display)(GdkMonitor *monitor);
 void (gdk_monitor_get_geometry)(GdkMonitor *monitor, GdkRectangle *geometry);
@@ -4563,6 +4907,7 @@ int (gdk_monitor_get_refresh_rate)(GdkMonitor *monitor);
 GdkSubpixelLayout (gdk_monitor_get_subpixel_layout)(GdkMonitor *monitor);
 gboolean (gdk_monitor_is_valid)(GdkMonitor *monitor);
 const char * (gdk_monitor_get_description)(GdkMonitor *monitor);
+// Header /usr/include/gtk-4.0/gdk/gdkpaintable.h
 GType (gdk_paintable_get_type)(void);
 GdkPaintable * (gdk_paintable_get_current_image)(GdkPaintable *paintable);
 GdkPaintableFlags (gdk_paintable_get_flags)(GdkPaintable *paintable);
@@ -4573,8 +4918,10 @@ void (gdk_paintable_compute_concrete_size)(GdkPaintable *paintable, double speci
 void (gdk_paintable_invalidate_contents)(GdkPaintable *paintable);
 void (gdk_paintable_invalidate_size)(GdkPaintable *paintable);
 GdkPaintable * (gdk_paintable_new_empty)(int intrinsic_width, int intrinsic_height);
+// Header /usr/include/gtk-4.0/gdk/gdkpango.h
 cairo_region_t* (gdk_pango_layout_get_clip_region)(PangoLayout *layout, int x_origin, int y_origin, const int *index_ranges, int n_ranges);
 cairo_region_t* (gdk_pango_layout_line_get_clip_region)(PangoLayoutLine *line, int x_origin, int y_origin, const int *index_ranges, int n_ranges);
+// Header /usr/include/gtk-4.0/gdk/gdkpopup.h
 GType (gdk_popup_get_type)(void);
 GdkGravity (gdk_popup_get_surface_anchor)(GdkPopup *popup);
 GdkGravity (gdk_popup_get_rect_anchor)(GdkPopup *popup);
@@ -4582,6 +4929,7 @@ GdkSurface * (gdk_popup_get_parent)(GdkPopup *popup);
 int (gdk_popup_get_position_x)(GdkPopup *popup);
 int (gdk_popup_get_position_y)(GdkPopup *popup);
 gboolean (gdk_popup_get_autohide)(GdkPopup *popup);
+// Header /usr/include/gtk-4.0/gdk/gdkpopuplayout.h
 GType (gdk_popup_layout_get_type)(void);
 GdkPopupLayout * (gdk_popup_layout_new)(const GdkRectangle *anchor_rect, GdkGravity rect_anchor, GdkGravity surface_anchor);
 GdkPopupLayout * (gdk_popup_layout_ref)(GdkPopupLayout *layout);
@@ -4600,11 +4948,13 @@ void (gdk_popup_layout_set_offset)(GdkPopupLayout *layout, int dx, int dy);
 void (gdk_popup_layout_get_offset)(GdkPopupLayout *layout, int *dx, int *dy);
 void (gdk_popup_layout_set_shadow_width)(GdkPopupLayout *layout, int left, int right, int top, int bottom);
 void (gdk_popup_layout_get_shadow_width)(GdkPopupLayout *layout, int *left, int *right, int *top, int *bottom);
+// Header /usr/include/gtk-4.0/gdk/gdkrectangle.h
 void (gdk_rectangle_union)(const GdkRectangle *src1, const GdkRectangle *src2, GdkRectangle *dest);
 gboolean (gdk_rectangle_equal)(const GdkRectangle *rect1, const GdkRectangle *rect2);
 gboolean (gdk_rectangle_contains_point)(const GdkRectangle *rect, int x, int y);
 GType (gdk_rectangle_get_type)(void);
 gboolean (gdk_rectangle_intersect)(const GdkRectangle *src1, const GdkRectangle *src2, GdkRectangle *dest);
+// Header /usr/include/gtk-4.0/gdk/gdkrgba.h
 GType (gdk_rgba_get_type)(void);
 GdkRGBA * (gdk_rgba_copy)(const GdkRGBA *rgba);
 void (gdk_rgba_free)(GdkRGBA *rgba);
@@ -4614,6 +4964,7 @@ guint (gdk_rgba_hash)(gconstpointer p);
 gboolean (gdk_rgba_equal)(gconstpointer p1, gconstpointer p2);
 gboolean (gdk_rgba_parse)(GdkRGBA *rgba, const char *spec);
 char * (gdk_rgba_to_string)(const GdkRGBA *rgba);
+// Header /usr/include/gtk-4.0/gdk/gdkseat.h
 GType (gdk_seat_get_type)(void);
 GdkDisplay * (gdk_seat_get_display)(GdkSeat *seat);
 GdkSeatCapabilities (gdk_seat_get_capabilities)(GdkSeat *seat);
@@ -4621,7 +4972,9 @@ GList * (gdk_seat_get_devices)(GdkSeat *seat, GdkSeatCapabilities capabilities);
 GList * (gdk_seat_get_tools)(GdkSeat *seat);
 GdkDevice * (gdk_seat_get_pointer)(GdkSeat *seat);
 GdkDevice * (gdk_seat_get_keyboard)(GdkSeat *seat);
+// Header /usr/include/gtk-4.0/gdk/gdksnapshot.h
 GType (gdk_snapshot_get_type)(void);
+// Header /usr/include/gtk-4.0/gdk/gdksurface.h
 GType (gdk_surface_get_type)(void);
 GdkSurface * (gdk_surface_new_toplevel)(GdkDisplay *display);
 GdkSurface * (gdk_surface_new_popup)(GdkSurface *parent, gboolean autohide);
@@ -4650,6 +5003,7 @@ void (gdk_surface_set_opaque_region)(GdkSurface *surface, cairo_region_t *region
 GdkCairoContext* (gdk_surface_create_cairo_context)(GdkSurface *surface);
 GdkGLContext * (gdk_surface_create_gl_context)(GdkSurface *surface, GError **error);
 GdkVulkanContext * (gdk_surface_create_vulkan_context)(GdkSurface *surface, GError **error);
+// Header /usr/include/gtk-4.0/gdk/gdktexture.h
 GType (gdk_texture_get_type)(void);
 GQuark (gdk_texture_error_quark)(void);
 GdkTexture * (gdk_texture_new_for_pixbuf)(GdkPixbuf *pixbuf);
@@ -4665,6 +5019,7 @@ gboolean (gdk_texture_save_to_png)(GdkTexture *texture, const char *filename);
 GBytes * (gdk_texture_save_to_png_bytes)(GdkTexture *texture);
 gboolean (gdk_texture_save_to_tiff)(GdkTexture *texture, const char *filename);
 GBytes * (gdk_texture_save_to_tiff_bytes)(GdkTexture *texture);
+// Header /usr/include/gtk-4.0/gdk/gdktexturedownloader.h
 GType (gdk_texture_downloader_get_type)(void);
 GdkTextureDownloader * (gdk_texture_downloader_new)(GdkTexture *texture);
 GdkTextureDownloader * (gdk_texture_downloader_copy)(const GdkTextureDownloader *self);
@@ -4675,6 +5030,7 @@ void (gdk_texture_downloader_set_format)(GdkTextureDownloader *self, GdkMemoryFo
 GdkMemoryFormat (gdk_texture_downloader_get_format)(const GdkTextureDownloader *self);
 void (gdk_texture_downloader_download_into)(const GdkTextureDownloader *self, guchar *data, gsize stride);
 GBytes * (gdk_texture_downloader_download_bytes)(const GdkTextureDownloader *self, gsize *out_stride);
+// Header /usr/include/gtk-4.0/gdk/gdktoplevel.h
 GType (gdk_toplevel_get_type)(void);
 gboolean (gdk_toplevel_minimize)(GdkToplevel *toplevel);
 gboolean (gdk_toplevel_lower)(GdkToplevel *toplevel);
@@ -4694,6 +5050,7 @@ void (gdk_toplevel_restore_system_shortcuts)(GdkToplevel *toplevel);
 void (gdk_toplevel_begin_resize)(GdkToplevel *toplevel, GdkSurfaceEdge edge, GdkDevice *device, int button, double x, double y, guint32 timestamp);
 void (gdk_toplevel_begin_move)(GdkToplevel *toplevel, GdkDevice *device, int button, double x, double y, guint32 timestamp);
 gboolean (gdk_toplevel_titlebar_gesture)(GdkToplevel *toplevel, GdkTitlebarGesture gesture);
+// Header /usr/include/gtk-4.0/gdk/gdktoplevellayout.h
 GType (gdk_toplevel_layout_get_type)(void);
 GdkToplevelLayout * (gdk_toplevel_layout_new)(void);
 GdkToplevelLayout * (gdk_toplevel_layout_ref)(GdkToplevelLayout *layout);
@@ -4707,23 +5064,31 @@ gboolean (gdk_toplevel_layout_get_fullscreen)(GdkToplevelLayout *layout, gboolea
 GdkMonitor * (gdk_toplevel_layout_get_fullscreen_monitor)(GdkToplevelLayout *layout);
 void (gdk_toplevel_layout_set_resizable)(GdkToplevelLayout *layout, gboolean resizable);
 gboolean (gdk_toplevel_layout_get_resizable)(GdkToplevelLayout *layout);
+// Header /usr/include/gtk-4.0/gdk/gdktoplevelsize.h
 GType (gdk_toplevel_size_get_type)(void);
 void (gdk_toplevel_size_get_bounds)(GdkToplevelSize *size, int *bounds_width, int *bounds_height);
 void (gdk_toplevel_size_set_size)(GdkToplevelSize *size, int width, int height);
 void (gdk_toplevel_size_set_min_size)(GdkToplevelSize *size, int min_width, int min_height);
 void (gdk_toplevel_size_set_shadow_width)(GdkToplevelSize *size, int left, int right, int top, int bottom);
+// Header /usr/include/gtk-4.0/gdk/gdktypes.h
+// Header /usr/include/gtk-4.0/gdk/gdkvulkancontext.h
 GType (gdk_vulkan_context_get_type)(void);
 GQuark (gdk_vulkan_error_quark)(void);
+// Header /usr/include/gtk-4.0/gsk/broadway/gskbroadwayrenderer.h
 GType (gsk_broadway_renderer_get_type)(void);
 GskRenderer * (gsk_broadway_renderer_new)(void);
+// Header /usr/include/gtk-4.0/gsk/gl/gskglrenderer.h
 GType (gsk_gl_renderer_get_type)(void);
 GskRenderer* (gsk_gl_renderer_new)(void);
 GType (gsk_ngl_renderer_get_type)(void);
 GskRenderer* (gsk_ngl_renderer_new)(void);
+// Header /usr/include/gtk-4.0/gsk/gpu/gskvulkanrenderer.h
 GType (gsk_vulkan_renderer_get_type)(void);
 GskRenderer * (gsk_vulkan_renderer_new)(void);
+// Header /usr/include/gtk-4.0/gsk/gskcairorenderer.h
 GType (gsk_cairo_renderer_get_type)(void);
 GskRenderer * (gsk_cairo_renderer_new)(void);
+// Header /usr/include/gtk-4.0/gsk/gskenumtypes.h
 GType (gsk_render_node_type_get_type)(void);
 GType (gsk_scaling_filter_get_type)(void);
 GType (gsk_blend_mode_get_type)(void);
@@ -4738,6 +5103,7 @@ GType (gsk_transform_category_get_type)(void);
 GType (gsk_gl_uniform_type_get_type)(void);
 GType (gsk_mask_mode_get_type)(void);
 GType (gsk_path_foreach_flags_get_type)(void);
+// Header /usr/include/gtk-4.0/gsk/gskglshader.h
 GType (gsk_shader_args_builder_get_type)(void);
 GType (gsk_gl_shader_get_type)(void);
 GskGLShader * (gsk_gl_shader_new_from_bytes)(GBytes *sourcecode);
@@ -4772,6 +5138,7 @@ void (gsk_shader_args_builder_set_bool)(GskShaderArgsBuilder *builder, int idx, 
 void (gsk_shader_args_builder_set_vec2)(GskShaderArgsBuilder *builder, int idx, const graphene_vec2_t *value);
 void (gsk_shader_args_builder_set_vec3)(GskShaderArgsBuilder *builder, int idx, const graphene_vec3_t *value);
 void (gsk_shader_args_builder_set_vec4)(GskShaderArgsBuilder *builder, int idx, const graphene_vec4_t *value);
+// Header /usr/include/gtk-4.0/gsk/gskpath.h
 GType (gsk_path_get_type)(void);
 GskPath * (gsk_path_ref)(GskPath *self);
 void (gsk_path_unref)(GskPath *self);
@@ -4788,6 +5155,7 @@ gboolean (gsk_path_get_start_point)(GskPath *self, GskPathPoint *result);
 gboolean (gsk_path_get_end_point)(GskPath *self, GskPathPoint *result);
 gboolean (gsk_path_get_closest_point)(GskPath *self, const graphene_point_t *point, float threshold, GskPathPoint *result, float *distance);
 gboolean (gsk_path_foreach)(GskPath *self, GskPathForeachFlags flags, GskPathForeachFunc func, gpointer user_data);
+// Header /usr/include/gtk-4.0/gsk/gskpathbuilder.h
 GType (gsk_path_builder_get_type)(void);
 GskPathBuilder * (gsk_path_builder_new)(void);
 GskPathBuilder * (gsk_path_builder_ref)(GskPathBuilder *self);
@@ -4820,6 +5188,7 @@ void (gsk_path_builder_rel_svg_arc_to)(GskPathBuilder *self, float rx, float ry,
 void (gsk_path_builder_html_arc_to)(GskPathBuilder *self, float x1, float y1, float x2, float y2, float radius);
 void (gsk_path_builder_rel_html_arc_to)(GskPathBuilder *self, float x1, float y1, float x2, float y2, float radius);
 void (gsk_path_builder_close)(GskPathBuilder *self);
+// Header /usr/include/gtk-4.0/gsk/gskpathmeasure.h
 GType (gsk_path_measure_get_type)(void);
 GskPathMeasure * (gsk_path_measure_new)(GskPath *path);
 GskPathMeasure * (gsk_path_measure_new_with_tolerance)(GskPath *path, float tolerance);
@@ -4829,6 +5198,7 @@ GskPath * (gsk_path_measure_get_path)(GskPathMeasure *self);
 float (gsk_path_measure_get_tolerance)(GskPathMeasure *self);
 float (gsk_path_measure_get_length)(GskPathMeasure *self);
 gboolean (gsk_path_measure_get_point)(GskPathMeasure *self, float distance, GskPathPoint *result);
+// Header /usr/include/gtk-4.0/gsk/gskpathpoint.h
 GType (gsk_path_point_get_type)(void);
 GskPathPoint * (gsk_path_point_copy)(GskPathPoint *point);
 void (gsk_path_point_free)(GskPathPoint *point);
@@ -4839,6 +5209,7 @@ void (gsk_path_point_get_tangent)(const GskPathPoint *point, GskPath *path, GskP
 float (gsk_path_point_get_rotation)(const GskPathPoint *point, GskPath *path, GskPathDirection direction);
 float (gsk_path_point_get_curvature)(const GskPathPoint *point, GskPath *path, GskPathDirection direction, graphene_point_t *center);
 float (gsk_path_point_get_distance)(const GskPathPoint *point, GskPathMeasure *measure);
+// Header /usr/include/gtk-4.0/gsk/gskrenderer.h
 GType (gsk_renderer_get_type)(void);
 GskRenderer * (gsk_renderer_new_for_surface)(GdkSurface *surface);
 GdkSurface * (gsk_renderer_get_surface)(GskRenderer *renderer);
@@ -4848,6 +5219,7 @@ void (gsk_renderer_unrealize)(GskRenderer *renderer);
 gboolean (gsk_renderer_is_realized)(GskRenderer *renderer);
 GdkTexture * (gsk_renderer_render_texture)(GskRenderer *renderer, GskRenderNode *root, const graphene_rect_t *viewport);
 void (gsk_renderer_render)(GskRenderer *renderer, GskRenderNode *root, const cairo_region_t *region);
+// Header /usr/include/gtk-4.0/gsk/gskrendernode.h
 GType (gsk_render_node_get_type)(void);
 GQuark (gsk_serialization_error_quark)(void);
 GskRenderNode * (gsk_render_node_ref)(GskRenderNode *node);
@@ -5008,6 +5380,7 @@ void (gsk_value_set_render_node)(GValue *value, GskRenderNode *node);
 void (gsk_value_take_render_node)(GValue *value, GskRenderNode *node);
 GskRenderNode * (gsk_value_get_render_node)(const GValue *value);
 GskRenderNode * (gsk_value_dup_render_node)(const GValue *value);
+// Header /usr/include/gtk-4.0/gsk/gskroundedrect.h
 GskRoundedRect * (gsk_rounded_rect_init_copy)(GskRoundedRect *self, const GskRoundedRect *src);
 GskRoundedRect * (gsk_rounded_rect_init_from_rect)(GskRoundedRect *self, const graphene_rect_t *bounds, float radius);
 GskRoundedRect * (gsk_rounded_rect_normalize)(GskRoundedRect *self);
@@ -5018,6 +5391,7 @@ gboolean (gsk_rounded_rect_contains_point)(const GskRoundedRect *self, const gra
 gboolean (gsk_rounded_rect_contains_rect)(const GskRoundedRect *self, const graphene_rect_t *rect);
 gboolean (gsk_rounded_rect_intersects_rect)(const GskRoundedRect *self, const graphene_rect_t *rect);
 GskRoundedRect * (gsk_rounded_rect_init)(GskRoundedRect *self, const graphene_rect_t *bounds, const graphene_size_t *top_left, const graphene_size_t *top_right, const graphene_size_t *bottom_right, const graphene_size_t *bottom_left);
+// Header /usr/include/gtk-4.0/gsk/gskstroke.h
 GType (gsk_stroke_get_type)(void);
 GskStroke * (gsk_stroke_new)(float line_width);
 GskStroke * (gsk_stroke_copy)(const GskStroke *other);
@@ -5036,6 +5410,7 @@ const float * (gsk_stroke_get_dash)(const GskStroke *self, gsize *n_dash);
 void (gsk_stroke_set_dash_offset)(GskStroke *self, float offset);
 float (gsk_stroke_get_dash_offset)(const GskStroke *self);
 void (gsk_stroke_to_cairo)(const GskStroke *self, cairo_t *cr);
+// Header /usr/include/gtk-4.0/gsk/gsktransform.h
 GType (gsk_transform_get_type)(void);
 GskTransform * (gsk_transform_ref)(GskTransform *self);
 void (gsk_transform_unref)(GskTransform *self);
