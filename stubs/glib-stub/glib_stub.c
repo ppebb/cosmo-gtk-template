@@ -442,6 +442,7 @@ static struct glibFuncs {
     const gchar * (*ptr_g_getenv)(const gchar *variable);
     // Header /usr/include/glib-2.0/glib/gerror.h
     GQuark (*ptr_g_error_domain_register)(const char *error_type_name, gsize error_type_private_size, GErrorInitFunc error_type_init, GErrorCopyFunc error_type_copy, GErrorClearFunc error_type_clear);
+    GError* (*ptr_g_error_new)(GQuark domain, gint code, const gchar *format, ...);
     GError* (*ptr_g_error_new_literal)(GQuark domain, gint code, const gchar *message);
     GError* (*ptr_g_error_new_valist)(GQuark domain, gint code, const gchar *format, va_list args);
     void (*ptr_g_error_free)(GError *error);
@@ -465,6 +466,7 @@ static struct glibFuncs {
     gint (*ptr_g_file_open_tmp)(const gchar *tmpl, gchar **name_used, GError **error);
     gchar* (*ptr_g_dir_make_tmp)(const gchar *tmpl, GError **error);
     gchar* (*ptr_g_build_pathv)(const gchar *separator, gchar **args);
+    gchar* (*ptr_g_build_filename)(const gchar *first_element, ...);
     gchar* (*ptr_g_build_filenamev)(gchar **args);
     gchar* (*ptr_g_build_filename_valist)(const gchar *first_element, va_list *args);
     gboolean (*ptr_g_path_is_absolute)(const gchar *file_name);
@@ -809,6 +811,7 @@ static struct glibFuncs {
     void (*ptr_g_markup_parse_context_get_position)(GMarkupParseContext *context, gint *line_number, gint *char_number);
     gpointer (*ptr_g_markup_parse_context_get_user_data)(GMarkupParseContext *context);
     gchar* (*ptr_g_markup_escape_text)(const gchar *text, gssize length);
+    gchar* (*ptr_g_markup_printf_escaped)(const char *format, ...);
     gchar* (*ptr_g_markup_vprintf_escaped)(const char *format, va_list args);
     GQuark (*ptr_g_markup_error_quark)(void);
     // Header /usr/include/glib-2.0/glib/gmem.h
@@ -839,6 +842,7 @@ static struct glibFuncs {
     guint (*ptr_g_log_set_handler_full)(const gchar *log_domain, GLogLevelFlags log_levels, GLogFunc log_func, gpointer user_data, GDestroyNotify destroy);
     void (*ptr_g_log_default_handler)(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer unused_data);
     GLogFunc (*ptr_g_log_set_default_handler)(GLogFunc log_func, gpointer user_data);
+    void (*ptr_g_log)(const gchar *log_domain, GLogLevelFlags log_level, const gchar *format, ...);
     void (*ptr_g_logv)(const gchar *log_domain, GLogLevelFlags log_level, const gchar *format, va_list args);
     GLogLevelFlags (*ptr_g_log_set_fatal_mask)(const gchar *log_domain, GLogLevelFlags fatal_mask);
     GLogLevelFlags (*ptr_g_log_set_always_fatal)(GLogLevelFlags fatal_mask);
@@ -954,10 +958,13 @@ static struct glibFuncs {
     // Header /usr/include/glib-2.0/glib/gprimes.h
     guint (*ptr_g_spaced_primes_closest)(guint num);
     // Header /usr/include/glib-2.0/glib/gprintf.h
+    gint (*ptr_g_fprintf)(FILE *file, gchar const *format, ...);
+    gint (*ptr_g_sprintf)(gchar *string, gchar const *format, ...);
     gint (*ptr_g_vprintf)(gchar const *format, va_list args);
     gint (*ptr_g_vfprintf)(FILE *file, gchar const *format, va_list args);
     gint (*ptr_g_vsprintf)(gchar *string, gchar const *format, va_list args);
     gint (*ptr_g_vasprintf)(gchar **string, gchar const *format, va_list args);
+    gint (*ptr_g_printf)(gchar const *format, ...);
     // Header /usr/include/glib-2.0/glib/gqsort.h
     void (*ptr_g_qsort_with_data)(gconstpointer pbase, gint total_elems, gsize size, GCompareDataFunc compare_func, gpointer user_data);
     // Header /usr/include/glib-2.0/glib/gquark.h
@@ -1259,6 +1266,7 @@ static struct glibFuncs {
     gchar* (*ptr_g_strdown)(gchar *string);
     gchar* (*ptr_g_strup)(gchar *string);
     gchar* (*ptr_g_strdup)(const gchar *str);
+    gchar* (*ptr_g_strdup_printf)(const gchar *format, ...);
     gchar* (*ptr_g_strdup_vprintf)(const gchar *format, va_list args);
     gchar* (*ptr_g_strndup)(const gchar *str, gsize n);
     gchar* (*ptr_g_strnfill)(gsize length, gchar fill_char);
@@ -1312,7 +1320,9 @@ static struct glibFuncs {
     GString* (*ptr_g_string_ascii_down)(GString *string);
     GString* (*ptr_g_string_ascii_up)(GString *string);
     void (*ptr_g_string_vprintf)(GString *string, const gchar *format, va_list args);
+    void (*ptr_g_string_printf)(GString *string, const gchar *format, ...);
     void (*ptr_g_string_append_vprintf)(GString *string, const gchar *format, va_list args);
+    void (*ptr_g_string_append_printf)(GString *string, const gchar *format, ...);
     GString* (*ptr_g_string_append_uri_escaped)(GString *string, const gchar *unescaped, const gchar *reserved_chars_allowed, gboolean allow_utf8);
     GString* (*ptr_g_string_down)(GString *string);
     GString* (*ptr_g_string_up)(GString *string);
@@ -1637,6 +1647,7 @@ static struct glibFuncs {
     const gchar * (*ptr_g_get_user_runtime_dir)(void);
     const gchar * (*ptr_g_get_user_special_dir)(GUserDirectory directory);
     guint (*ptr_g_parse_debug_string)(const gchar *string, const GDebugKey *keys, guint nkeys);
+    gint (*ptr_g_snprintf)(gchar *string, gulong n, gchar const *format, ...);
     gint (*ptr_g_vsnprintf)(gchar *string, gulong n, gchar const *format, va_list args);
     void (*ptr_g_nullify_pointer)(gpointer *nullify_location);
     gchar* (*ptr_g_format_size_full)(guint64 size, GFormatSizeFlags flags);
@@ -1747,6 +1758,7 @@ static struct glibFuncs {
     void (*ptr_g_variant_get_va)(GVariant *value, const gchar *format_string, const gchar **endptr, va_list *app);
     gboolean (*ptr_g_variant_check_format_string)(GVariant *value, const gchar *format_string, gboolean copy_only);
     GVariant * (*ptr_g_variant_parse)(const GVariantType *type, const gchar *text, const gchar *limit, const gchar **endptr, GError **error);
+    GVariant * (*ptr_g_variant_new_parsed)(const gchar *format, ...);
     GVariant * (*ptr_g_variant_new_parsed_va)(const gchar *format, va_list *app);
     gchar * (*ptr_g_variant_parse_error_print_context)(GError *error, const gchar *source_str);
     gint (*ptr_g_variant_compare)(gconstpointer one, gconstpointer two);
@@ -1977,6 +1989,8 @@ static struct glibFuncs {
     GParamSpec** (*ptr_g_object_interface_list_properties)(gpointer g_iface, guint *n_properties_p);
     GType (*ptr_g_object_get_type)(void);
     GObject* (*ptr_g_object_new_with_properties)(GType object_type, guint n_properties, const char *names[], const GValue values[]);
+    void (*ptr_g_object_set)(gpointer object, const gchar *first_property_name, ...);
+    void (*ptr_g_object_get)(gpointer object, const gchar *first_property_name, ...);
     void (*ptr_g_object_setv)(GObject *object, guint n_properties, const gchar *names[], const GValue values[]);
     void (*ptr_g_object_set_valist)(GObject *object, const gchar *first_property_name, va_list var_args);
     void (*ptr_g_object_getv)(GObject *object, guint n_properties, const gchar *names[], GValue values[]);
@@ -2094,6 +2108,7 @@ static struct glibFuncs {
     void (*ptr_g_signal_set_va_marshaller)(guint signal_id, GType instance_type, GSignalCVaMarshaller va_marshaller);
     void (*ptr_g_signal_emitv)(const GValue *instance_and_params, guint signal_id, GQuark detail, GValue *return_value);
     void (*ptr_g_signal_emit_valist)(gpointer instance, guint signal_id, GQuark detail, va_list var_args);
+    void (*ptr_g_signal_emit)(gpointer instance, guint signal_id, GQuark detail, ...);
     guint (*ptr_g_signal_lookup)(const gchar *name, GType itype);
     const gchar * (*ptr_g_signal_name)(guint signal_id);
     void (*ptr_g_signal_query)(guint signal_id, GSignalQuery *query);
@@ -2654,6 +2669,7 @@ static struct glibFuncs {
     gboolean (*ptr_g_dbus_error_unregister_error)(GQuark error_domain, gint error_code, const gchar *dbus_error_name);
     void (*ptr_g_dbus_error_register_error_domain)(const gchar *error_domain_quark_name, volatile gsize *quark_volatile, const GDBusErrorEntry *entries, guint num_entries);
     GError* (*ptr_g_dbus_error_new_for_dbus_error)(const gchar *dbus_error_name, const gchar *dbus_error_message);
+    void (*ptr_g_dbus_error_set_dbus_error)(GError **error, const gchar *dbus_error_name, const gchar *dbus_error_message, const gchar *format, ...);
     void (*ptr_g_dbus_error_set_dbus_error_valist)(GError **error, const gchar *dbus_error_name, const gchar *dbus_error_message, const gchar *format, va_list var_args);
     gchar* (*ptr_g_dbus_error_encode_gerror)(const GError *error);
     GQuark (*ptr_g_dbus_error_quark)(void);
@@ -2719,6 +2735,7 @@ static struct glibFuncs {
     GDBusMessage* (*ptr_g_dbus_message_new_signal)(const gchar *path, const gchar *interface_, const gchar *signal);
     GDBusMessage* (*ptr_g_dbus_message_new_method_call)(const gchar *name, const gchar *path, const gchar *interface_, const gchar *method);
     GDBusMessage* (*ptr_g_dbus_message_new_method_reply)(GDBusMessage *method_call_message);
+    GDBusMessage* (*ptr_g_dbus_message_new_method_error)(GDBusMessage *method_call_message, const gchar *error_name, const gchar *error_message_format, ...);
     GDBusMessage* (*ptr_g_dbus_message_new_method_error_valist)(GDBusMessage *method_call_message, const gchar *error_name, const gchar *error_message_format, va_list var_args);
     GDBusMessage* (*ptr_g_dbus_message_new_method_error_literal)(GDBusMessage *method_call_message, const gchar *error_name, const gchar *error_message);
     gchar* (*ptr_g_dbus_message_print)(GDBusMessage *message, guint indent);
@@ -2778,6 +2795,7 @@ static struct glibFuncs {
     gpointer (*ptr_g_dbus_method_invocation_get_user_data)(GDBusMethodInvocation *invocation);
     void (*ptr_g_dbus_method_invocation_return_value)(GDBusMethodInvocation *invocation, GVariant *parameters);
     void (*ptr_g_dbus_method_invocation_return_value_with_unix_fd_list)(GDBusMethodInvocation *invocation, GVariant *parameters, GUnixFDList *fd_list);
+    void (*ptr_g_dbus_method_invocation_return_error)(GDBusMethodInvocation *invocation, GQuark domain, gint code, const gchar *format, ...);
     void (*ptr_g_dbus_method_invocation_return_error_valist)(GDBusMethodInvocation *invocation, GQuark domain, gint code, const gchar *format, va_list var_args);
     void (*ptr_g_dbus_method_invocation_return_error_literal)(GDBusMethodInvocation *invocation, GQuark domain, gint code, const gchar *message);
     void (*ptr_g_dbus_method_invocation_return_gerror)(GDBusMethodInvocation *invocation, const GError *error);
@@ -3663,6 +3681,7 @@ static struct glibFuncs {
     gboolean (*ptr_g_output_stream_write_all)(GOutputStream *stream, const void *buffer, gsize count, gsize *bytes_written, GCancellable *cancellable, GError **error);
     gboolean (*ptr_g_output_stream_writev)(GOutputStream *stream, const GOutputVector *vectors, gsize n_vectors, gsize *bytes_written, GCancellable *cancellable, GError **error);
     gboolean (*ptr_g_output_stream_writev_all)(GOutputStream *stream, GOutputVector *vectors, gsize n_vectors, gsize *bytes_written, GCancellable *cancellable, GError **error);
+    gboolean (*ptr_g_output_stream_printf)(GOutputStream *stream, gsize *bytes_written, GCancellable *cancellable, GError **error, const gchar *format, ...);
     gboolean (*ptr_g_output_stream_vprintf)(GOutputStream *stream, gsize *bytes_written, GCancellable *cancellable, GError **error, const gchar *format, va_list args);
     gssize (*ptr_g_output_stream_write_bytes)(GOutputStream *stream, GBytes *bytes, GCancellable *cancellable, GError **error);
     gssize (*ptr_g_output_stream_splice)(GOutputStream *stream, GInputStream *source, GOutputStreamSpliceFlags flags, GCancellable *cancellable, GError **error);
@@ -3929,6 +3948,7 @@ static struct glibFuncs {
     void (*ptr_g_simple_async_result_set_from_error)(GSimpleAsyncResult *simple, const GError *error);
     void (*ptr_g_simple_async_result_take_error)(GSimpleAsyncResult *simple, GError *error);
     gboolean (*ptr_g_simple_async_result_propagate_error)(GSimpleAsyncResult *simple, GError **dest);
+    void (*ptr_g_simple_async_result_set_error)(GSimpleAsyncResult *simple, GQuark domain, gint code, const char *format, ...);
     void (*ptr_g_simple_async_result_set_error_va)(GSimpleAsyncResult *simple, GQuark domain, gint code, const char *format, va_list args);
     gboolean (*ptr_g_simple_async_result_is_valid)(GAsyncResult *result, GObject *source, gpointer source_tag);
     void (*ptr_g_simple_async_report_gerror_in_idle)(GObject *object, GAsyncReadyCallback callback, gpointer user_data, const GError *error);
@@ -4946,6 +4966,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_getenv = try_find_sym(glib, "g_getenv");
     // Header /usr/include/glib-2.0/glib/gerror.h
     stub_funcs.ptr_g_error_domain_register = try_find_sym(glib, "g_error_domain_register");
+    stub_funcs.ptr_g_error_new = try_find_sym(glib, "g_error_new");
     stub_funcs.ptr_g_error_new_literal = try_find_sym(glib, "g_error_new_literal");
     stub_funcs.ptr_g_error_new_valist = try_find_sym(glib, "g_error_new_valist");
     stub_funcs.ptr_g_error_free = try_find_sym(glib, "g_error_free");
@@ -4969,6 +4990,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_file_open_tmp = try_find_sym(glib, "g_file_open_tmp");
     stub_funcs.ptr_g_dir_make_tmp = try_find_sym(glib, "g_dir_make_tmp");
     stub_funcs.ptr_g_build_pathv = try_find_sym(glib, "g_build_pathv");
+    stub_funcs.ptr_g_build_filename = try_find_sym(glib, "g_build_filename");
     stub_funcs.ptr_g_build_filenamev = try_find_sym(glib, "g_build_filenamev");
     stub_funcs.ptr_g_build_filename_valist = try_find_sym(glib, "g_build_filename_valist");
     stub_funcs.ptr_g_path_is_absolute = try_find_sym(glib, "g_path_is_absolute");
@@ -5313,6 +5335,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_markup_parse_context_get_position = try_find_sym(glib, "g_markup_parse_context_get_position");
     stub_funcs.ptr_g_markup_parse_context_get_user_data = try_find_sym(glib, "g_markup_parse_context_get_user_data");
     stub_funcs.ptr_g_markup_escape_text = try_find_sym(glib, "g_markup_escape_text");
+    stub_funcs.ptr_g_markup_printf_escaped = try_find_sym(glib, "g_markup_printf_escaped");
     stub_funcs.ptr_g_markup_vprintf_escaped = try_find_sym(glib, "g_markup_vprintf_escaped");
     stub_funcs.ptr_g_markup_error_quark = try_find_sym(glib, "g_markup_error_quark");
     // Header /usr/include/glib-2.0/glib/gmem.h
@@ -5343,6 +5366,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_log_set_handler_full = try_find_sym(glib, "g_log_set_handler_full");
     stub_funcs.ptr_g_log_default_handler = try_find_sym(glib, "g_log_default_handler");
     stub_funcs.ptr_g_log_set_default_handler = try_find_sym(glib, "g_log_set_default_handler");
+    stub_funcs.ptr_g_log = try_find_sym(glib, "g_log");
     stub_funcs.ptr_g_logv = try_find_sym(glib, "g_logv");
     stub_funcs.ptr_g_log_set_fatal_mask = try_find_sym(glib, "g_log_set_fatal_mask");
     stub_funcs.ptr_g_log_set_always_fatal = try_find_sym(glib, "g_log_set_always_fatal");
@@ -5458,10 +5482,13 @@ void initialize_glib(void) {
     // Header /usr/include/glib-2.0/glib/gprimes.h
     stub_funcs.ptr_g_spaced_primes_closest = try_find_sym(glib, "g_spaced_primes_closest");
     // Header /usr/include/glib-2.0/glib/gprintf.h
+    stub_funcs.ptr_g_fprintf = try_find_sym(glib, "g_fprintf");
+    stub_funcs.ptr_g_sprintf = try_find_sym(glib, "g_sprintf");
     stub_funcs.ptr_g_vprintf = try_find_sym(glib, "g_vprintf");
     stub_funcs.ptr_g_vfprintf = try_find_sym(glib, "g_vfprintf");
     stub_funcs.ptr_g_vsprintf = try_find_sym(glib, "g_vsprintf");
     stub_funcs.ptr_g_vasprintf = try_find_sym(glib, "g_vasprintf");
+    stub_funcs.ptr_g_printf = try_find_sym(glib, "g_printf");
     // Header /usr/include/glib-2.0/glib/gqsort.h
     stub_funcs.ptr_g_qsort_with_data = try_find_sym(glib, "g_qsort_with_data");
     // Header /usr/include/glib-2.0/glib/gquark.h
@@ -5763,6 +5790,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_strdown = try_find_sym(glib, "g_strdown");
     stub_funcs.ptr_g_strup = try_find_sym(glib, "g_strup");
     stub_funcs.ptr_g_strdup = try_find_sym(glib, "g_strdup");
+    stub_funcs.ptr_g_strdup_printf = try_find_sym(glib, "g_strdup_printf");
     stub_funcs.ptr_g_strdup_vprintf = try_find_sym(glib, "g_strdup_vprintf");
     stub_funcs.ptr_g_strndup = try_find_sym(glib, "g_strndup");
     stub_funcs.ptr_g_strnfill = try_find_sym(glib, "g_strnfill");
@@ -5816,7 +5844,9 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_string_ascii_down = try_find_sym(glib, "g_string_ascii_down");
     stub_funcs.ptr_g_string_ascii_up = try_find_sym(glib, "g_string_ascii_up");
     stub_funcs.ptr_g_string_vprintf = try_find_sym(glib, "g_string_vprintf");
+    stub_funcs.ptr_g_string_printf = try_find_sym(glib, "g_string_printf");
     stub_funcs.ptr_g_string_append_vprintf = try_find_sym(glib, "g_string_append_vprintf");
+    stub_funcs.ptr_g_string_append_printf = try_find_sym(glib, "g_string_append_printf");
     stub_funcs.ptr_g_string_append_uri_escaped = try_find_sym(glib, "g_string_append_uri_escaped");
     stub_funcs.ptr_g_string_down = try_find_sym(glib, "g_string_down");
     stub_funcs.ptr_g_string_up = try_find_sym(glib, "g_string_up");
@@ -6141,6 +6171,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_get_user_runtime_dir = try_find_sym(glib, "g_get_user_runtime_dir");
     stub_funcs.ptr_g_get_user_special_dir = try_find_sym(glib, "g_get_user_special_dir");
     stub_funcs.ptr_g_parse_debug_string = try_find_sym(glib, "g_parse_debug_string");
+    stub_funcs.ptr_g_snprintf = try_find_sym(glib, "g_snprintf");
     stub_funcs.ptr_g_vsnprintf = try_find_sym(glib, "g_vsnprintf");
     stub_funcs.ptr_g_nullify_pointer = try_find_sym(glib, "g_nullify_pointer");
     stub_funcs.ptr_g_format_size_full = try_find_sym(glib, "g_format_size_full");
@@ -6251,6 +6282,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_variant_get_va = try_find_sym(glib, "g_variant_get_va");
     stub_funcs.ptr_g_variant_check_format_string = try_find_sym(glib, "g_variant_check_format_string");
     stub_funcs.ptr_g_variant_parse = try_find_sym(glib, "g_variant_parse");
+    stub_funcs.ptr_g_variant_new_parsed = try_find_sym(glib, "g_variant_new_parsed");
     stub_funcs.ptr_g_variant_new_parsed_va = try_find_sym(glib, "g_variant_new_parsed_va");
     stub_funcs.ptr_g_variant_parse_error_print_context = try_find_sym(glib, "g_variant_parse_error_print_context");
     stub_funcs.ptr_g_variant_compare = try_find_sym(glib, "g_variant_compare");
@@ -6481,6 +6513,8 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_object_interface_list_properties = try_find_sym(gobject, "g_object_interface_list_properties");
     stub_funcs.ptr_g_object_get_type = try_find_sym(gobject, "g_object_get_type");
     stub_funcs.ptr_g_object_new_with_properties = try_find_sym(gobject, "g_object_new_with_properties");
+    stub_funcs.ptr_g_object_set = try_find_sym(gobject, "g_object_set");
+    stub_funcs.ptr_g_object_get = try_find_sym(gobject, "g_object_get");
     stub_funcs.ptr_g_object_setv = try_find_sym(gobject, "g_object_setv");
     stub_funcs.ptr_g_object_set_valist = try_find_sym(gobject, "g_object_set_valist");
     stub_funcs.ptr_g_object_getv = try_find_sym(gobject, "g_object_getv");
@@ -6598,6 +6632,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_signal_set_va_marshaller = try_find_sym(gobject, "g_signal_set_va_marshaller");
     stub_funcs.ptr_g_signal_emitv = try_find_sym(gobject, "g_signal_emitv");
     stub_funcs.ptr_g_signal_emit_valist = try_find_sym(gobject, "g_signal_emit_valist");
+    stub_funcs.ptr_g_signal_emit = try_find_sym(gobject, "g_signal_emit");
     stub_funcs.ptr_g_signal_lookup = try_find_sym(gobject, "g_signal_lookup");
     stub_funcs.ptr_g_signal_name = try_find_sym(gobject, "g_signal_name");
     stub_funcs.ptr_g_signal_query = try_find_sym(gobject, "g_signal_query");
@@ -7158,6 +7193,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_dbus_error_unregister_error = try_find_sym(gio, "g_dbus_error_unregister_error");
     stub_funcs.ptr_g_dbus_error_register_error_domain = try_find_sym(gio, "g_dbus_error_register_error_domain");
     stub_funcs.ptr_g_dbus_error_new_for_dbus_error = try_find_sym(gio, "g_dbus_error_new_for_dbus_error");
+    stub_funcs.ptr_g_dbus_error_set_dbus_error = try_find_sym(gio, "g_dbus_error_set_dbus_error");
     stub_funcs.ptr_g_dbus_error_set_dbus_error_valist = try_find_sym(gio, "g_dbus_error_set_dbus_error_valist");
     stub_funcs.ptr_g_dbus_error_encode_gerror = try_find_sym(gio, "g_dbus_error_encode_gerror");
     stub_funcs.ptr_g_dbus_error_quark = try_find_sym(gio, "g_dbus_error_quark");
@@ -7223,6 +7259,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_dbus_message_new_signal = try_find_sym(gio, "g_dbus_message_new_signal");
     stub_funcs.ptr_g_dbus_message_new_method_call = try_find_sym(gio, "g_dbus_message_new_method_call");
     stub_funcs.ptr_g_dbus_message_new_method_reply = try_find_sym(gio, "g_dbus_message_new_method_reply");
+    stub_funcs.ptr_g_dbus_message_new_method_error = try_find_sym(gio, "g_dbus_message_new_method_error");
     stub_funcs.ptr_g_dbus_message_new_method_error_valist = try_find_sym(gio, "g_dbus_message_new_method_error_valist");
     stub_funcs.ptr_g_dbus_message_new_method_error_literal = try_find_sym(gio, "g_dbus_message_new_method_error_literal");
     stub_funcs.ptr_g_dbus_message_print = try_find_sym(gio, "g_dbus_message_print");
@@ -7282,6 +7319,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_dbus_method_invocation_get_user_data = try_find_sym(gio, "g_dbus_method_invocation_get_user_data");
     stub_funcs.ptr_g_dbus_method_invocation_return_value = try_find_sym(gio, "g_dbus_method_invocation_return_value");
     stub_funcs.ptr_g_dbus_method_invocation_return_value_with_unix_fd_list = try_find_sym(gio, "g_dbus_method_invocation_return_value_with_unix_fd_list");
+    stub_funcs.ptr_g_dbus_method_invocation_return_error = try_find_sym(gio, "g_dbus_method_invocation_return_error");
     stub_funcs.ptr_g_dbus_method_invocation_return_error_valist = try_find_sym(gio, "g_dbus_method_invocation_return_error_valist");
     stub_funcs.ptr_g_dbus_method_invocation_return_error_literal = try_find_sym(gio, "g_dbus_method_invocation_return_error_literal");
     stub_funcs.ptr_g_dbus_method_invocation_return_gerror = try_find_sym(gio, "g_dbus_method_invocation_return_gerror");
@@ -8167,6 +8205,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_output_stream_write_all = try_find_sym(gio, "g_output_stream_write_all");
     stub_funcs.ptr_g_output_stream_writev = try_find_sym(gio, "g_output_stream_writev");
     stub_funcs.ptr_g_output_stream_writev_all = try_find_sym(gio, "g_output_stream_writev_all");
+    stub_funcs.ptr_g_output_stream_printf = try_find_sym(gio, "g_output_stream_printf");
     stub_funcs.ptr_g_output_stream_vprintf = try_find_sym(gio, "g_output_stream_vprintf");
     stub_funcs.ptr_g_output_stream_write_bytes = try_find_sym(gio, "g_output_stream_write_bytes");
     stub_funcs.ptr_g_output_stream_splice = try_find_sym(gio, "g_output_stream_splice");
@@ -8433,6 +8472,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_simple_async_result_set_from_error = try_find_sym(gio, "g_simple_async_result_set_from_error");
     stub_funcs.ptr_g_simple_async_result_take_error = try_find_sym(gio, "g_simple_async_result_take_error");
     stub_funcs.ptr_g_simple_async_result_propagate_error = try_find_sym(gio, "g_simple_async_result_propagate_error");
+    stub_funcs.ptr_g_simple_async_result_set_error = try_find_sym(gio, "g_simple_async_result_set_error");
     stub_funcs.ptr_g_simple_async_result_set_error_va = try_find_sym(gio, "g_simple_async_result_set_error_va");
     stub_funcs.ptr_g_simple_async_result_is_valid = try_find_sym(gio, "g_simple_async_result_is_valid");
     stub_funcs.ptr_g_simple_async_report_gerror_in_idle = try_find_sym(gio, "g_simple_async_report_gerror_in_idle");

@@ -150,6 +150,11 @@ function M:with_extra_headers(headers, dest)
     return self
 end
 
+function M:set_explicit_function_bodies(tbl)
+    self.explicit_function_bodies = tbl
+    return self
+end
+
 function M:set_prefix(prefix)
     self.prefix = prefix
     return self
@@ -180,6 +185,108 @@ function M:set_skip_funcs(fs)
     return self
 end
 
+--- @private
+--- @param header string
+function M:process_header(header)
+    local function get_sig(func) return string.format("%s (%s)(%s)", func.ret, func.name, func.args) end
+
+    -- TODO: I still don't like this section very much. Kind of ugly still.
+    local function handle_function(func, impl)
+        local sig = get_sig(func)
+        local arg_names = args_split(func.args)
+
+        local name = func.name
+        local args = func.args
+        local ret = func.ret
+        local extras = func.extras
+
+        table.insert(self.c_struct_defs, string.format("%s (*ptr_%s)(%s);", ret, name, args))
+        table.insert(
+            self.c_struct_inst,
+            string.format('stub_funcs.ptr_%s = try_find_sym(%s, "%s");', name, self.current_shared_object, name)
+        )
+        table.insert(
+            self.c_func_impls,
+            impl
+                or string.format(
+                    sig .. " { %sstub_funcs.ptr_%s(%s);%s }",
+                    func.ret ~= "void" and "return " or "",
+                    name,
+                    utils.tbl_join(arg_names, ", "),
+                    extras.no_return and RAYO_COSMICO or ""
+                )
+        )
+        table.insert(self.h_func_defs, sig .. ";")
+    end
+
+    local function handle_dot_dot_dot_function(func)
+        local sig = get_sig(func)
+        local arg_names = args_split(func.args)
+
+        local name = func.name
+        local ret = func.ret
+        local extras = func.extras
+
+        local va_equiv, pattern, info, err = self:try_find_va_equivalent(self.parser.names_to_args, name, arg_names)
+
+        if not va_equiv then
+            local msg = "Unable to locate va_equiv for " .. name
+            table.insert(self.c_func_impls, "// " .. msg)
+            utils.fprintf(io.stderr, "%s\n", msg)
+        elseif err then
+            table.insert(
+                self.c_func_impls,
+                string.format(
+                    "// Found va_equiv for func %s as func %s with pattern %s, but err: %s",
+                    name,
+                    va_equiv,
+                    pattern,
+                    err
+                )
+            )
+        else
+            local nonvoid = ret ~= "void"
+
+            handle_function(
+                func,
+                string.format(
+                    sig .. " { %sva_list vaargs; va_start(vaargs, %s); %sstub_funcs.ptr_%s(%s); va_end(vaargs); %s}",
+                    nonvoid and (ret .. " ret; ") or "",
+                    arg_names[#arg_names],
+                    nonvoid and "ret = " or "",
+                    va_equiv,
+                    utils.tbl_join(arg_names, ", ") .. string.format(", %svaargs", info == "ptr" and "&" or ""),
+                    extras.no_return and RAYO_COSMICO or nonvoid and "return ret; " or ""
+                )
+            )
+            utils.fprintf(io.stdout, "Found va_equiv for func %s as func %s with pattern %s\n", name, va_equiv, pattern)
+        end
+    end
+
+    local funcs = self.parser:process_header(header, self.match_access, self.prefix, self.trim_prefix, self.skip_funcs)
+
+    if not funcs then
+        return
+    end
+
+    -- Header markers
+    table.insert(self.c_struct_defs, "// Header " .. header)
+    table.insert(self.c_struct_inst, "// Header " .. header)
+    table.insert(self.h_func_defs, "// Header " .. header)
+
+    for _, func in ipairs(funcs) do
+        local explicit_function_body = self.explicit_function_bodies and self.explicit_function_bodies[func.name]
+
+        if explicit_function_body then
+            handle_function(func, explicit_function_body)
+        elseif func.args:find("%.%.%.") then
+            handle_dot_dot_dot_function(func)
+        else
+            handle_function(func)
+        end
+    end
+end
+
 function M:process_headers(headers)
     local function process_dir(path)
         utils.fprintf(io.stdout, "Processing directory %s\n", path)
@@ -200,97 +307,8 @@ function M:process_headers(headers)
         if attr.mode == "directory" and not utils.matches_any(header, self.skip_dirs) then
             process_dir(header)
         elseif attr.mode == "file" and not utils.matches_any(header, self.skip_files) then
-            local funcs =
-                self.parser:process_header(header, self.match_access, self.prefix, self.trim_prefix, self.skip_funcs)
-
-            if not funcs then
-                goto continue
-            end
-
-            table.insert(self.c_struct_defs, "// Header " .. header)
-            table.insert(self.c_struct_inst, "// Header " .. header)
-            table.insert(self.h_func_defs, "// Header " .. header)
-
-            for _, func in ipairs(funcs) do
-                local ret = func.ret
-                local name = func.name
-                local args = func.args
-                local extras = func.extras
-
-                local arg_names = args_split(args)
-
-                local sig = string.format("%s (%s)(%s)", ret, name, args)
-
-                if not args:find("%.%.%.") then
-                    table.insert(self.c_struct_defs, string.format("%s (*ptr_%s)(%s);", ret, name, args))
-                    table.insert(
-                        self.c_struct_inst,
-                        string.format(
-                            'stub_funcs.ptr_%s = try_find_sym(%s, "%s");',
-                            name,
-                            self.current_shared_object,
-                            name
-                        )
-                    )
-                    table.insert(
-                        self.c_func_impls,
-                        string.format(
-                            sig .. " { %sstub_funcs.ptr_%s(%s);%s }",
-                            ret ~= "void" and "return " or "",
-                            name,
-                            utils.tbl_join(arg_names, ", "),
-                            extras.no_return and RAYO_COSMICO or ""
-                        )
-                    )
-                    table.insert(self.h_func_defs, sig .. ";")
-                else
-                    local va_equiv, pattern, info, err =
-                        self:try_find_va_equivalent(self.parser.names_to_args, name, arg_names)
-
-                    if not va_equiv then
-                        local msg = "Unable to locate va_equiv for " .. name
-                        table.insert(self.c_func_impls, "// " .. msg)
-                        utils.fprintf(io.stderr, "%s\n", msg)
-                    elseif err then
-                        table.insert(
-                            self.c_func_impls,
-                            string.format(
-                                "// Found va_equiv for func %s as func %s with pattern %s, but err: %s",
-                                name,
-                                va_equiv,
-                                pattern,
-                                err
-                            )
-                        )
-                    else
-                        local nonvoid = ret ~= "void"
-                        table.insert(
-                            self.c_func_impls,
-                            string.format(
-                                sig
-                                    .. " { %sva_list vaargs; va_start(vaargs, %s); %sstub_funcs.ptr_%s(%s); va_end(vaargs); %s}",
-                                nonvoid and (ret .. " ret; ") or "",
-                                arg_names[#arg_names],
-                                nonvoid and "ret = " or "",
-                                va_equiv,
-                                utils.tbl_join(arg_names, ", ")
-                                    .. string.format(", %svaargs", info == "ptr" and "&" or ""),
-                                extras.no_return and RAYO_COSMICO or nonvoid and "return ret; " or ""
-                            )
-                        )
-                        utils.fprintf(
-                            io.stdout,
-                            "Found va_equiv for func %s as func %s with pattern %s\n",
-                            name,
-                            va_equiv,
-                            pattern
-                        )
-                    end
-                end
-            end
+            self:process_header(header)
         end
-
-        ::continue::
     end
 
     return self

@@ -121,6 +121,8 @@ static struct gtk4Funcs {
     void (*ptr_gtk_cell_area_class_install_cell_property)(GtkCellAreaClass *aclass, guint property_id, GParamSpec *pspec);
     GParamSpec* (*ptr_gtk_cell_area_class_find_cell_property)(GtkCellAreaClass *aclass, const char *property_name);
     GParamSpec** (*ptr_gtk_cell_area_class_list_cell_properties)(GtkCellAreaClass *aclass, guint *n_properties);
+    void (*ptr_gtk_cell_area_cell_set)(GtkCellArea *area, GtkCellRenderer *renderer, const char *first_prop_name, ...);
+    void (*ptr_gtk_cell_area_cell_get)(GtkCellArea *area, GtkCellRenderer *renderer, const char *first_prop_name, ...);
     void (*ptr_gtk_cell_area_cell_set_valist)(GtkCellArea *area, GtkCellRenderer *renderer, const char *first_property_name, va_list var_args);
     void (*ptr_gtk_cell_area_cell_get_valist)(GtkCellArea *area, GtkCellRenderer *renderer, const char *first_property_name, va_list var_args);
     void (*ptr_gtk_cell_area_cell_set_property)(GtkCellArea *area, GtkCellRenderer *renderer, const char *property_name, const GValue *value);
@@ -525,6 +527,7 @@ static struct gtk4Funcs {
     GtkListStore* (*ptr_gtk_list_store_newv)(int n_columns, GType *types);
     void (*ptr_gtk_list_store_set_column_types)(GtkListStore *list_store, int n_columns, GType *types);
     void (*ptr_gtk_list_store_set_value)(GtkListStore *list_store, GtkTreeIter *iter, int column, GValue *value);
+    void (*ptr_gtk_list_store_set)(GtkListStore *list_store, GtkTreeIter *iter, ...);
     void (*ptr_gtk_list_store_set_valuesv)(GtkListStore *list_store, GtkTreeIter *iter, int *columns, GValue *values, int n_values);
     void (*ptr_gtk_list_store_set_valist)(GtkListStore *list_store, GtkTreeIter *iter, va_list var_args);
     gboolean (*ptr_gtk_list_store_remove)(GtkListStore *list_store, GtkTreeIter *iter);
@@ -665,6 +668,7 @@ static struct gtk4Funcs {
     gboolean (*ptr_gtk_tree_model_iter_parent)(GtkTreeModel *tree_model, GtkTreeIter *iter, GtkTreeIter *child);
     void (*ptr_gtk_tree_model_ref_node)(GtkTreeModel *tree_model, GtkTreeIter *iter);
     void (*ptr_gtk_tree_model_unref_node)(GtkTreeModel *tree_model, GtkTreeIter *iter);
+    void (*ptr_gtk_tree_model_get)(GtkTreeModel *tree_model, GtkTreeIter *iter, ...);
     void (*ptr_gtk_tree_model_get_valist)(GtkTreeModel *tree_model, GtkTreeIter *iter, va_list var_args);
     void (*ptr_gtk_tree_model_foreach)(GtkTreeModel *model, GtkTreeModelForeachFunc func, gpointer user_data);
     void (*ptr_gtk_tree_model_row_changed)(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *iter);
@@ -732,6 +736,7 @@ static struct gtk4Funcs {
     GtkTreeStore* (*ptr_gtk_tree_store_newv)(int n_columns, GType *types);
     void (*ptr_gtk_tree_store_set_column_types)(GtkTreeStore *tree_store, int n_columns, GType *types);
     void (*ptr_gtk_tree_store_set_value)(GtkTreeStore *tree_store, GtkTreeIter *iter, int column, GValue *value);
+    void (*ptr_gtk_tree_store_set)(GtkTreeStore *tree_store, GtkTreeIter *iter, ...);
     void (*ptr_gtk_tree_store_set_valuesv)(GtkTreeStore *tree_store, GtkTreeIter *iter, int *columns, GValue *values, int n_values);
     void (*ptr_gtk_tree_store_set_valist)(GtkTreeStore *tree_store, GtkTreeIter *iter, va_list var_args);
     gboolean (*ptr_gtk_tree_store_remove)(GtkTreeStore *tree_store, GtkTreeIter *iter);
@@ -2661,6 +2666,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_media_stream_seek_success)(GtkMediaStream *self);
     void (*ptr_gtk_media_stream_seek_failed)(GtkMediaStream *self);
     void (*ptr_gtk_media_stream_gerror)(GtkMediaStream *self, GError *error);
+    void (*ptr_gtk_media_stream_error)(GtkMediaStream *self, GQuark domain, int code, const char *format, ...);
     void (*ptr_gtk_media_stream_error_valist)(GtkMediaStream *self, GQuark domain, int code, const char *format, va_list args);
     // Header /usr/include/gtk-4.0/gtk/gtkmenubutton.h
     GType (*ptr_gtk_menu_button_get_type)(void);
@@ -4466,6 +4472,7 @@ static struct gtk4Funcs {
     void (*ptr_gdk_clipboard_read_text_async)(GdkClipboard *clipboard, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
     char * (*ptr_gdk_clipboard_read_text_finish)(GdkClipboard *clipboard, GAsyncResult *result, GError **error);
     gboolean (*ptr_gdk_clipboard_set_content)(GdkClipboard *clipboard, GdkContentProvider *provider);
+    void (*ptr_gdk_clipboard_set)(GdkClipboard *clipboard, GType type, ...);
     void (*ptr_gdk_clipboard_set_valist)(GdkClipboard *clipboard, GType type, va_list args);
     void (*ptr_gdk_clipboard_set_value)(GdkClipboard *clipboard, const GValue *value);
     void (*ptr_gdk_clipboard_set_text)(GdkClipboard *clipboard, const char *text);
@@ -5120,6 +5127,7 @@ static struct gtk4Funcs {
     int (*ptr_gsk_gl_shader_get_uniform_offset)(GskGLShader *shader, int idx);
     gsize (*ptr_gsk_gl_shader_get_args_size)(GskGLShader *shader);
     GBytes * (*ptr_gsk_gl_shader_format_args_va)(GskGLShader *shader, va_list uniforms);
+    GBytes * (*ptr_gsk_gl_shader_format_args)(GskGLShader *shader, ...);
     float (*ptr_gsk_gl_shader_get_arg_float)(GskGLShader *shader, GBytes *args, int idx);
     gint32 (*ptr_gsk_gl_shader_get_arg_int)(GskGLShader *shader, GBytes *args, int idx);
     guint32 (*ptr_gsk_gl_shader_get_arg_uint)(GskGLShader *shader, GBytes *args, int idx);
@@ -5565,6 +5573,8 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_cell_area_class_install_cell_property = try_find_sym(gtk, "gtk_cell_area_class_install_cell_property");
     stub_funcs.ptr_gtk_cell_area_class_find_cell_property = try_find_sym(gtk, "gtk_cell_area_class_find_cell_property");
     stub_funcs.ptr_gtk_cell_area_class_list_cell_properties = try_find_sym(gtk, "gtk_cell_area_class_list_cell_properties");
+    stub_funcs.ptr_gtk_cell_area_cell_set = try_find_sym(gtk, "gtk_cell_area_cell_set");
+    stub_funcs.ptr_gtk_cell_area_cell_get = try_find_sym(gtk, "gtk_cell_area_cell_get");
     stub_funcs.ptr_gtk_cell_area_cell_set_valist = try_find_sym(gtk, "gtk_cell_area_cell_set_valist");
     stub_funcs.ptr_gtk_cell_area_cell_get_valist = try_find_sym(gtk, "gtk_cell_area_cell_get_valist");
     stub_funcs.ptr_gtk_cell_area_cell_set_property = try_find_sym(gtk, "gtk_cell_area_cell_set_property");
@@ -5969,6 +5979,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_list_store_newv = try_find_sym(gtk, "gtk_list_store_newv");
     stub_funcs.ptr_gtk_list_store_set_column_types = try_find_sym(gtk, "gtk_list_store_set_column_types");
     stub_funcs.ptr_gtk_list_store_set_value = try_find_sym(gtk, "gtk_list_store_set_value");
+    stub_funcs.ptr_gtk_list_store_set = try_find_sym(gtk, "gtk_list_store_set");
     stub_funcs.ptr_gtk_list_store_set_valuesv = try_find_sym(gtk, "gtk_list_store_set_valuesv");
     stub_funcs.ptr_gtk_list_store_set_valist = try_find_sym(gtk, "gtk_list_store_set_valist");
     stub_funcs.ptr_gtk_list_store_remove = try_find_sym(gtk, "gtk_list_store_remove");
@@ -6109,6 +6120,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_tree_model_iter_parent = try_find_sym(gtk, "gtk_tree_model_iter_parent");
     stub_funcs.ptr_gtk_tree_model_ref_node = try_find_sym(gtk, "gtk_tree_model_ref_node");
     stub_funcs.ptr_gtk_tree_model_unref_node = try_find_sym(gtk, "gtk_tree_model_unref_node");
+    stub_funcs.ptr_gtk_tree_model_get = try_find_sym(gtk, "gtk_tree_model_get");
     stub_funcs.ptr_gtk_tree_model_get_valist = try_find_sym(gtk, "gtk_tree_model_get_valist");
     stub_funcs.ptr_gtk_tree_model_foreach = try_find_sym(gtk, "gtk_tree_model_foreach");
     stub_funcs.ptr_gtk_tree_model_row_changed = try_find_sym(gtk, "gtk_tree_model_row_changed");
@@ -6176,6 +6188,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_tree_store_newv = try_find_sym(gtk, "gtk_tree_store_newv");
     stub_funcs.ptr_gtk_tree_store_set_column_types = try_find_sym(gtk, "gtk_tree_store_set_column_types");
     stub_funcs.ptr_gtk_tree_store_set_value = try_find_sym(gtk, "gtk_tree_store_set_value");
+    stub_funcs.ptr_gtk_tree_store_set = try_find_sym(gtk, "gtk_tree_store_set");
     stub_funcs.ptr_gtk_tree_store_set_valuesv = try_find_sym(gtk, "gtk_tree_store_set_valuesv");
     stub_funcs.ptr_gtk_tree_store_set_valist = try_find_sym(gtk, "gtk_tree_store_set_valist");
     stub_funcs.ptr_gtk_tree_store_remove = try_find_sym(gtk, "gtk_tree_store_remove");
@@ -8105,6 +8118,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_media_stream_seek_success = try_find_sym(gtk, "gtk_media_stream_seek_success");
     stub_funcs.ptr_gtk_media_stream_seek_failed = try_find_sym(gtk, "gtk_media_stream_seek_failed");
     stub_funcs.ptr_gtk_media_stream_gerror = try_find_sym(gtk, "gtk_media_stream_gerror");
+    stub_funcs.ptr_gtk_media_stream_error = try_find_sym(gtk, "gtk_media_stream_error");
     stub_funcs.ptr_gtk_media_stream_error_valist = try_find_sym(gtk, "gtk_media_stream_error_valist");
     // Header /usr/include/gtk-4.0/gtk/gtkmenubutton.h
     stub_funcs.ptr_gtk_menu_button_get_type = try_find_sym(gtk, "gtk_menu_button_get_type");
@@ -9910,6 +9924,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_clipboard_read_text_async = try_find_sym(gtk, "gdk_clipboard_read_text_async");
     stub_funcs.ptr_gdk_clipboard_read_text_finish = try_find_sym(gtk, "gdk_clipboard_read_text_finish");
     stub_funcs.ptr_gdk_clipboard_set_content = try_find_sym(gtk, "gdk_clipboard_set_content");
+    stub_funcs.ptr_gdk_clipboard_set = try_find_sym(gtk, "gdk_clipboard_set");
     stub_funcs.ptr_gdk_clipboard_set_valist = try_find_sym(gtk, "gdk_clipboard_set_valist");
     stub_funcs.ptr_gdk_clipboard_set_value = try_find_sym(gtk, "gdk_clipboard_set_value");
     stub_funcs.ptr_gdk_clipboard_set_text = try_find_sym(gtk, "gdk_clipboard_set_text");
@@ -10564,6 +10579,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gsk_gl_shader_get_uniform_offset = try_find_sym(gtk, "gsk_gl_shader_get_uniform_offset");
     stub_funcs.ptr_gsk_gl_shader_get_args_size = try_find_sym(gtk, "gsk_gl_shader_get_args_size");
     stub_funcs.ptr_gsk_gl_shader_format_args_va = try_find_sym(gtk, "gsk_gl_shader_format_args_va");
+    stub_funcs.ptr_gsk_gl_shader_format_args = try_find_sym(gtk, "gsk_gl_shader_format_args");
     stub_funcs.ptr_gsk_gl_shader_get_arg_float = try_find_sym(gtk, "gsk_gl_shader_get_arg_float");
     stub_funcs.ptr_gsk_gl_shader_get_arg_int = try_find_sym(gtk, "gsk_gl_shader_get_arg_int");
     stub_funcs.ptr_gsk_gl_shader_get_arg_uint = try_find_sym(gtk, "gsk_gl_shader_get_arg_uint");

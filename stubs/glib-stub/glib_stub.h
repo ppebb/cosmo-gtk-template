@@ -443,6 +443,7 @@ gchar ** (g_environ_unsetenv)(gchar **envp, const gchar *variable);
 const gchar * (g_getenv)(const gchar *variable);
 // Header /usr/include/glib-2.0/glib/gerror.h
 GQuark (g_error_domain_register)(const char *error_type_name, gsize error_type_private_size, GErrorInitFunc error_type_init, GErrorCopyFunc error_type_copy, GErrorClearFunc error_type_clear);
+GError* (g_error_new)(GQuark domain, gint code, const gchar *format, ...);
 GError* (g_error_new_literal)(GQuark domain, gint code, const gchar *message);
 GError* (g_error_new_valist)(GQuark domain, gint code, const gchar *format, va_list args);
 void (g_error_free)(GError *error);
@@ -466,6 +467,7 @@ gint (g_mkstemp_full)(gchar *tmpl, gint flags, gint mode);
 gint (g_file_open_tmp)(const gchar *tmpl, gchar **name_used, GError **error);
 gchar* (g_dir_make_tmp)(const gchar *tmpl, GError **error);
 gchar* (g_build_pathv)(const gchar *separator, gchar **args);
+gchar* (g_build_filename)(const gchar *first_element, ...);
 gchar* (g_build_filenamev)(gchar **args);
 gchar* (g_build_filename_valist)(const gchar *first_element, va_list *args);
 gboolean (g_path_is_absolute)(const gchar *file_name);
@@ -810,6 +812,7 @@ const GSList * (g_markup_parse_context_get_element_stack)(GMarkupParseContext *c
 void (g_markup_parse_context_get_position)(GMarkupParseContext *context, gint *line_number, gint *char_number);
 gpointer (g_markup_parse_context_get_user_data)(GMarkupParseContext *context);
 gchar* (g_markup_escape_text)(const gchar *text, gssize length);
+gchar* (g_markup_printf_escaped)(const char *format, ...);
 gchar* (g_markup_vprintf_escaped)(const char *format, va_list args);
 GQuark (g_markup_error_quark)(void);
 // Header /usr/include/glib-2.0/glib/gmem.h
@@ -840,6 +843,7 @@ guint (g_log_set_handler)(const gchar *log_domain, GLogLevelFlags log_levels, GL
 guint (g_log_set_handler_full)(const gchar *log_domain, GLogLevelFlags log_levels, GLogFunc log_func, gpointer user_data, GDestroyNotify destroy);
 void (g_log_default_handler)(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer unused_data);
 GLogFunc (g_log_set_default_handler)(GLogFunc log_func, gpointer user_data);
+void (g_log)(const gchar *log_domain, GLogLevelFlags log_level, const gchar *format, ...);
 void (g_logv)(const gchar *log_domain, GLogLevelFlags log_level, const gchar *format, va_list args);
 GLogLevelFlags (g_log_set_fatal_mask)(const gchar *log_domain, GLogLevelFlags fatal_mask);
 GLogLevelFlags (g_log_set_always_fatal)(GLogLevelFlags fatal_mask);
@@ -955,10 +959,13 @@ gint (g_poll)(GPollFD *fds, guint nfds, gint timeout);
 // Header /usr/include/glib-2.0/glib/gprimes.h
 guint (g_spaced_primes_closest)(guint num);
 // Header /usr/include/glib-2.0/glib/gprintf.h
+gint (g_fprintf)(FILE *file, gchar const *format, ...);
+gint (g_sprintf)(gchar *string, gchar const *format, ...);
 gint (g_vprintf)(gchar const *format, va_list args);
 gint (g_vfprintf)(FILE *file, gchar const *format, va_list args);
 gint (g_vsprintf)(gchar *string, gchar const *format, va_list args);
 gint (g_vasprintf)(gchar **string, gchar const *format, va_list args);
+gint (g_printf)(gchar const *format, ...);
 // Header /usr/include/glib-2.0/glib/gqsort.h
 void (g_qsort_with_data)(gconstpointer pbase, gint total_elems, gsize size, GCompareDataFunc compare_func, gpointer user_data);
 // Header /usr/include/glib-2.0/glib/gquark.h
@@ -1260,6 +1267,7 @@ gint (g_strncasecmp)(const gchar *s1, const gchar *s2, guint n);
 gchar* (g_strdown)(gchar *string);
 gchar* (g_strup)(gchar *string);
 gchar* (g_strdup)(const gchar *str);
+gchar* (g_strdup_printf)(const gchar *format, ...);
 gchar* (g_strdup_vprintf)(const gchar *format, va_list args);
 gchar* (g_strndup)(const gchar *str, gsize n);
 gchar* (g_strnfill)(gsize length, gchar fill_char);
@@ -1313,7 +1321,9 @@ guint (g_string_replace)(GString *string, const gchar *find, const gchar *replac
 GString* (g_string_ascii_down)(GString *string);
 GString* (g_string_ascii_up)(GString *string);
 void (g_string_vprintf)(GString *string, const gchar *format, va_list args);
+void (g_string_printf)(GString *string, const gchar *format, ...);
 void (g_string_append_vprintf)(GString *string, const gchar *format, va_list args);
+void (g_string_append_printf)(GString *string, const gchar *format, ...);
 GString* (g_string_append_uri_escaped)(GString *string, const gchar *unescaped, const gchar *reserved_chars_allowed, gboolean allow_utf8);
 GString* (g_string_down)(GString *string);
 GString* (g_string_up)(GString *string);
@@ -1638,6 +1648,7 @@ const gchar * const * (g_get_system_config_dirs)(void);
 const gchar * (g_get_user_runtime_dir)(void);
 const gchar * (g_get_user_special_dir)(GUserDirectory directory);
 guint (g_parse_debug_string)(const gchar *string, const GDebugKey *keys, guint nkeys);
+gint (g_snprintf)(gchar *string, gulong n, gchar const *format, ...);
 gint (g_vsnprintf)(gchar *string, gulong n, gchar const *format, va_list args);
 void (g_nullify_pointer)(gpointer *nullify_location);
 gchar* (g_format_size_full)(guint64 size, GFormatSizeFlags flags);
@@ -1748,6 +1759,7 @@ GVariant * (g_variant_new_va)(const gchar *format_string, const gchar **endptr, 
 void (g_variant_get_va)(GVariant *value, const gchar *format_string, const gchar **endptr, va_list *app);
 gboolean (g_variant_check_format_string)(GVariant *value, const gchar *format_string, gboolean copy_only);
 GVariant * (g_variant_parse)(const GVariantType *type, const gchar *text, const gchar *limit, const gchar **endptr, GError **error);
+GVariant * (g_variant_new_parsed)(const gchar *format, ...);
 GVariant * (g_variant_new_parsed_va)(const gchar *format, va_list *app);
 gchar * (g_variant_parse_error_print_context)(GError *error, const gchar *source_str);
 gint (g_variant_compare)(gconstpointer one, gconstpointer two);
@@ -1978,6 +1990,8 @@ GParamSpec* (g_object_interface_find_property)(gpointer g_iface, const gchar *pr
 GParamSpec** (g_object_interface_list_properties)(gpointer g_iface, guint *n_properties_p);
 GType (g_object_get_type)(void);
 GObject* (g_object_new_with_properties)(GType object_type, guint n_properties, const char *names[], const GValue values[]);
+void (g_object_set)(gpointer object, const gchar *first_property_name, ...);
+void (g_object_get)(gpointer object, const gchar *first_property_name, ...);
 void (g_object_setv)(GObject *object, guint n_properties, const gchar *names[], const GValue values[]);
 void (g_object_set_valist)(GObject *object, const gchar *first_property_name, va_list var_args);
 void (g_object_getv)(GObject *object, guint n_properties, const gchar *names[], GValue values[]);
@@ -2095,6 +2109,7 @@ guint (g_signal_new_valist)(const gchar *signal_name, GType itype, GSignalFlags 
 void (g_signal_set_va_marshaller)(guint signal_id, GType instance_type, GSignalCVaMarshaller va_marshaller);
 void (g_signal_emitv)(const GValue *instance_and_params, guint signal_id, GQuark detail, GValue *return_value);
 void (g_signal_emit_valist)(gpointer instance, guint signal_id, GQuark detail, va_list var_args);
+void (g_signal_emit)(gpointer instance, guint signal_id, GQuark detail, ...);
 guint (g_signal_lookup)(const gchar *name, GType itype);
 const gchar * (g_signal_name)(guint signal_id);
 void (g_signal_query)(guint signal_id, GSignalQuery *query);
@@ -2655,6 +2670,7 @@ gboolean (g_dbus_error_register_error)(GQuark error_domain, gint error_code, con
 gboolean (g_dbus_error_unregister_error)(GQuark error_domain, gint error_code, const gchar *dbus_error_name);
 void (g_dbus_error_register_error_domain)(const gchar *error_domain_quark_name, volatile gsize *quark_volatile, const GDBusErrorEntry *entries, guint num_entries);
 GError* (g_dbus_error_new_for_dbus_error)(const gchar *dbus_error_name, const gchar *dbus_error_message);
+void (g_dbus_error_set_dbus_error)(GError **error, const gchar *dbus_error_name, const gchar *dbus_error_message, const gchar *format, ...);
 void (g_dbus_error_set_dbus_error_valist)(GError **error, const gchar *dbus_error_name, const gchar *dbus_error_message, const gchar *format, va_list var_args);
 gchar* (g_dbus_error_encode_gerror)(const GError *error);
 GQuark (g_dbus_error_quark)(void);
@@ -2720,6 +2736,7 @@ GDBusMessage* (g_dbus_message_new)(void);
 GDBusMessage* (g_dbus_message_new_signal)(const gchar *path, const gchar *interface_, const gchar *signal);
 GDBusMessage* (g_dbus_message_new_method_call)(const gchar *name, const gchar *path, const gchar *interface_, const gchar *method);
 GDBusMessage* (g_dbus_message_new_method_reply)(GDBusMessage *method_call_message);
+GDBusMessage* (g_dbus_message_new_method_error)(GDBusMessage *method_call_message, const gchar *error_name, const gchar *error_message_format, ...);
 GDBusMessage* (g_dbus_message_new_method_error_valist)(GDBusMessage *method_call_message, const gchar *error_name, const gchar *error_message_format, va_list var_args);
 GDBusMessage* (g_dbus_message_new_method_error_literal)(GDBusMessage *method_call_message, const gchar *error_name, const gchar *error_message);
 gchar* (g_dbus_message_print)(GDBusMessage *message, guint indent);
@@ -2779,6 +2796,7 @@ GVariant* (g_dbus_method_invocation_get_parameters)(GDBusMethodInvocation *invoc
 gpointer (g_dbus_method_invocation_get_user_data)(GDBusMethodInvocation *invocation);
 void (g_dbus_method_invocation_return_value)(GDBusMethodInvocation *invocation, GVariant *parameters);
 void (g_dbus_method_invocation_return_value_with_unix_fd_list)(GDBusMethodInvocation *invocation, GVariant *parameters, GUnixFDList *fd_list);
+void (g_dbus_method_invocation_return_error)(GDBusMethodInvocation *invocation, GQuark domain, gint code, const gchar *format, ...);
 void (g_dbus_method_invocation_return_error_valist)(GDBusMethodInvocation *invocation, GQuark domain, gint code, const gchar *format, va_list var_args);
 void (g_dbus_method_invocation_return_error_literal)(GDBusMethodInvocation *invocation, GQuark domain, gint code, const gchar *message);
 void (g_dbus_method_invocation_return_gerror)(GDBusMethodInvocation *invocation, const GError *error);
@@ -3664,6 +3682,7 @@ gssize (g_output_stream_write)(GOutputStream *stream, const void *buffer, gsize 
 gboolean (g_output_stream_write_all)(GOutputStream *stream, const void *buffer, gsize count, gsize *bytes_written, GCancellable *cancellable, GError **error);
 gboolean (g_output_stream_writev)(GOutputStream *stream, const GOutputVector *vectors, gsize n_vectors, gsize *bytes_written, GCancellable *cancellable, GError **error);
 gboolean (g_output_stream_writev_all)(GOutputStream *stream, GOutputVector *vectors, gsize n_vectors, gsize *bytes_written, GCancellable *cancellable, GError **error);
+gboolean (g_output_stream_printf)(GOutputStream *stream, gsize *bytes_written, GCancellable *cancellable, GError **error, const gchar *format, ...);
 gboolean (g_output_stream_vprintf)(GOutputStream *stream, gsize *bytes_written, GCancellable *cancellable, GError **error, const gchar *format, va_list args);
 gssize (g_output_stream_write_bytes)(GOutputStream *stream, GBytes *bytes, GCancellable *cancellable, GError **error);
 gssize (g_output_stream_splice)(GOutputStream *stream, GInputStream *source, GOutputStreamSpliceFlags flags, GCancellable *cancellable, GError **error);
@@ -3930,6 +3949,7 @@ void (g_simple_async_result_run_in_thread)(GSimpleAsyncResult *simple, GSimpleAs
 void (g_simple_async_result_set_from_error)(GSimpleAsyncResult *simple, const GError *error);
 void (g_simple_async_result_take_error)(GSimpleAsyncResult *simple, GError *error);
 gboolean (g_simple_async_result_propagate_error)(GSimpleAsyncResult *simple, GError **dest);
+void (g_simple_async_result_set_error)(GSimpleAsyncResult *simple, GQuark domain, gint code, const char *format, ...);
 void (g_simple_async_result_set_error_va)(GSimpleAsyncResult *simple, GQuark domain, gint code, const char *format, va_list args);
 gboolean (g_simple_async_result_is_valid)(GAsyncResult *result, GObject *source, gpointer source_tag);
 void (g_simple_async_report_gerror_in_idle)(GObject *object, GAsyncReadyCallback callback, gpointer user_data, const GError *error);
