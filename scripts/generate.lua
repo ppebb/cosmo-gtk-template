@@ -54,6 +54,7 @@ local _ = stub.new(stubs_root, "gtk4")
     :process_headers({ "/usr/include/gtk-4.0/gsk/" })
     :write()
 
+-- TODO: Maybe split these up again since they don't need to all be in the same file?
 local _ = stub.new(stubs_root, "glib")
     :with_shared_object("glib", { "libglib-2.0.so" })
     :with_shared_object("gobject", { "libgobject-2.0.so" })
@@ -83,6 +84,7 @@ local _ = stub.new(stubs_root, "glib")
     :set_skip_funcs({
         "g_win32_get_system_data_dirs_for_module",
         "g_signal_new ",
+        "g_initable_new ",
         "g_chmod",
         "g_open",
         "g_creat",
@@ -95,6 +97,7 @@ local _ = stub.new(stubs_root, "glib")
         "g_freopen",
         "g_fsync",
         "g_utime",
+        "[^_]atexit",
         "alloca",
     })
     :process_headers({
@@ -103,7 +106,8 @@ local _ = stub.new(stubs_root, "glib")
     })
     :use_shared_object("gobject")
     :set_skip_files({ "%.c$" })
-    :set_match_access({ "GOBJECT_[A-Z0-9_]+" })
+    :set_match_access({ "GOBJECT_[A-Z0-9_()a-z]+" })
+    :set_explicit_function_bodies(require("scripts.explicit_functions.gobject"))
     :process_headers({ "/usr/include/glib-2.0/gobject/" })
     :use_shared_object("gio")
     :set_skip_files(nil)

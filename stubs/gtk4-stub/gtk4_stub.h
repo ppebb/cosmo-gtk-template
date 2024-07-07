@@ -1140,6 +1140,7 @@ GdkModifierType (gtk_accelerator_get_default_mod_mask)(void);
 gboolean (gtk_accelerator_valid)(guint keyval, GdkModifierType modifiers);
 // Header /usr/include/gtk-4.0/gtk/gtkaccessible.h
 GType (gtk_accessible_get_type)(void);
+GtkATContext * (gtk_accessible_get_at_context)(GtkAccessible *self);
 gboolean (gtk_accessible_get_platform_state)(GtkAccessible *self, GtkAccessiblePlatformState state);
 GtkAccessible * (gtk_accessible_get_accessible_parent)(GtkAccessible *self);
 void (gtk_accessible_set_accessible_parent)(GtkAccessible *self, GtkAccessible *parent, GtkAccessible *next_sibling);
@@ -1166,6 +1167,7 @@ void (gtk_accessible_announce)(GtkAccessible *self, const char *message, GtkAcce
 GType (gtk_accessible_range_get_type)(void);
 // Header /usr/include/gtk-4.0/gtk/gtkaccessibletext.h
 GType (gtk_accessible_text_get_type)(void);
+void (gtk_accessible_text_update_caret_position)(GtkAccessibleText *self);
 void (gtk_accessible_text_update_selection_bound)(GtkAccessibleText *self);
 void (gtk_accessible_text_update_contents)(GtkAccessibleText *self, GtkAccessibleTextContentChange change, unsigned int start, unsigned int end);
 // Header /usr/include/gtk-4.0/gtk/gtkactionable.h
@@ -1270,6 +1272,7 @@ GtkLayoutManager * (gtk_bin_layout_new)(void);
 GType (gtk_bitset_get_type)(void);
 GtkBitset * (gtk_bitset_ref)(GtkBitset *self);
 void (gtk_bitset_unref)(GtkBitset *self);
+gboolean (gtk_bitset_contains)(const GtkBitset *self, guint value);
 gboolean (gtk_bitset_is_empty)(const GtkBitset *self);
 gboolean (gtk_bitset_equals)(const GtkBitset *self, const GtkBitset *other);
 guint64 (gtk_bitset_get_size)(const GtkBitset *self);
@@ -1922,6 +1925,7 @@ GType (gtk_expression_get_type)(void);
 GType (gtk_expression_watch_get_type)(void);
 GtkExpression * (gtk_expression_ref)(GtkExpression *self);
 void (gtk_expression_unref)(GtkExpression *self);
+GType (gtk_expression_get_value_type)(GtkExpression *self);
 gboolean (gtk_expression_is_static)(GtkExpression *self);
 gboolean (gtk_expression_evaluate)(GtkExpression *self, gpointer this_, GValue *value);
 GtkExpressionWatch * (gtk_expression_watch)(GtkExpression *self, gpointer this_, GtkExpressionNotify notify, gpointer user_data, GDestroyNotify user_destroy);
@@ -2725,6 +2729,7 @@ void (gtk_multi_sorter_append)(GtkMultiSorter *self, GtkSorter *sorter);
 void (gtk_multi_sorter_remove)(GtkMultiSorter *self, guint position);
 // Header /usr/include/gtk-4.0/gtk/gtknative.h
 GType (gtk_native_get_type)(void);
+void (gtk_native_realize)(GtkNative *self);
 void (gtk_native_unrealize)(GtkNative *self);
 GtkNative * (gtk_native_get_for_surface)(GdkSurface *surface);
 GdkSurface* (gtk_native_get_surface)(GtkNative *self);
@@ -3040,6 +3045,7 @@ void (gtk_revealer_set_child)(GtkRevealer *revealer, GtkWidget *child);
 GtkWidget * (gtk_revealer_get_child)(GtkRevealer *revealer);
 // Header /usr/include/gtk-4.0/gtk/gtkroot.h
 GType (gtk_root_get_type)(void);
+GdkDisplay * (gtk_root_get_display)(GtkRoot *self);
 void (gtk_root_set_focus)(GtkRoot *self, GtkWidget *focus);
 GtkWidget * (gtk_root_get_focus)(GtkRoot *self);
 // Header /usr/include/gtk-4.0/gtk/gtkscale.h
@@ -3159,6 +3165,7 @@ void (gtk_search_entry_set_input_hints)(GtkSearchEntry *entry, GtkInputHints hin
 GtkInputHints (gtk_search_entry_get_input_hints)(GtkSearchEntry *entry);
 // Header /usr/include/gtk-4.0/gtk/gtksectionmodel.h
 GType (gtk_section_model_get_type)(void);
+void (gtk_section_model_get_section)(GtkSectionModel *self, guint position, guint *out_start, guint *out_end);
 void (gtk_section_model_sections_changed)(GtkSectionModel *self, guint position, guint n_items);
 // Header /usr/include/gtk-4.0/gtk/gtkselectionfiltermodel.h
 GType (gtk_selection_filter_model_get_type)(void);
@@ -3167,6 +3174,7 @@ void (gtk_selection_filter_model_set_model)(GtkSelectionFilterModel *self, GtkSe
 GtkSelectionModel * (gtk_selection_filter_model_get_model)(GtkSelectionFilterModel *self);
 // Header /usr/include/gtk-4.0/gtk/gtkselectionmodel.h
 GType (gtk_selection_model_get_type)(void);
+gboolean (gtk_selection_model_is_selected)(GtkSelectionModel *model, guint position);
 GtkBitset * (gtk_selection_model_get_selection)(GtkSelectionModel *model);
 GtkBitset * (gtk_selection_model_get_selection_in_range)(GtkSelectionModel *model, guint position, guint n_items);
 gboolean (gtk_selection_model_select_item)(GtkSelectionModel *model, guint position, gboolean unselect_rest);
@@ -3488,6 +3496,7 @@ void (gtk_string_sorter_set_collation)(GtkStringSorter *self, GtkCollation colla
 GtkCollation (gtk_string_sorter_get_collation)(GtkStringSorter *self);
 // Header /usr/include/gtk-4.0/gtk/gtkstyleprovider.h
 GType (gtk_style_provider_get_type)(void);
+void (gtk_style_context_add_provider_for_display)(GdkDisplay *display, GtkStyleProvider *provider, guint priority);
 void (gtk_style_context_remove_provider_for_display)(GdkDisplay *display, GtkStyleProvider *provider);
 // Header /usr/include/gtk-4.0/gtk/gtkswitch.h
 GType (gtk_switch_get_type)(void);
@@ -3498,6 +3507,7 @@ void (gtk_switch_set_state)(GtkSwitch *self, gboolean state);
 gboolean (gtk_switch_get_state)(GtkSwitch *self);
 // Header /usr/include/gtk-4.0/gtk/gtksymbolicpaintable.h
 GType (gtk_symbolic_paintable_get_type)(void);
+void (gtk_symbolic_paintable_snapshot_symbolic)(GtkSymbolicPaintable *paintable, GdkSnapshot *snapshot, double width, double height, const GdkRGBA *colors, gsize n_colors);
 // Header /usr/include/gtk-4.0/gtk/gtktestatcontext.h
 gboolean (gtk_test_accessible_has_property)(GtkAccessible *accessible, GtkAccessibleProperty property);
 gboolean (gtk_test_accessible_has_relation)(GtkAccessible *accessible, GtkAccessibleRelation relation);
@@ -4691,6 +4701,7 @@ GdkContentProvider * (gdk_drag_get_content)(GdkDrag *drag);
 GdkSurface * (gdk_drag_get_surface)(GdkDrag *drag);
 // Header /usr/include/gtk-4.0/gdk/gdkdragsurface.h
 GType (gdk_drag_surface_get_type)(void);
+gboolean (gdk_drag_surface_present)(GdkDragSurface *drag_surface, int width, int height);
 // Header /usr/include/gtk-4.0/gdk/gdkdragsurfacesize.h
 GType (gdk_drag_surface_size_get_type)(void);
 void (gdk_drag_surface_size_set_size)(GdkDragSurfaceSize *size, int width, int height);
@@ -4916,6 +4927,7 @@ gboolean (gdk_monitor_is_valid)(GdkMonitor *monitor);
 const char * (gdk_monitor_get_description)(GdkMonitor *monitor);
 // Header /usr/include/gtk-4.0/gdk/gdkpaintable.h
 GType (gdk_paintable_get_type)(void);
+void (gdk_paintable_snapshot)(GdkPaintable *paintable, GdkSnapshot *snapshot, double width, double height);
 GdkPaintable * (gdk_paintable_get_current_image)(GdkPaintable *paintable);
 GdkPaintableFlags (gdk_paintable_get_flags)(GdkPaintable *paintable);
 int (gdk_paintable_get_intrinsic_width)(GdkPaintable *paintable);
@@ -4930,6 +4942,7 @@ cairo_region_t* (gdk_pango_layout_get_clip_region)(PangoLayout *layout, int x_or
 cairo_region_t* (gdk_pango_layout_line_get_clip_region)(PangoLayoutLine *line, int x_origin, int y_origin, const int *index_ranges, int n_ranges);
 // Header /usr/include/gtk-4.0/gdk/gdkpopup.h
 GType (gdk_popup_get_type)(void);
+gboolean (gdk_popup_present)(GdkPopup *popup, int width, int height, GdkPopupLayout *layout);
 GdkGravity (gdk_popup_get_surface_anchor)(GdkPopup *popup);
 GdkGravity (gdk_popup_get_rect_anchor)(GdkPopup *popup);
 GdkSurface * (gdk_popup_get_parent)(GdkPopup *popup);
@@ -5039,6 +5052,7 @@ void (gdk_texture_downloader_download_into)(const GdkTextureDownloader *self, gu
 GBytes * (gdk_texture_downloader_download_bytes)(const GdkTextureDownloader *self, gsize *out_stride);
 // Header /usr/include/gtk-4.0/gdk/gdktoplevel.h
 GType (gdk_toplevel_get_type)(void);
+void (gdk_toplevel_present)(GdkToplevel *toplevel, GdkToplevelLayout *layout);
 gboolean (gdk_toplevel_minimize)(GdkToplevel *toplevel);
 gboolean (gdk_toplevel_lower)(GdkToplevel *toplevel);
 void (gdk_toplevel_focus)(GdkToplevel *toplevel, guint32 timestamp);

@@ -26,6 +26,7 @@ gpointer (g_cache_insert)(GCache *cache, gpointer key);
 void (g_cache_remove)(GCache *cache, gconstpointer value);
 void (g_cache_key_foreach)(GCache *cache, GHFunc func, gpointer user_data);
 void (g_cache_value_foreach)(GCache *cache, GHFunc func, gpointer user_data);
+GCache* (g_cache_new)(GCacheNewFunc value_new_func, GCacheDestroyFunc value_destroy_func, GCacheDupFunc key_dup_func, GCacheDestroyFunc key_destroy_func, GHashFunc hash_key_func, GHashFunc hash_value_func, GEqualFunc key_equal_func);
 // Header /usr/include/glib-2.0/glib/deprecated/gcompletion.h
 void (g_completion_add_items)(GCompletion* cmp, GList* items);
 void (g_completion_remove_items)(GCompletion* cmp, GList* items);
@@ -47,7 +48,6 @@ void (g_tuples_destroy)(GTuples *tuples);
 gpointer (g_tuples_index)(GTuples *tuples, gint index_, gint field);
 GRelation* (g_relation_new)(gint fields);
 // Header /usr/include/glib-2.0/glib/deprecated/gthread.h
-GThread* (g_thread_create)(GThreadFunc func, gpointer data, gboolean joinable, GError **error);
 GThread* (g_thread_create_full)(GThreadFunc func, gpointer data, gulong stack_size, gboolean joinable, gboolean bound, GThreadPriority priority, GError **error);
 void (g_thread_set_priority)(GThread *thread, GThreadPriority priority);
 void (g_thread_foreach)(GFunc thread_func, gpointer user_data);
@@ -61,6 +61,7 @@ void (g_mutex_free)(GMutex *mutex);
 GCond * (g_cond_new)(void);
 void (g_cond_free)(GCond *cond);
 gboolean (g_cond_timed_wait)(GCond *cond, GMutex *mutex, GTimeVal *abs_time);
+GThread* (g_thread_create)(GThreadFunc func, gpointer data, gboolean joinable, GError **error);
 // Header /usr/include/glib-2.0/glib/galloca.h
 // Header /usr/include/glib-2.0/glib/garray.h
 GArray* (g_array_new_take)(gpointer data, gsize len, gboolean clear, gsize element_size);
@@ -161,6 +162,7 @@ gboolean (g_async_queue_remove)(GAsyncQueue *queue, gpointer item);
 gboolean (g_async_queue_remove_unlocked)(GAsyncQueue *queue, gpointer item);
 void (g_async_queue_push_front)(GAsyncQueue *queue, gpointer item);
 void (g_async_queue_push_front_unlocked)(GAsyncQueue *queue, gpointer item);
+gpointer (g_async_queue_timed_pop)(GAsyncQueue *queue, GTimeVal *end_time);
 gpointer (g_async_queue_timed_pop_unlocked)(GAsyncQueue *queue, GTimeVal *end_time);
 GAsyncQueue* (g_async_queue_new)(void);
 // Header /usr/include/glib-2.0/glib/gatomic.h
@@ -351,7 +353,9 @@ guint (g_date_get_iso8601_week_of_year)(const GDate *date);
 void (g_date_clear)(GDate *date, guint n_dates);
 void (g_date_set_parse)(GDate *date, const gchar *str);
 void (g_date_set_time_t)(GDate *date, time_t timet);
+void (g_date_set_time_val)(GDate *date, GTimeVal *timeval);
 void (g_date_set_time)(GDate *date, GTime time_);
+void (g_date_set_month)(GDate *date, GDateMonth month);
 void (g_date_set_day)(GDate *date, GDateDay day);
 void (g_date_set_year)(GDate *date, GDateYear year);
 void (g_date_set_dmy)(GDate *date, GDateDay day, GDateMonth month, GDateYear y);
@@ -384,7 +388,9 @@ GDateTime * (g_date_time_new_from_unix_local)(gint64 t);
 GDateTime * (g_date_time_new_from_unix_utc)(gint64 t);
 GDateTime * (g_date_time_new_from_unix_local_usec)(gint64 usecs);
 GDateTime * (g_date_time_new_from_unix_utc_usec)(gint64 usecs);
+GDateTime * (g_date_time_new_from_timeval_local)(const GTimeVal *tv);
 GDateTime * (g_date_time_new_from_timeval_utc)(const GTimeVal *tv);
+GDateTime * (g_date_time_new_from_iso8601)(const gchar *text, GTimeZone *default_tz);
 GDateTime * (g_date_time_new)(GTimeZone *tz, gint year, gint month, gint day, gint hour, gint minute, gdouble seconds);
 GDateTime * (g_date_time_new_local)(gint year, gint month, gint day, gint hour, gint minute, gdouble seconds);
 GDateTime * (g_date_time_new_utc)(gint year, gint month, gint day, gint hour, gint minute, gdouble seconds);
@@ -416,6 +422,8 @@ gint (g_date_time_get_microsecond)(GDateTime *datetime);
 gdouble (g_date_time_get_seconds)(GDateTime *datetime);
 gint64 (g_date_time_to_unix)(GDateTime *datetime);
 gint64 (g_date_time_to_unix_usec)(GDateTime *datetime);
+gboolean (g_date_time_to_timeval)(GDateTime *datetime, GTimeVal *tv);
+GTimeSpan (g_date_time_get_utc_offset)(GDateTime *datetime);
 GTimeZone * (g_date_time_get_timezone)(GDateTime *datetime);
 const gchar * (g_date_time_get_timezone_abbreviation)(GDateTime *datetime);
 gboolean (g_date_time_is_daylight_savings)(GDateTime *datetime);
@@ -455,11 +463,12 @@ void (g_clear_error)(GError **err);
 void (g_prefix_error_literal)(GError **err, const gchar *prefix);
 GQuark (g_error_domain_register_static)(const char *error_type_name, gsize error_type_private_size, GErrorInitFunc error_type_init, GErrorCopyFunc error_type_copy, GErrorClearFunc error_type_clear);
 // Header /usr/include/glib-2.0/glib/gfileutils.h
-GQuark (g_file_error_quark)(void);
 GFileError (g_file_error_from_errno)(gint err_no);
 gboolean (g_file_test)(const gchar *filename, GFileTest test);
 gboolean (g_file_get_contents)(const gchar *filename, gchar **contents, gsize *length, GError **error);
 gboolean (g_file_set_contents)(const gchar *filename, const gchar *contents, gssize length, GError **error);
+gboolean (g_file_set_contents_full)(const gchar *filename, const gchar *contents, gssize length, GFileSetContentsFlags flags, int mode, GError **error);
+gchar* (g_file_read_link)(const gchar *filename, GError **error);
 gchar* (g_mkdtemp)(gchar *tmpl);
 gchar* (g_mkdtemp_full)(gchar *tmpl, gint mode);
 gint (g_mkstemp)(gchar *tmpl);
@@ -477,6 +486,7 @@ gchar* (g_get_current_dir)(void);
 gchar* (g_path_get_basename)(const gchar *file_name);
 gchar* (g_path_get_dirname)(const gchar *file_name);
 gchar* (g_canonicalize_filename)(const gchar *filename, const gchar *relative_to);
+GQuark (g_file_error_quark)(void);
 // Header /usr/include/glib-2.0/glib/ggettext.h
 const gchar* (g_dgettext)(const gchar *domain, const gchar *msgid);
 const gchar* (g_dcgettext)(const gchar *domain, const gchar *msgid, gint category);
@@ -705,6 +715,8 @@ void (g_clear_list)(GList **list_ptr, GDestroyNotify destroy);
 GList* (g_list_alloc)(void);
 // Header /usr/include/glib-2.0/glib/gmacros.h
 // Header /usr/include/glib-2.0/glib/gmain.h
+GMainContext* (g_main_context_new_with_flags)(GMainContextFlags flags);
+GMainContext* (g_main_context_ref)(GMainContext *context);
 void (g_main_context_unref)(GMainContext *context);
 GMainContext* (g_main_context_default)(void);
 gboolean (g_main_context_iteration)(GMainContext *context, gboolean may_block);
@@ -731,6 +743,7 @@ void (g_main_context_push_thread_default)(GMainContext *context);
 void (g_main_context_pop_thread_default)(GMainContext *context);
 GMainContext* (g_main_context_get_thread_default)(void);
 GMainContext* (g_main_context_ref_thread_default)(void);
+GMainLoop* (g_main_loop_new)(GMainContext *context, gboolean is_running);
 void (g_main_loop_run)(GMainLoop *loop);
 void (g_main_loop_quit)(GMainLoop *loop);
 GMainLoop* (g_main_loop_ref)(GMainLoop *loop);
@@ -738,6 +751,8 @@ void (g_main_loop_unref)(GMainLoop *loop);
 gboolean (g_main_loop_is_running)(GMainLoop *loop);
 GMainContext* (g_main_loop_get_context)(GMainLoop *loop);
 GSource* (g_source_new)(GSourceFuncs *source_funcs, guint struct_size);
+void (g_source_set_dispose_function)(GSource *source, GSourceDisposeFunc dispose);
+GSource* (g_source_ref)(GSource *source);
 void (g_source_unref)(GSource *source);
 guint (g_source_attach)(GSource *source, GMainContext *context);
 void (g_source_destroy)(GSource *source);
@@ -765,10 +780,14 @@ void (g_source_add_poll)(GSource *source, GPollFD *fd);
 void (g_source_remove_poll)(GSource *source, GPollFD *fd);
 void (g_source_add_child_source)(GSource *source, GSource *child_source);
 void (g_source_remove_child_source)(GSource *source, GSource *child_source);
+void (g_source_get_current_time)(GSource *source, GTimeVal *timeval);
+gint64 (g_source_get_time)(GSource *source);
 GSource* (g_idle_source_new)(void);
 GSource* (g_child_watch_source_new)(GPid pid);
 GSource* (g_timeout_source_new)(guint interval);
 GSource* (g_timeout_source_new_seconds)(guint interval);
+void (g_get_current_time)(GTimeVal *result);
+gint64 (g_get_monotonic_time)(void);
 gint64 (g_get_real_time)(void);
 gboolean (g_source_remove)(guint tag);
 gboolean (g_source_remove_by_user_data)(gpointer user_data);
@@ -1233,7 +1252,6 @@ int (g_rmdir)(const gchar *filename);
 int (g_access)(const gchar *filename, int mode);
 gboolean (g_close)(gint fd, GError **error);
 // Header /usr/include/glib-2.0/glib/gstrfuncs.h
-gchar (g_ascii_tolower)(gchar c);
 gchar (g_ascii_toupper)(gchar c);
 gint (g_ascii_digit_value)(gchar c);
 gint (g_ascii_xdigit_value)(gchar c);
@@ -1290,6 +1308,7 @@ gboolean (g_strv_equal)(const gchar * const *strv1, const gchar * const *strv2);
 GQuark (g_number_parser_error_quark)(void);
 gboolean (g_ascii_string_to_signed)(const gchar *str, guint base, gint64 min, gint64 max, gint64 *out_num, GError **error);
 gboolean (g_ascii_string_to_unsigned)(const gchar *str, guint base, guint64 min, guint64 max, guint64 *out_num, GError **error);
+gchar (g_ascii_tolower)(gchar c);
 // Header /usr/include/glib-2.0/glib/gstring.h
 GString* (g_string_new_take)(gchar *init);
 GString* (g_string_new_len)(const gchar *init, gssize len);
@@ -1364,6 +1383,8 @@ double (g_test_timer_elapsed)(void);
 double (g_test_timer_last)(void);
 void (g_test_queue_free)(gpointer gfree_pointer);
 void (g_test_queue_destroy)(GDestroyNotify destroy_func, gpointer destroy_data);
+gboolean (g_test_trap_fork)(guint64 usec_timeout, GTestTrapFlags test_trap_flags);
+void (g_test_trap_subprocess)(const char *test_path, guint64 usec_timeout, GTestSubprocessFlags test_flags);
 void (g_test_trap_subprocess_with_envp)(const char *test_path, const char * const *envp, guint64 usec_timeout, GTestSubprocessFlags test_flags);
 gboolean (g_test_trap_has_passed)(void);
 gboolean (g_test_trap_reached_timeout)(void);
@@ -1468,6 +1489,7 @@ void (g_timer_continue)(GTimer *timer);
 gdouble (g_timer_elapsed)(GTimer *timer, gulong *microseconds);
 gboolean (g_timer_is_active)(GTimer *timer);
 void (g_usleep)(gulong microseconds);
+void (g_time_val_add)(GTimeVal *time_, glong microseconds);
 gboolean (g_time_val_from_iso8601)(const gchar *iso_date, GTimeVal *time_);
 gchar* (g_time_val_to_iso8601)(GTimeVal *time_);
 GTimer* (g_timer_new)(void);
@@ -1489,6 +1511,7 @@ GTimeZone * (g_time_zone_new)(const gchar *identifier);
 gpointer (g_trash_stack_pop)(GTrashStack **stack_p);
 gpointer (g_trash_stack_peek)(GTrashStack **stack_p);
 guint (g_trash_stack_height)(GTrashStack **stack_p);
+void (g_trash_stack_push)(GTrashStack **stack_p, gpointer data_p);
 // Header /usr/include/glib-2.0/glib/gtree.h
 GTree* (g_tree_new_with_data)(GCompareDataFunc key_compare_func, gpointer key_compare_data);
 GTree* (g_tree_new_full)(GCompareDataFunc key_compare_func, gpointer key_compare_data, GDestroyNotify key_destroy_func, GDestroyNotify value_destroy_func);
@@ -1628,6 +1651,7 @@ const char* (g_uri_peek_scheme)(const char *uri);
 char * (g_uri_escape_string)(const char *unescaped, const char *reserved_chars_allowed, gboolean allow_utf8);
 GBytes * (g_uri_unescape_bytes)(const char *escaped_string, gssize length, const char *illegal_characters, GError **error);
 char * (g_uri_escape_bytes)(const guint8 *unescaped, gsize length, const char *reserved_chars_allowed);
+GUri * (g_uri_ref)(GUri *uri);
 // Header /usr/include/glib-2.0/glib/gutils.h
 const gchar * (g_get_real_name)(void);
 const gchar * (g_get_home_dir)(void);
@@ -1654,6 +1678,7 @@ void (g_nullify_pointer)(gpointer *nullify_location);
 gchar* (g_format_size_full)(guint64 size, GFormatSizeFlags flags);
 gchar* (g_format_size)(guint64 size);
 gchar* (g_format_size_for_display)(goffset size);
+void (g_atexit)(GVoidFunc func);
 gchar* (g_find_program_in_path)(const gchar *program);
 gint (g_bit_nth_lsf)(gulong mask, gint nth_bit);
 gint (g_bit_nth_msf)(gulong mask, gint nth_bit);
@@ -1818,6 +1843,7 @@ GSource* (g_unix_fd_source_new)(gint fd, GIOCondition condition);
 guint (g_unix_fd_add_full)(gint priority, gint fd, GIOCondition condition, GUnixFDSourceFunc function, gpointer user_data, GDestroyNotify notify);
 guint (g_unix_fd_add)(gint fd, GIOCondition condition, GUnixFDSourceFunc function, gpointer user_data);
 struct passwd* (g_unix_get_passwd_entry)(const gchar *user_name, GError **error);
+int (g_closefrom)(int lowfd);
 int (g_fdwalk_set_cloexec)(int lowfd);
 GQuark (g_unix_error_quark)(void);
 // Header /usr/include/glib-2.0/gobject/gbinding.h
@@ -1922,6 +1948,7 @@ GType (g_markup_parse_context_get_type)(void);
 GType (g_key_file_get_type)(void);
 GType (g_mapped_file_get_type)(void);
 GType (g_thread_get_type)(void);
+GType (g_checksum_get_type)(void);
 GType (g_option_group_get_type)(void);
 GType (g_uri_get_type)(void);
 GType (g_tree_get_type)(void);
@@ -1931,7 +1958,6 @@ GType (g_hmac_get_type)(void);
 GType (g_dir_get_type)(void);
 GType (g_rand_get_type)(void);
 GType (g_strv_builder_get_type)(void);
-GType (g_checksum_get_type)(void);
 GType (g_variant_get_gtype)(void);
 // Header /usr/include/glib-2.0/gobject/gmarshal.h
 void (g_cclosure_marshal_VOID__VOIDv)(GClosure *closure, GValue *return_value, gpointer instance, va_list args, gpointer marshal_data, int n_params, GType *param_types);
@@ -1989,7 +2015,10 @@ void (g_object_interface_install_property)(gpointer g_iface, GParamSpec *pspec);
 GParamSpec* (g_object_interface_find_property)(gpointer g_iface, const gchar *property_name);
 GParamSpec** (g_object_interface_list_properties)(gpointer g_iface, guint *n_properties_p);
 GType (g_object_get_type)(void);
+gpointer (g_object_new)(GType object_type, const gchar *first_property_name, ...);
 GObject* (g_object_new_with_properties)(GType object_type, guint n_properties, const char *names[], const GValue values[]);
+gpointer (g_object_newv)(GType object_type, guint n_parameters, GParameter *parameters);
+GObject* (g_object_new_valist)(GType object_type, const gchar *first_property_name, va_list var_args);
 void (g_object_set)(gpointer object, const gchar *first_property_name, ...);
 void (g_object_get)(gpointer object, const gchar *first_property_name, ...);
 void (g_object_setv)(GObject *object, guint n_properties, const gchar *names[], const GValue values[]);
@@ -2159,7 +2188,9 @@ void (g_signal_group_connect_swapped)(GSignalGroup *self, const gchar *detailed_
 void (g_source_set_dummy_callback)(GSource *source);
 void (g_source_set_closure)(GSource *source, GClosure *closure);
 // Header /usr/include/glib-2.0/gobject/gtype.h
+void (g_type_init)(void);
 void (g_type_init_with_debug_flags)(GTypeDebugFlags debug_flags);
+const gchar * (g_type_name)(GType type);
 GQuark (g_type_qname)(GType type);
 GType (g_type_from_name)(const gchar *name);
 GType (g_type_parent)(GType type);
@@ -2182,6 +2213,7 @@ void (g_type_set_qdata)(GType type, GQuark quark, gpointer data);
 gpointer (g_type_get_qdata)(GType type, GQuark quark);
 void (g_type_query)(GType type, GTypeQuery *query);
 int (g_type_get_instance_count)(GType type);
+GType (g_type_register_static)(GType parent_type, const gchar *type_name, const GTypeInfo *info, GTypeFlags flags);
 GType (g_type_register_static_simple)(GType parent_type, const gchar *type_name, guint class_size, GClassInitFunc class_init, guint instance_size, GInstanceInitFunc instance_init, GTypeFlags flags);
 GType (g_type_register_dynamic)(GType parent_type, const gchar *type_name, GTypePlugin *plugin, GTypeFlags flags);
 GType (g_type_register_fundamental)(GType type_id, const gchar *type_name, const GTypeInfo *info, const GTypeFundamentalInfo *finfo, GTypeFlags flags);
@@ -2460,6 +2492,8 @@ void (g_application_command_line_done)(GApplicationCommandLine *cmdline);
 GType (g_async_initable_get_type)(void);
 void (g_async_initable_init_async)(GAsyncInitable *initable, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 gboolean (g_async_initable_init_finish)(GAsyncInitable *initable, GAsyncResult *res, GError **error);
+void (g_async_initable_newv_async)(GType object_type, guint n_parameters, GParameter *parameters, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
+void (g_async_initable_new_valist_async)(GType object_type, const gchar *first_property_name, va_list var_args, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 GObject* (g_async_initable_new_finish)(GAsyncInitable *initable, GAsyncResult *res, GError **error);
 // Header /usr/include/glib-2.0/gio/gasyncresult.h
 GType (g_async_result_get_type)(void);
@@ -2909,6 +2943,7 @@ guint8* (g_dbus_unescape_object_path)(const gchar *s);
 gboolean (g_dbus_is_guid)(const gchar *string);
 // Header /usr/include/glib-2.0/gio/gdebugcontroller.h
 GType (g_debug_controller_get_type)(void);
+gboolean (g_debug_controller_get_debug_enabled)(GDebugController *self);
 void (g_debug_controller_set_debug_enabled)(GDebugController *self, gboolean debug_enabled);
 // Header /usr/include/glib-2.0/gio/gdebugcontrollerdbus.h
 GType (g_debug_controller_dbus_get_type)(void);
@@ -2964,7 +2999,9 @@ GTlsCertificate* (g_dtls_connection_get_peer_certificate)(GDtlsConnection *conn)
 GTlsCertificateFlags (g_dtls_connection_get_peer_certificate_errors)(GDtlsConnection *conn);
 void (g_dtls_connection_set_require_close_notify)(GDtlsConnection *conn, gboolean require_close_notify);
 gboolean (g_dtls_connection_get_require_close_notify)(GDtlsConnection *conn);
+void (g_dtls_connection_set_rehandshake_mode)(GDtlsConnection *conn, GTlsRehandshakeMode mode);
 GTlsRehandshakeMode (g_dtls_connection_get_rehandshake_mode)(GDtlsConnection *conn);
+gboolean (g_dtls_connection_handshake)(GDtlsConnection *conn, GCancellable *cancellable, GError **error);
 void (g_dtls_connection_handshake_async)(GDtlsConnection *conn, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 gboolean (g_dtls_connection_handshake_finish)(GDtlsConnection *conn, GAsyncResult *result, GError **error);
 gboolean (g_dtls_connection_shutdown)(GDtlsConnection *conn, gboolean shutdown_read, gboolean shutdown_write, GCancellable *cancellable, GError **error);
@@ -2976,6 +3013,8 @@ gboolean (g_dtls_connection_close_finish)(GDtlsConnection *conn, GAsyncResult *r
 gboolean (g_dtls_connection_emit_accept_certificate)(GDtlsConnection *conn, GTlsCertificate *peer_cert, GTlsCertificateFlags errors);
 void (g_dtls_connection_set_advertised_protocols)(GDtlsConnection *conn, const gchar * const *protocols);
 const gchar * (g_dtls_connection_get_negotiated_protocol)(GDtlsConnection *conn);
+gboolean (g_dtls_connection_get_channel_binding_data)(GDtlsConnection *conn, GTlsChannelBindingType type, GByteArray *data, GError **error);
+GTlsProtocolVersion (g_dtls_connection_get_protocol_version)(GDtlsConnection *conn);
 gchar * (g_dtls_connection_get_ciphersuite_name)(GDtlsConnection *conn);
 // Header /usr/include/glib-2.0/gio/gdtlsserverconnection.h
 GType (g_dtls_server_connection_get_type)(void);
@@ -3209,6 +3248,8 @@ GIcon * (g_file_info_get_icon)(GFileInfo *info);
 GIcon * (g_file_info_get_symbolic_icon)(GFileInfo *info);
 const char * (g_file_info_get_content_type)(GFileInfo *info);
 goffset (g_file_info_get_size)(GFileInfo *info);
+void (g_file_info_get_modification_time)(GFileInfo *info, GTimeVal *result);
+GDateTime * (g_file_info_get_modification_date_time)(GFileInfo *info);
 GDateTime * (g_file_info_get_access_date_time)(GFileInfo *info);
 GDateTime * (g_file_info_get_creation_date_time)(GFileInfo *info);
 const char * (g_file_info_get_symlink_target)(GFileInfo *info);
@@ -3226,6 +3267,8 @@ void (g_file_info_set_icon)(GFileInfo *info, GIcon *icon);
 void (g_file_info_set_symbolic_icon)(GFileInfo *info, GIcon *icon);
 void (g_file_info_set_content_type)(GFileInfo *info, const char *content_type);
 void (g_file_info_set_size)(GFileInfo *info, goffset size);
+void (g_file_info_set_modification_time)(GFileInfo *info, GTimeVal *mtime);
+void (g_file_info_set_modification_date_time)(GFileInfo *info, GDateTime *mtime);
 void (g_file_info_set_access_date_time)(GFileInfo *info, GDateTime *atime);
 void (g_file_info_set_creation_date_time)(GFileInfo *info, GDateTime *creation_time);
 void (g_file_info_set_symlink_target)(GFileInfo *info, const char *symlink_target);
@@ -3329,6 +3372,8 @@ guint32 (g_inet_socket_address_get_scope_id)(GInetSocketAddress *address);
 // Header /usr/include/glib-2.0/gio/ginitable.h
 GType (g_initable_get_type)(void);
 gboolean (g_initable_init)(GInitable *initable, GCancellable *cancellable, GError **error);
+gpointer (g_initable_newv)(GType object_type, guint n_parameters, GParameter *parameters, GCancellable *cancellable, GError **error);
+GObject* (g_initable_new_valist)(GType object_type, const gchar *first_property_name, va_list var_args, GCancellable *cancellable, GError **error);
 // Header /usr/include/glib-2.0/gio/ginputstream.h
 GType (g_input_stream_get_type)(void);
 gssize (g_input_stream_read)(GInputStream *stream, void *buffer, gsize count, GCancellable *cancellable, GError **error);
@@ -3484,6 +3529,7 @@ void (g_io_stream_clear_pending)(GIOStream *stream);
 // Header /usr/include/glib-2.0/gio/giotypes.h
 // Header /usr/include/glib-2.0/gio/glistmodel.h
 GType (g_list_model_get_type)(void);
+GType (g_list_model_get_item_type)(GListModel *list);
 guint (g_list_model_get_n_items)(GListModel *list);
 gpointer (g_list_model_get_item)(GListModel *list, guint position);
 GObject * (g_list_model_get_object)(GListModel *list, guint position);
@@ -3515,6 +3561,7 @@ void (g_memory_input_stream_add_data)(GMemoryInputStream *stream, const void *da
 void (g_memory_input_stream_add_bytes)(GMemoryInputStream *stream, GBytes *bytes);
 // Header /usr/include/glib-2.0/gio/gmemorymonitor.h
 GType (g_memory_monitor_get_type)(void);
+GMemoryMonitor* (g_memory_monitor_dup_default)(void);
 // Header /usr/include/glib-2.0/gio/gmemoryoutputstream.h
 GType (g_memory_output_stream_get_type)(void);
 GOutputStream* (g_memory_output_stream_new)(gpointer data, gsize size, GReallocFunc realloc_function, GDestroyNotify destroy_function);
@@ -3742,6 +3789,7 @@ gboolean (g_pollable_stream_write_all)(GOutputStream *stream, const void *buffer
 GSource* (g_pollable_source_new)(GObject *pollable_stream);
 // Header /usr/include/glib-2.0/gio/gpowerprofilemonitor.h
 GType (g_power_profile_monitor_get_type)(void);
+GPowerProfileMonitor* (g_power_profile_monitor_dup_default)(void);
 gboolean (g_power_profile_monitor_get_power_saver_enabled)(GPowerProfileMonitor *monitor);
 // Header /usr/include/glib-2.0/gio/gpropertyaction.h
 GType (g_property_action_get_type)(void);
@@ -4296,8 +4344,12 @@ GTlsCertificate* (g_tls_connection_get_peer_certificate)(GTlsConnection *conn);
 GTlsCertificateFlags (g_tls_connection_get_peer_certificate_errors)(GTlsConnection *conn);
 void (g_tls_connection_set_require_close_notify)(GTlsConnection *conn, gboolean require_close_notify);
 gboolean (g_tls_connection_get_require_close_notify)(GTlsConnection *conn);
+void (g_tls_connection_set_rehandshake_mode)(GTlsConnection *conn, GTlsRehandshakeMode mode);
 GTlsRehandshakeMode (g_tls_connection_get_rehandshake_mode)(GTlsConnection *conn);
+void (g_tls_connection_set_advertised_protocols)(GTlsConnection *conn, const gchar * const *protocols);
 const gchar * (g_tls_connection_get_negotiated_protocol)(GTlsConnection *conn);
+gboolean (g_tls_connection_get_channel_binding_data)(GTlsConnection *conn, GTlsChannelBindingType type, GByteArray *data, GError **error);
+gboolean (g_tls_connection_handshake)(GTlsConnection *conn, GCancellable *cancellable, GError **error);
 void (g_tls_connection_handshake_async)(GTlsConnection *conn, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
 gboolean (g_tls_connection_handshake_finish)(GTlsConnection *conn, GAsyncResult *result, GError **error);
 GTlsProtocolVersion (g_tls_connection_get_protocol_version)(GTlsConnection *conn);

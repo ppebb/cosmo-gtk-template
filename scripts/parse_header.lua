@@ -3,6 +3,20 @@ local utils = require("scripts.utils")
 local M = {}
 M.__index = M
 
+-- TODO: Move this elsewhere. Could be defined on a per-stub basis...
+local skip_lines = {
+    "G_GNUC_[A-Z]*_IGNORE_DEPRECATIONS",
+    "G_DECLARE_INTERFACE",
+    "G_DEFINE_AUTOPTR_CLEANUP_FUNC",
+    "G_TYPE_CHECK",
+    "G_GNUC_[A-Z]*_IGNORE_DEPRECATIONS",
+    "GMODULE_[A-Z]*_ENUMERATOR",
+    "GLIB_[A-Z]*_ENUMERATOR",
+    "GIO_[A-Z]*_TYPE_IN",
+    "GLIB_VAR",
+    "GOBJECT_VAR",
+}
+
 --- @param path string
 --- @param match_access string[]
 --- @param prefix string
@@ -113,6 +127,14 @@ function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
         end
 
         if curly_depth > 0 then
+            goto continue
+        end
+
+        if utils.matches_any(line, skip_lines) then
+            if #collected > 1 and utils.matches_any(collected[#collected] or "", match_access) then
+                collected[#collected] = ""
+            end
+
             goto continue
         end
 
@@ -246,18 +268,9 @@ function M:process_header(path, match_access, prefix, trim_prefix, skip_funcs)
     for _, _v in pairs(collected) do
         local v = _v
 
-        if
-            v:match("G_DECLARE_INTERFACE")
-            or v:match("G_DEFINE_AUTOPTR_CLEANUP_FUNC")
-            or v:match("G_TYPE_CHECK")
-            or v:match("G_GNUC_[A-Z]*_IGNORE_DEPRECATIONS")
-            or v:match("GMODULE_[A-Z]*_ENUMERATOR")
-            or v:match("GLIB_[A-Z]*_ENUMERATOR")
-            or v:match("GIO_[A-Z]*_TYPE_IN")
-            or v:match("GLIB_VAR")
-            or v:match("GOBJECT_VAR")
-            or utils.matches_any(v, skip_funcs)
-        then
+        local matched, match = utils.matches_any(v, skip_funcs)
+        if matched then
+            utils.fprintf(io.stdout, "Skipping function %s, which matched pattern %s", matched, match)
             goto continue
         end
 

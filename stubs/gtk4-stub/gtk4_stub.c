@@ -1141,6 +1141,7 @@ static struct gtk4Funcs {
     gboolean (*ptr_gtk_accelerator_valid)(guint keyval, GdkModifierType modifiers);
     // Header /usr/include/gtk-4.0/gtk/gtkaccessible.h
     GType (*ptr_gtk_accessible_get_type)(void);
+    GtkATContext * (*ptr_gtk_accessible_get_at_context)(GtkAccessible *self);
     gboolean (*ptr_gtk_accessible_get_platform_state)(GtkAccessible *self, GtkAccessiblePlatformState state);
     GtkAccessible * (*ptr_gtk_accessible_get_accessible_parent)(GtkAccessible *self);
     void (*ptr_gtk_accessible_set_accessible_parent)(GtkAccessible *self, GtkAccessible *parent, GtkAccessible *next_sibling);
@@ -1167,6 +1168,7 @@ static struct gtk4Funcs {
     GType (*ptr_gtk_accessible_range_get_type)(void);
     // Header /usr/include/gtk-4.0/gtk/gtkaccessibletext.h
     GType (*ptr_gtk_accessible_text_get_type)(void);
+    void (*ptr_gtk_accessible_text_update_caret_position)(GtkAccessibleText *self);
     void (*ptr_gtk_accessible_text_update_selection_bound)(GtkAccessibleText *self);
     void (*ptr_gtk_accessible_text_update_contents)(GtkAccessibleText *self, GtkAccessibleTextContentChange change, unsigned int start, unsigned int end);
     // Header /usr/include/gtk-4.0/gtk/gtkactionable.h
@@ -1271,6 +1273,7 @@ static struct gtk4Funcs {
     GType (*ptr_gtk_bitset_get_type)(void);
     GtkBitset * (*ptr_gtk_bitset_ref)(GtkBitset *self);
     void (*ptr_gtk_bitset_unref)(GtkBitset *self);
+    gboolean (*ptr_gtk_bitset_contains)(const GtkBitset *self, guint value);
     gboolean (*ptr_gtk_bitset_is_empty)(const GtkBitset *self);
     gboolean (*ptr_gtk_bitset_equals)(const GtkBitset *self, const GtkBitset *other);
     guint64 (*ptr_gtk_bitset_get_size)(const GtkBitset *self);
@@ -1923,6 +1926,7 @@ static struct gtk4Funcs {
     GType (*ptr_gtk_expression_watch_get_type)(void);
     GtkExpression * (*ptr_gtk_expression_ref)(GtkExpression *self);
     void (*ptr_gtk_expression_unref)(GtkExpression *self);
+    GType (*ptr_gtk_expression_get_value_type)(GtkExpression *self);
     gboolean (*ptr_gtk_expression_is_static)(GtkExpression *self);
     gboolean (*ptr_gtk_expression_evaluate)(GtkExpression *self, gpointer this_, GValue *value);
     GtkExpressionWatch * (*ptr_gtk_expression_watch)(GtkExpression *self, gpointer this_, GtkExpressionNotify notify, gpointer user_data, GDestroyNotify user_destroy);
@@ -2726,6 +2730,7 @@ static struct gtk4Funcs {
     void (*ptr_gtk_multi_sorter_remove)(GtkMultiSorter *self, guint position);
     // Header /usr/include/gtk-4.0/gtk/gtknative.h
     GType (*ptr_gtk_native_get_type)(void);
+    void (*ptr_gtk_native_realize)(GtkNative *self);
     void (*ptr_gtk_native_unrealize)(GtkNative *self);
     GtkNative * (*ptr_gtk_native_get_for_surface)(GdkSurface *surface);
     GdkSurface* (*ptr_gtk_native_get_surface)(GtkNative *self);
@@ -3041,6 +3046,7 @@ static struct gtk4Funcs {
     GtkWidget * (*ptr_gtk_revealer_get_child)(GtkRevealer *revealer);
     // Header /usr/include/gtk-4.0/gtk/gtkroot.h
     GType (*ptr_gtk_root_get_type)(void);
+    GdkDisplay * (*ptr_gtk_root_get_display)(GtkRoot *self);
     void (*ptr_gtk_root_set_focus)(GtkRoot *self, GtkWidget *focus);
     GtkWidget * (*ptr_gtk_root_get_focus)(GtkRoot *self);
     // Header /usr/include/gtk-4.0/gtk/gtkscale.h
@@ -3160,6 +3166,7 @@ static struct gtk4Funcs {
     GtkInputHints (*ptr_gtk_search_entry_get_input_hints)(GtkSearchEntry *entry);
     // Header /usr/include/gtk-4.0/gtk/gtksectionmodel.h
     GType (*ptr_gtk_section_model_get_type)(void);
+    void (*ptr_gtk_section_model_get_section)(GtkSectionModel *self, guint position, guint *out_start, guint *out_end);
     void (*ptr_gtk_section_model_sections_changed)(GtkSectionModel *self, guint position, guint n_items);
     // Header /usr/include/gtk-4.0/gtk/gtkselectionfiltermodel.h
     GType (*ptr_gtk_selection_filter_model_get_type)(void);
@@ -3168,6 +3175,7 @@ static struct gtk4Funcs {
     GtkSelectionModel * (*ptr_gtk_selection_filter_model_get_model)(GtkSelectionFilterModel *self);
     // Header /usr/include/gtk-4.0/gtk/gtkselectionmodel.h
     GType (*ptr_gtk_selection_model_get_type)(void);
+    gboolean (*ptr_gtk_selection_model_is_selected)(GtkSelectionModel *model, guint position);
     GtkBitset * (*ptr_gtk_selection_model_get_selection)(GtkSelectionModel *model);
     GtkBitset * (*ptr_gtk_selection_model_get_selection_in_range)(GtkSelectionModel *model, guint position, guint n_items);
     gboolean (*ptr_gtk_selection_model_select_item)(GtkSelectionModel *model, guint position, gboolean unselect_rest);
@@ -3489,6 +3497,7 @@ static struct gtk4Funcs {
     GtkCollation (*ptr_gtk_string_sorter_get_collation)(GtkStringSorter *self);
     // Header /usr/include/gtk-4.0/gtk/gtkstyleprovider.h
     GType (*ptr_gtk_style_provider_get_type)(void);
+    void (*ptr_gtk_style_context_add_provider_for_display)(GdkDisplay *display, GtkStyleProvider *provider, guint priority);
     void (*ptr_gtk_style_context_remove_provider_for_display)(GdkDisplay *display, GtkStyleProvider *provider);
     // Header /usr/include/gtk-4.0/gtk/gtkswitch.h
     GType (*ptr_gtk_switch_get_type)(void);
@@ -3499,6 +3508,7 @@ static struct gtk4Funcs {
     gboolean (*ptr_gtk_switch_get_state)(GtkSwitch *self);
     // Header /usr/include/gtk-4.0/gtk/gtksymbolicpaintable.h
     GType (*ptr_gtk_symbolic_paintable_get_type)(void);
+    void (*ptr_gtk_symbolic_paintable_snapshot_symbolic)(GtkSymbolicPaintable *paintable, GdkSnapshot *snapshot, double width, double height, const GdkRGBA *colors, gsize n_colors);
     // Header /usr/include/gtk-4.0/gtk/gtktestatcontext.h
     gboolean (*ptr_gtk_test_accessible_has_property)(GtkAccessible *accessible, GtkAccessibleProperty property);
     gboolean (*ptr_gtk_test_accessible_has_relation)(GtkAccessible *accessible, GtkAccessibleRelation relation);
@@ -4692,6 +4702,7 @@ static struct gtk4Funcs {
     GdkSurface * (*ptr_gdk_drag_get_surface)(GdkDrag *drag);
     // Header /usr/include/gtk-4.0/gdk/gdkdragsurface.h
     GType (*ptr_gdk_drag_surface_get_type)(void);
+    gboolean (*ptr_gdk_drag_surface_present)(GdkDragSurface *drag_surface, int width, int height);
     // Header /usr/include/gtk-4.0/gdk/gdkdragsurfacesize.h
     GType (*ptr_gdk_drag_surface_size_get_type)(void);
     void (*ptr_gdk_drag_surface_size_set_size)(GdkDragSurfaceSize *size, int width, int height);
@@ -4917,6 +4928,7 @@ static struct gtk4Funcs {
     const char * (*ptr_gdk_monitor_get_description)(GdkMonitor *monitor);
     // Header /usr/include/gtk-4.0/gdk/gdkpaintable.h
     GType (*ptr_gdk_paintable_get_type)(void);
+    void (*ptr_gdk_paintable_snapshot)(GdkPaintable *paintable, GdkSnapshot *snapshot, double width, double height);
     GdkPaintable * (*ptr_gdk_paintable_get_current_image)(GdkPaintable *paintable);
     GdkPaintableFlags (*ptr_gdk_paintable_get_flags)(GdkPaintable *paintable);
     int (*ptr_gdk_paintable_get_intrinsic_width)(GdkPaintable *paintable);
@@ -4931,6 +4943,7 @@ static struct gtk4Funcs {
     cairo_region_t* (*ptr_gdk_pango_layout_line_get_clip_region)(PangoLayoutLine *line, int x_origin, int y_origin, const int *index_ranges, int n_ranges);
     // Header /usr/include/gtk-4.0/gdk/gdkpopup.h
     GType (*ptr_gdk_popup_get_type)(void);
+    gboolean (*ptr_gdk_popup_present)(GdkPopup *popup, int width, int height, GdkPopupLayout *layout);
     GdkGravity (*ptr_gdk_popup_get_surface_anchor)(GdkPopup *popup);
     GdkGravity (*ptr_gdk_popup_get_rect_anchor)(GdkPopup *popup);
     GdkSurface * (*ptr_gdk_popup_get_parent)(GdkPopup *popup);
@@ -5040,6 +5053,7 @@ static struct gtk4Funcs {
     GBytes * (*ptr_gdk_texture_downloader_download_bytes)(const GdkTextureDownloader *self, gsize *out_stride);
     // Header /usr/include/gtk-4.0/gdk/gdktoplevel.h
     GType (*ptr_gdk_toplevel_get_type)(void);
+    void (*ptr_gdk_toplevel_present)(GdkToplevel *toplevel, GdkToplevelLayout *layout);
     gboolean (*ptr_gdk_toplevel_minimize)(GdkToplevel *toplevel);
     gboolean (*ptr_gdk_toplevel_lower)(GdkToplevel *toplevel);
     void (*ptr_gdk_toplevel_focus)(GdkToplevel *toplevel, guint32 timestamp);
@@ -6593,6 +6607,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_accelerator_valid = try_find_sym(gtk, "gtk_accelerator_valid");
     // Header /usr/include/gtk-4.0/gtk/gtkaccessible.h
     stub_funcs.ptr_gtk_accessible_get_type = try_find_sym(gtk, "gtk_accessible_get_type");
+    stub_funcs.ptr_gtk_accessible_get_at_context = try_find_sym(gtk, "gtk_accessible_get_at_context");
     stub_funcs.ptr_gtk_accessible_get_platform_state = try_find_sym(gtk, "gtk_accessible_get_platform_state");
     stub_funcs.ptr_gtk_accessible_get_accessible_parent = try_find_sym(gtk, "gtk_accessible_get_accessible_parent");
     stub_funcs.ptr_gtk_accessible_set_accessible_parent = try_find_sym(gtk, "gtk_accessible_set_accessible_parent");
@@ -6619,6 +6634,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_accessible_range_get_type = try_find_sym(gtk, "gtk_accessible_range_get_type");
     // Header /usr/include/gtk-4.0/gtk/gtkaccessibletext.h
     stub_funcs.ptr_gtk_accessible_text_get_type = try_find_sym(gtk, "gtk_accessible_text_get_type");
+    stub_funcs.ptr_gtk_accessible_text_update_caret_position = try_find_sym(gtk, "gtk_accessible_text_update_caret_position");
     stub_funcs.ptr_gtk_accessible_text_update_selection_bound = try_find_sym(gtk, "gtk_accessible_text_update_selection_bound");
     stub_funcs.ptr_gtk_accessible_text_update_contents = try_find_sym(gtk, "gtk_accessible_text_update_contents");
     // Header /usr/include/gtk-4.0/gtk/gtkactionable.h
@@ -6723,6 +6739,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_bitset_get_type = try_find_sym(gtk, "gtk_bitset_get_type");
     stub_funcs.ptr_gtk_bitset_ref = try_find_sym(gtk, "gtk_bitset_ref");
     stub_funcs.ptr_gtk_bitset_unref = try_find_sym(gtk, "gtk_bitset_unref");
+    stub_funcs.ptr_gtk_bitset_contains = try_find_sym(gtk, "gtk_bitset_contains");
     stub_funcs.ptr_gtk_bitset_is_empty = try_find_sym(gtk, "gtk_bitset_is_empty");
     stub_funcs.ptr_gtk_bitset_equals = try_find_sym(gtk, "gtk_bitset_equals");
     stub_funcs.ptr_gtk_bitset_get_size = try_find_sym(gtk, "gtk_bitset_get_size");
@@ -7375,6 +7392,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_expression_watch_get_type = try_find_sym(gtk, "gtk_expression_watch_get_type");
     stub_funcs.ptr_gtk_expression_ref = try_find_sym(gtk, "gtk_expression_ref");
     stub_funcs.ptr_gtk_expression_unref = try_find_sym(gtk, "gtk_expression_unref");
+    stub_funcs.ptr_gtk_expression_get_value_type = try_find_sym(gtk, "gtk_expression_get_value_type");
     stub_funcs.ptr_gtk_expression_is_static = try_find_sym(gtk, "gtk_expression_is_static");
     stub_funcs.ptr_gtk_expression_evaluate = try_find_sym(gtk, "gtk_expression_evaluate");
     stub_funcs.ptr_gtk_expression_watch = try_find_sym(gtk, "gtk_expression_watch");
@@ -8178,6 +8196,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_multi_sorter_remove = try_find_sym(gtk, "gtk_multi_sorter_remove");
     // Header /usr/include/gtk-4.0/gtk/gtknative.h
     stub_funcs.ptr_gtk_native_get_type = try_find_sym(gtk, "gtk_native_get_type");
+    stub_funcs.ptr_gtk_native_realize = try_find_sym(gtk, "gtk_native_realize");
     stub_funcs.ptr_gtk_native_unrealize = try_find_sym(gtk, "gtk_native_unrealize");
     stub_funcs.ptr_gtk_native_get_for_surface = try_find_sym(gtk, "gtk_native_get_for_surface");
     stub_funcs.ptr_gtk_native_get_surface = try_find_sym(gtk, "gtk_native_get_surface");
@@ -8493,6 +8512,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_revealer_get_child = try_find_sym(gtk, "gtk_revealer_get_child");
     // Header /usr/include/gtk-4.0/gtk/gtkroot.h
     stub_funcs.ptr_gtk_root_get_type = try_find_sym(gtk, "gtk_root_get_type");
+    stub_funcs.ptr_gtk_root_get_display = try_find_sym(gtk, "gtk_root_get_display");
     stub_funcs.ptr_gtk_root_set_focus = try_find_sym(gtk, "gtk_root_set_focus");
     stub_funcs.ptr_gtk_root_get_focus = try_find_sym(gtk, "gtk_root_get_focus");
     // Header /usr/include/gtk-4.0/gtk/gtkscale.h
@@ -8612,6 +8632,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_search_entry_get_input_hints = try_find_sym(gtk, "gtk_search_entry_get_input_hints");
     // Header /usr/include/gtk-4.0/gtk/gtksectionmodel.h
     stub_funcs.ptr_gtk_section_model_get_type = try_find_sym(gtk, "gtk_section_model_get_type");
+    stub_funcs.ptr_gtk_section_model_get_section = try_find_sym(gtk, "gtk_section_model_get_section");
     stub_funcs.ptr_gtk_section_model_sections_changed = try_find_sym(gtk, "gtk_section_model_sections_changed");
     // Header /usr/include/gtk-4.0/gtk/gtkselectionfiltermodel.h
     stub_funcs.ptr_gtk_selection_filter_model_get_type = try_find_sym(gtk, "gtk_selection_filter_model_get_type");
@@ -8620,6 +8641,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_selection_filter_model_get_model = try_find_sym(gtk, "gtk_selection_filter_model_get_model");
     // Header /usr/include/gtk-4.0/gtk/gtkselectionmodel.h
     stub_funcs.ptr_gtk_selection_model_get_type = try_find_sym(gtk, "gtk_selection_model_get_type");
+    stub_funcs.ptr_gtk_selection_model_is_selected = try_find_sym(gtk, "gtk_selection_model_is_selected");
     stub_funcs.ptr_gtk_selection_model_get_selection = try_find_sym(gtk, "gtk_selection_model_get_selection");
     stub_funcs.ptr_gtk_selection_model_get_selection_in_range = try_find_sym(gtk, "gtk_selection_model_get_selection_in_range");
     stub_funcs.ptr_gtk_selection_model_select_item = try_find_sym(gtk, "gtk_selection_model_select_item");
@@ -8941,6 +8963,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_string_sorter_get_collation = try_find_sym(gtk, "gtk_string_sorter_get_collation");
     // Header /usr/include/gtk-4.0/gtk/gtkstyleprovider.h
     stub_funcs.ptr_gtk_style_provider_get_type = try_find_sym(gtk, "gtk_style_provider_get_type");
+    stub_funcs.ptr_gtk_style_context_add_provider_for_display = try_find_sym(gtk, "gtk_style_context_add_provider_for_display");
     stub_funcs.ptr_gtk_style_context_remove_provider_for_display = try_find_sym(gtk, "gtk_style_context_remove_provider_for_display");
     // Header /usr/include/gtk-4.0/gtk/gtkswitch.h
     stub_funcs.ptr_gtk_switch_get_type = try_find_sym(gtk, "gtk_switch_get_type");
@@ -8951,6 +8974,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gtk_switch_get_state = try_find_sym(gtk, "gtk_switch_get_state");
     // Header /usr/include/gtk-4.0/gtk/gtksymbolicpaintable.h
     stub_funcs.ptr_gtk_symbolic_paintable_get_type = try_find_sym(gtk, "gtk_symbolic_paintable_get_type");
+    stub_funcs.ptr_gtk_symbolic_paintable_snapshot_symbolic = try_find_sym(gtk, "gtk_symbolic_paintable_snapshot_symbolic");
     // Header /usr/include/gtk-4.0/gtk/gtktestatcontext.h
     stub_funcs.ptr_gtk_test_accessible_has_property = try_find_sym(gtk, "gtk_test_accessible_has_property");
     stub_funcs.ptr_gtk_test_accessible_has_relation = try_find_sym(gtk, "gtk_test_accessible_has_relation");
@@ -10144,6 +10168,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_drag_get_surface = try_find_sym(gtk, "gdk_drag_get_surface");
     // Header /usr/include/gtk-4.0/gdk/gdkdragsurface.h
     stub_funcs.ptr_gdk_drag_surface_get_type = try_find_sym(gtk, "gdk_drag_surface_get_type");
+    stub_funcs.ptr_gdk_drag_surface_present = try_find_sym(gtk, "gdk_drag_surface_present");
     // Header /usr/include/gtk-4.0/gdk/gdkdragsurfacesize.h
     stub_funcs.ptr_gdk_drag_surface_size_get_type = try_find_sym(gtk, "gdk_drag_surface_size_get_type");
     stub_funcs.ptr_gdk_drag_surface_size_set_size = try_find_sym(gtk, "gdk_drag_surface_size_set_size");
@@ -10369,6 +10394,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_monitor_get_description = try_find_sym(gtk, "gdk_monitor_get_description");
     // Header /usr/include/gtk-4.0/gdk/gdkpaintable.h
     stub_funcs.ptr_gdk_paintable_get_type = try_find_sym(gtk, "gdk_paintable_get_type");
+    stub_funcs.ptr_gdk_paintable_snapshot = try_find_sym(gtk, "gdk_paintable_snapshot");
     stub_funcs.ptr_gdk_paintable_get_current_image = try_find_sym(gtk, "gdk_paintable_get_current_image");
     stub_funcs.ptr_gdk_paintable_get_flags = try_find_sym(gtk, "gdk_paintable_get_flags");
     stub_funcs.ptr_gdk_paintable_get_intrinsic_width = try_find_sym(gtk, "gdk_paintable_get_intrinsic_width");
@@ -10383,6 +10409,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_pango_layout_line_get_clip_region = try_find_sym(gtk, "gdk_pango_layout_line_get_clip_region");
     // Header /usr/include/gtk-4.0/gdk/gdkpopup.h
     stub_funcs.ptr_gdk_popup_get_type = try_find_sym(gtk, "gdk_popup_get_type");
+    stub_funcs.ptr_gdk_popup_present = try_find_sym(gtk, "gdk_popup_present");
     stub_funcs.ptr_gdk_popup_get_surface_anchor = try_find_sym(gtk, "gdk_popup_get_surface_anchor");
     stub_funcs.ptr_gdk_popup_get_rect_anchor = try_find_sym(gtk, "gdk_popup_get_rect_anchor");
     stub_funcs.ptr_gdk_popup_get_parent = try_find_sym(gtk, "gdk_popup_get_parent");
@@ -10492,6 +10519,7 @@ void initialize_gtk4(void) {
     stub_funcs.ptr_gdk_texture_downloader_download_bytes = try_find_sym(gtk, "gdk_texture_downloader_download_bytes");
     // Header /usr/include/gtk-4.0/gdk/gdktoplevel.h
     stub_funcs.ptr_gdk_toplevel_get_type = try_find_sym(gtk, "gdk_toplevel_get_type");
+    stub_funcs.ptr_gdk_toplevel_present = try_find_sym(gtk, "gdk_toplevel_present");
     stub_funcs.ptr_gdk_toplevel_minimize = try_find_sym(gtk, "gdk_toplevel_minimize");
     stub_funcs.ptr_gdk_toplevel_lower = try_find_sym(gtk, "gdk_toplevel_lower");
     stub_funcs.ptr_gdk_toplevel_focus = try_find_sym(gtk, "gdk_toplevel_focus");
@@ -11985,6 +12013,7 @@ char * (gtk_accelerator_get_label_with_keycode)(GdkDisplay *display, guint accel
 GdkModifierType (gtk_accelerator_get_default_mod_mask)(void) { return stub_funcs.ptr_gtk_accelerator_get_default_mod_mask(); }
 gboolean (gtk_accelerator_valid)(guint keyval, GdkModifierType modifiers) { return stub_funcs.ptr_gtk_accelerator_valid(keyval, modifiers); }
 GType (gtk_accessible_get_type)(void) { return stub_funcs.ptr_gtk_accessible_get_type(); }
+GtkATContext * (gtk_accessible_get_at_context)(GtkAccessible *self) { return stub_funcs.ptr_gtk_accessible_get_at_context(self); }
 gboolean (gtk_accessible_get_platform_state)(GtkAccessible *self, GtkAccessiblePlatformState state) { return stub_funcs.ptr_gtk_accessible_get_platform_state(self, state); }
 GtkAccessible * (gtk_accessible_get_accessible_parent)(GtkAccessible *self) { return stub_funcs.ptr_gtk_accessible_get_accessible_parent(self); }
 void (gtk_accessible_set_accessible_parent)(GtkAccessible *self, GtkAccessible *parent, GtkAccessible *next_sibling) { stub_funcs.ptr_gtk_accessible_set_accessible_parent(self, parent, next_sibling); }
@@ -12012,6 +12041,7 @@ GtkAccessibleList * (gtk_accessible_list_new_from_array)(GtkAccessible **accessi
 void (gtk_accessible_announce)(GtkAccessible *self, const char *message, GtkAccessibleAnnouncementPriority priority) { stub_funcs.ptr_gtk_accessible_announce(self, message, priority); }
 GType (gtk_accessible_range_get_type)(void) { return stub_funcs.ptr_gtk_accessible_range_get_type(); }
 GType (gtk_accessible_text_get_type)(void) { return stub_funcs.ptr_gtk_accessible_text_get_type(); }
+void (gtk_accessible_text_update_caret_position)(GtkAccessibleText *self) { stub_funcs.ptr_gtk_accessible_text_update_caret_position(self); }
 void (gtk_accessible_text_update_selection_bound)(GtkAccessibleText *self) { stub_funcs.ptr_gtk_accessible_text_update_selection_bound(self); }
 void (gtk_accessible_text_update_contents)(GtkAccessibleText *self, GtkAccessibleTextContentChange change, unsigned int start, unsigned int end) { stub_funcs.ptr_gtk_accessible_text_update_contents(self, change, start, end); }
 GType (gtk_actionable_get_type)(void) { return stub_funcs.ptr_gtk_actionable_get_type(); }
@@ -12108,6 +12138,7 @@ GtkLayoutManager * (gtk_bin_layout_new)(void) { return stub_funcs.ptr_gtk_bin_la
 GType (gtk_bitset_get_type)(void) { return stub_funcs.ptr_gtk_bitset_get_type(); }
 GtkBitset * (gtk_bitset_ref)(GtkBitset *self) { return stub_funcs.ptr_gtk_bitset_ref(self); }
 void (gtk_bitset_unref)(GtkBitset *self) { stub_funcs.ptr_gtk_bitset_unref(self); }
+gboolean (gtk_bitset_contains)(const GtkBitset *self, guint value) { return stub_funcs.ptr_gtk_bitset_contains(self, value); }
 gboolean (gtk_bitset_is_empty)(const GtkBitset *self) { return stub_funcs.ptr_gtk_bitset_is_empty(self); }
 gboolean (gtk_bitset_equals)(const GtkBitset *self, const GtkBitset *other) { return stub_funcs.ptr_gtk_bitset_equals(self, other); }
 guint64 (gtk_bitset_get_size)(const GtkBitset *self) { return stub_funcs.ptr_gtk_bitset_get_size(self); }
@@ -12708,6 +12739,7 @@ GType (gtk_expression_get_type)(void) { return stub_funcs.ptr_gtk_expression_get
 GType (gtk_expression_watch_get_type)(void) { return stub_funcs.ptr_gtk_expression_watch_get_type(); }
 GtkExpression * (gtk_expression_ref)(GtkExpression *self) { return stub_funcs.ptr_gtk_expression_ref(self); }
 void (gtk_expression_unref)(GtkExpression *self) { stub_funcs.ptr_gtk_expression_unref(self); }
+GType (gtk_expression_get_value_type)(GtkExpression *self) { return stub_funcs.ptr_gtk_expression_get_value_type(self); }
 gboolean (gtk_expression_is_static)(GtkExpression *self) { return stub_funcs.ptr_gtk_expression_is_static(self); }
 gboolean (gtk_expression_evaluate)(GtkExpression *self, gpointer this_, GValue *value) { return stub_funcs.ptr_gtk_expression_evaluate(self, this_, value); }
 GtkExpressionWatch * (gtk_expression_watch)(GtkExpression *self, gpointer this_, GtkExpressionNotify notify, gpointer user_data, GDestroyNotify user_destroy) { return stub_funcs.ptr_gtk_expression_watch(self, this_, notify, user_data, user_destroy); }
@@ -13455,6 +13487,7 @@ GtkMultiSorter * (gtk_multi_sorter_new)(void) { return stub_funcs.ptr_gtk_multi_
 void (gtk_multi_sorter_append)(GtkMultiSorter *self, GtkSorter *sorter) { stub_funcs.ptr_gtk_multi_sorter_append(self, sorter); }
 void (gtk_multi_sorter_remove)(GtkMultiSorter *self, guint position) { stub_funcs.ptr_gtk_multi_sorter_remove(self, position); }
 GType (gtk_native_get_type)(void) { return stub_funcs.ptr_gtk_native_get_type(); }
+void (gtk_native_realize)(GtkNative *self) { stub_funcs.ptr_gtk_native_realize(self); }
 void (gtk_native_unrealize)(GtkNative *self) { stub_funcs.ptr_gtk_native_unrealize(self); }
 GtkNative * (gtk_native_get_for_surface)(GdkSurface *surface) { return stub_funcs.ptr_gtk_native_get_for_surface(surface); }
 GdkSurface* (gtk_native_get_surface)(GtkNative *self) { return stub_funcs.ptr_gtk_native_get_surface(self); }
@@ -13749,6 +13782,7 @@ GtkRevealerTransitionType (gtk_revealer_get_transition_type)(GtkRevealer *reveal
 void (gtk_revealer_set_child)(GtkRevealer *revealer, GtkWidget *child) { stub_funcs.ptr_gtk_revealer_set_child(revealer, child); }
 GtkWidget * (gtk_revealer_get_child)(GtkRevealer *revealer) { return stub_funcs.ptr_gtk_revealer_get_child(revealer); }
 GType (gtk_root_get_type)(void) { return stub_funcs.ptr_gtk_root_get_type(); }
+GdkDisplay * (gtk_root_get_display)(GtkRoot *self) { return stub_funcs.ptr_gtk_root_get_display(self); }
 void (gtk_root_set_focus)(GtkRoot *self, GtkWidget *focus) { stub_funcs.ptr_gtk_root_set_focus(self, focus); }
 GtkWidget * (gtk_root_get_focus)(GtkRoot *self) { return stub_funcs.ptr_gtk_root_get_focus(self); }
 GType (gtk_scale_get_type)(void) { return stub_funcs.ptr_gtk_scale_get_type(); }
@@ -13859,12 +13893,14 @@ GtkInputPurpose (gtk_search_entry_get_input_purpose)(GtkSearchEntry *entry) { re
 void (gtk_search_entry_set_input_hints)(GtkSearchEntry *entry, GtkInputHints hints) { stub_funcs.ptr_gtk_search_entry_set_input_hints(entry, hints); }
 GtkInputHints (gtk_search_entry_get_input_hints)(GtkSearchEntry *entry) { return stub_funcs.ptr_gtk_search_entry_get_input_hints(entry); }
 GType (gtk_section_model_get_type)(void) { return stub_funcs.ptr_gtk_section_model_get_type(); }
+void (gtk_section_model_get_section)(GtkSectionModel *self, guint position, guint *out_start, guint *out_end) { stub_funcs.ptr_gtk_section_model_get_section(self, position, out_start, out_end); }
 void (gtk_section_model_sections_changed)(GtkSectionModel *self, guint position, guint n_items) { stub_funcs.ptr_gtk_section_model_sections_changed(self, position, n_items); }
 GType (gtk_selection_filter_model_get_type)(void) { return stub_funcs.ptr_gtk_selection_filter_model_get_type(); }
 GtkSelectionFilterModel * (gtk_selection_filter_model_new)(GtkSelectionModel *model) { return stub_funcs.ptr_gtk_selection_filter_model_new(model); }
 void (gtk_selection_filter_model_set_model)(GtkSelectionFilterModel *self, GtkSelectionModel *model) { stub_funcs.ptr_gtk_selection_filter_model_set_model(self, model); }
 GtkSelectionModel * (gtk_selection_filter_model_get_model)(GtkSelectionFilterModel *self) { return stub_funcs.ptr_gtk_selection_filter_model_get_model(self); }
 GType (gtk_selection_model_get_type)(void) { return stub_funcs.ptr_gtk_selection_model_get_type(); }
+gboolean (gtk_selection_model_is_selected)(GtkSelectionModel *model, guint position) { return stub_funcs.ptr_gtk_selection_model_is_selected(model, position); }
 GtkBitset * (gtk_selection_model_get_selection)(GtkSelectionModel *model) { return stub_funcs.ptr_gtk_selection_model_get_selection(model); }
 GtkBitset * (gtk_selection_model_get_selection_in_range)(GtkSelectionModel *model, guint position, guint n_items) { return stub_funcs.ptr_gtk_selection_model_get_selection_in_range(model, position, n_items); }
 gboolean (gtk_selection_model_select_item)(GtkSelectionModel *model, guint position, gboolean unselect_rest) { return stub_funcs.ptr_gtk_selection_model_select_item(model, position, unselect_rest); }
@@ -14159,6 +14195,7 @@ void (gtk_string_sorter_set_ignore_case)(GtkStringSorter *self, gboolean ignore_
 void (gtk_string_sorter_set_collation)(GtkStringSorter *self, GtkCollation collation) { stub_funcs.ptr_gtk_string_sorter_set_collation(self, collation); }
 GtkCollation (gtk_string_sorter_get_collation)(GtkStringSorter *self) { return stub_funcs.ptr_gtk_string_sorter_get_collation(self); }
 GType (gtk_style_provider_get_type)(void) { return stub_funcs.ptr_gtk_style_provider_get_type(); }
+void (gtk_style_context_add_provider_for_display)(GdkDisplay *display, GtkStyleProvider *provider, guint priority) { stub_funcs.ptr_gtk_style_context_add_provider_for_display(display, provider, priority); }
 void (gtk_style_context_remove_provider_for_display)(GdkDisplay *display, GtkStyleProvider *provider) { stub_funcs.ptr_gtk_style_context_remove_provider_for_display(display, provider); }
 GType (gtk_switch_get_type)(void) { return stub_funcs.ptr_gtk_switch_get_type(); }
 GtkWidget * (gtk_switch_new)(void) { return stub_funcs.ptr_gtk_switch_new(); }
@@ -14167,6 +14204,7 @@ gboolean (gtk_switch_get_active)(GtkSwitch *self) { return stub_funcs.ptr_gtk_sw
 void (gtk_switch_set_state)(GtkSwitch *self, gboolean state) { stub_funcs.ptr_gtk_switch_set_state(self, state); }
 gboolean (gtk_switch_get_state)(GtkSwitch *self) { return stub_funcs.ptr_gtk_switch_get_state(self); }
 GType (gtk_symbolic_paintable_get_type)(void) { return stub_funcs.ptr_gtk_symbolic_paintable_get_type(); }
+void (gtk_symbolic_paintable_snapshot_symbolic)(GtkSymbolicPaintable *paintable, GdkSnapshot *snapshot, double width, double height, const GdkRGBA *colors, gsize n_colors) { stub_funcs.ptr_gtk_symbolic_paintable_snapshot_symbolic(paintable, snapshot, width, height, colors, n_colors); }
 gboolean (gtk_test_accessible_has_property)(GtkAccessible *accessible, GtkAccessibleProperty property) { return stub_funcs.ptr_gtk_test_accessible_has_property(accessible, property); }
 gboolean (gtk_test_accessible_has_relation)(GtkAccessible *accessible, GtkAccessibleRelation relation) { return stub_funcs.ptr_gtk_test_accessible_has_relation(accessible, relation); }
 gboolean (gtk_test_accessible_has_state)(GtkAccessible *accessible, GtkAccessibleState state) { return stub_funcs.ptr_gtk_test_accessible_has_state(accessible, state); }
@@ -15298,6 +15336,7 @@ void (gdk_drag_set_hotspot)(GdkDrag *drag, int hot_x, int hot_y) { stub_funcs.pt
 GdkContentProvider * (gdk_drag_get_content)(GdkDrag *drag) { return stub_funcs.ptr_gdk_drag_get_content(drag); }
 GdkSurface * (gdk_drag_get_surface)(GdkDrag *drag) { return stub_funcs.ptr_gdk_drag_get_surface(drag); }
 GType (gdk_drag_surface_get_type)(void) { return stub_funcs.ptr_gdk_drag_surface_get_type(); }
+gboolean (gdk_drag_surface_present)(GdkDragSurface *drag_surface, int width, int height) { return stub_funcs.ptr_gdk_drag_surface_present(drag_surface, width, height); }
 GType (gdk_drag_surface_size_get_type)(void) { return stub_funcs.ptr_gdk_drag_surface_size_get_type(); }
 void (gdk_drag_surface_size_set_size)(GdkDragSurfaceSize *size, int width, int height) { stub_funcs.ptr_gdk_drag_surface_size_set_size(size, width, height); }
 GType (gdk_draw_context_get_type)(void) { return stub_funcs.ptr_gdk_draw_context_get_type(); }
@@ -15508,6 +15547,7 @@ GdkSubpixelLayout (gdk_monitor_get_subpixel_layout)(GdkMonitor *monitor) { retur
 gboolean (gdk_monitor_is_valid)(GdkMonitor *monitor) { return stub_funcs.ptr_gdk_monitor_is_valid(monitor); }
 const char * (gdk_monitor_get_description)(GdkMonitor *monitor) { return stub_funcs.ptr_gdk_monitor_get_description(monitor); }
 GType (gdk_paintable_get_type)(void) { return stub_funcs.ptr_gdk_paintable_get_type(); }
+void (gdk_paintable_snapshot)(GdkPaintable *paintable, GdkSnapshot *snapshot, double width, double height) { stub_funcs.ptr_gdk_paintable_snapshot(paintable, snapshot, width, height); }
 GdkPaintable * (gdk_paintable_get_current_image)(GdkPaintable *paintable) { return stub_funcs.ptr_gdk_paintable_get_current_image(paintable); }
 GdkPaintableFlags (gdk_paintable_get_flags)(GdkPaintable *paintable) { return stub_funcs.ptr_gdk_paintable_get_flags(paintable); }
 int (gdk_paintable_get_intrinsic_width)(GdkPaintable *paintable) { return stub_funcs.ptr_gdk_paintable_get_intrinsic_width(paintable); }
@@ -15520,6 +15560,7 @@ GdkPaintable * (gdk_paintable_new_empty)(int intrinsic_width, int intrinsic_heig
 cairo_region_t* (gdk_pango_layout_get_clip_region)(PangoLayout *layout, int x_origin, int y_origin, const int *index_ranges, int n_ranges) { return stub_funcs.ptr_gdk_pango_layout_get_clip_region(layout, x_origin, y_origin, index_ranges, n_ranges); }
 cairo_region_t* (gdk_pango_layout_line_get_clip_region)(PangoLayoutLine *line, int x_origin, int y_origin, const int *index_ranges, int n_ranges) { return stub_funcs.ptr_gdk_pango_layout_line_get_clip_region(line, x_origin, y_origin, index_ranges, n_ranges); }
 GType (gdk_popup_get_type)(void) { return stub_funcs.ptr_gdk_popup_get_type(); }
+gboolean (gdk_popup_present)(GdkPopup *popup, int width, int height, GdkPopupLayout *layout) { return stub_funcs.ptr_gdk_popup_present(popup, width, height, layout); }
 GdkGravity (gdk_popup_get_surface_anchor)(GdkPopup *popup) { return stub_funcs.ptr_gdk_popup_get_surface_anchor(popup); }
 GdkGravity (gdk_popup_get_rect_anchor)(GdkPopup *popup) { return stub_funcs.ptr_gdk_popup_get_rect_anchor(popup); }
 GdkSurface * (gdk_popup_get_parent)(GdkPopup *popup) { return stub_funcs.ptr_gdk_popup_get_parent(popup); }
@@ -15620,6 +15661,7 @@ GdkMemoryFormat (gdk_texture_downloader_get_format)(const GdkTextureDownloader *
 void (gdk_texture_downloader_download_into)(const GdkTextureDownloader *self, guchar *data, gsize stride) { stub_funcs.ptr_gdk_texture_downloader_download_into(self, data, stride); }
 GBytes * (gdk_texture_downloader_download_bytes)(const GdkTextureDownloader *self, gsize *out_stride) { return stub_funcs.ptr_gdk_texture_downloader_download_bytes(self, out_stride); }
 GType (gdk_toplevel_get_type)(void) { return stub_funcs.ptr_gdk_toplevel_get_type(); }
+void (gdk_toplevel_present)(GdkToplevel *toplevel, GdkToplevelLayout *layout) { stub_funcs.ptr_gdk_toplevel_present(toplevel, layout); }
 gboolean (gdk_toplevel_minimize)(GdkToplevel *toplevel) { return stub_funcs.ptr_gdk_toplevel_minimize(toplevel); }
 gboolean (gdk_toplevel_lower)(GdkToplevel *toplevel) { return stub_funcs.ptr_gdk_toplevel_lower(toplevel); }
 void (gdk_toplevel_focus)(GdkToplevel *toplevel, guint32 timestamp) { stub_funcs.ptr_gdk_toplevel_focus(toplevel, timestamp); }

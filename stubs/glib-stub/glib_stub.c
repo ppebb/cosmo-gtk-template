@@ -25,6 +25,7 @@ static struct glibFuncs {
     void (*ptr_g_cache_remove)(GCache *cache, gconstpointer value);
     void (*ptr_g_cache_key_foreach)(GCache *cache, GHFunc func, gpointer user_data);
     void (*ptr_g_cache_value_foreach)(GCache *cache, GHFunc func, gpointer user_data);
+    GCache* (*ptr_g_cache_new)(GCacheNewFunc value_new_func, GCacheDestroyFunc value_destroy_func, GCacheDupFunc key_dup_func, GCacheDestroyFunc key_destroy_func, GHashFunc hash_key_func, GHashFunc hash_value_func, GEqualFunc key_equal_func);
     // Header /usr/include/glib-2.0/glib/deprecated/gcompletion.h
     void (*ptr_g_completion_add_items)(GCompletion* cmp, GList* items);
     void (*ptr_g_completion_remove_items)(GCompletion* cmp, GList* items);
@@ -46,7 +47,6 @@ static struct glibFuncs {
     gpointer (*ptr_g_tuples_index)(GTuples *tuples, gint index_, gint field);
     GRelation* (*ptr_g_relation_new)(gint fields);
     // Header /usr/include/glib-2.0/glib/deprecated/gthread.h
-    GThread* (*ptr_g_thread_create)(GThreadFunc func, gpointer data, gboolean joinable, GError **error);
     GThread* (*ptr_g_thread_create_full)(GThreadFunc func, gpointer data, gulong stack_size, gboolean joinable, gboolean bound, GThreadPriority priority, GError **error);
     void (*ptr_g_thread_set_priority)(GThread *thread, GThreadPriority priority);
     void (*ptr_g_thread_foreach)(GFunc thread_func, gpointer user_data);
@@ -60,6 +60,7 @@ static struct glibFuncs {
     GCond * (*ptr_g_cond_new)(void);
     void (*ptr_g_cond_free)(GCond *cond);
     gboolean (*ptr_g_cond_timed_wait)(GCond *cond, GMutex *mutex, GTimeVal *abs_time);
+    GThread* (*ptr_g_thread_create)(GThreadFunc func, gpointer data, gboolean joinable, GError **error);
     // Header /usr/include/glib-2.0/glib/galloca.h
     // Header /usr/include/glib-2.0/glib/garray.h
     GArray* (*ptr_g_array_new_take)(gpointer data, gsize len, gboolean clear, gsize element_size);
@@ -160,6 +161,7 @@ static struct glibFuncs {
     gboolean (*ptr_g_async_queue_remove_unlocked)(GAsyncQueue *queue, gpointer item);
     void (*ptr_g_async_queue_push_front)(GAsyncQueue *queue, gpointer item);
     void (*ptr_g_async_queue_push_front_unlocked)(GAsyncQueue *queue, gpointer item);
+    gpointer (*ptr_g_async_queue_timed_pop)(GAsyncQueue *queue, GTimeVal *end_time);
     gpointer (*ptr_g_async_queue_timed_pop_unlocked)(GAsyncQueue *queue, GTimeVal *end_time);
     GAsyncQueue* (*ptr_g_async_queue_new)(void);
     // Header /usr/include/glib-2.0/glib/gatomic.h
@@ -350,7 +352,9 @@ static struct glibFuncs {
     void (*ptr_g_date_clear)(GDate *date, guint n_dates);
     void (*ptr_g_date_set_parse)(GDate *date, const gchar *str);
     void (*ptr_g_date_set_time_t)(GDate *date, time_t timet);
+    void (*ptr_g_date_set_time_val)(GDate *date, GTimeVal *timeval);
     void (*ptr_g_date_set_time)(GDate *date, GTime time_);
+    void (*ptr_g_date_set_month)(GDate *date, GDateMonth month);
     void (*ptr_g_date_set_day)(GDate *date, GDateDay day);
     void (*ptr_g_date_set_year)(GDate *date, GDateYear year);
     void (*ptr_g_date_set_dmy)(GDate *date, GDateDay day, GDateMonth month, GDateYear y);
@@ -383,7 +387,9 @@ static struct glibFuncs {
     GDateTime * (*ptr_g_date_time_new_from_unix_utc)(gint64 t);
     GDateTime * (*ptr_g_date_time_new_from_unix_local_usec)(gint64 usecs);
     GDateTime * (*ptr_g_date_time_new_from_unix_utc_usec)(gint64 usecs);
+    GDateTime * (*ptr_g_date_time_new_from_timeval_local)(const GTimeVal *tv);
     GDateTime * (*ptr_g_date_time_new_from_timeval_utc)(const GTimeVal *tv);
+    GDateTime * (*ptr_g_date_time_new_from_iso8601)(const gchar *text, GTimeZone *default_tz);
     GDateTime * (*ptr_g_date_time_new)(GTimeZone *tz, gint year, gint month, gint day, gint hour, gint minute, gdouble seconds);
     GDateTime * (*ptr_g_date_time_new_local)(gint year, gint month, gint day, gint hour, gint minute, gdouble seconds);
     GDateTime * (*ptr_g_date_time_new_utc)(gint year, gint month, gint day, gint hour, gint minute, gdouble seconds);
@@ -415,6 +421,8 @@ static struct glibFuncs {
     gdouble (*ptr_g_date_time_get_seconds)(GDateTime *datetime);
     gint64 (*ptr_g_date_time_to_unix)(GDateTime *datetime);
     gint64 (*ptr_g_date_time_to_unix_usec)(GDateTime *datetime);
+    gboolean (*ptr_g_date_time_to_timeval)(GDateTime *datetime, GTimeVal *tv);
+    GTimeSpan (*ptr_g_date_time_get_utc_offset)(GDateTime *datetime);
     GTimeZone * (*ptr_g_date_time_get_timezone)(GDateTime *datetime);
     const gchar * (*ptr_g_date_time_get_timezone_abbreviation)(GDateTime *datetime);
     gboolean (*ptr_g_date_time_is_daylight_savings)(GDateTime *datetime);
@@ -454,11 +462,12 @@ static struct glibFuncs {
     void (*ptr_g_prefix_error_literal)(GError **err, const gchar *prefix);
     GQuark (*ptr_g_error_domain_register_static)(const char *error_type_name, gsize error_type_private_size, GErrorInitFunc error_type_init, GErrorCopyFunc error_type_copy, GErrorClearFunc error_type_clear);
     // Header /usr/include/glib-2.0/glib/gfileutils.h
-    GQuark (*ptr_g_file_error_quark)(void);
     GFileError (*ptr_g_file_error_from_errno)(gint err_no);
     gboolean (*ptr_g_file_test)(const gchar *filename, GFileTest test);
     gboolean (*ptr_g_file_get_contents)(const gchar *filename, gchar **contents, gsize *length, GError **error);
     gboolean (*ptr_g_file_set_contents)(const gchar *filename, const gchar *contents, gssize length, GError **error);
+    gboolean (*ptr_g_file_set_contents_full)(const gchar *filename, const gchar *contents, gssize length, GFileSetContentsFlags flags, int mode, GError **error);
+    gchar* (*ptr_g_file_read_link)(const gchar *filename, GError **error);
     gchar* (*ptr_g_mkdtemp)(gchar *tmpl);
     gchar* (*ptr_g_mkdtemp_full)(gchar *tmpl, gint mode);
     gint (*ptr_g_mkstemp)(gchar *tmpl);
@@ -476,6 +485,7 @@ static struct glibFuncs {
     gchar* (*ptr_g_path_get_basename)(const gchar *file_name);
     gchar* (*ptr_g_path_get_dirname)(const gchar *file_name);
     gchar* (*ptr_g_canonicalize_filename)(const gchar *filename, const gchar *relative_to);
+    GQuark (*ptr_g_file_error_quark)(void);
     // Header /usr/include/glib-2.0/glib/ggettext.h
     const gchar* (*ptr_g_dgettext)(const gchar *domain, const gchar *msgid);
     const gchar* (*ptr_g_dcgettext)(const gchar *domain, const gchar *msgid, gint category);
@@ -704,6 +714,8 @@ static struct glibFuncs {
     GList* (*ptr_g_list_alloc)(void);
     // Header /usr/include/glib-2.0/glib/gmacros.h
     // Header /usr/include/glib-2.0/glib/gmain.h
+    GMainContext* (*ptr_g_main_context_new_with_flags)(GMainContextFlags flags);
+    GMainContext* (*ptr_g_main_context_ref)(GMainContext *context);
     void (*ptr_g_main_context_unref)(GMainContext *context);
     GMainContext* (*ptr_g_main_context_default)(void);
     gboolean (*ptr_g_main_context_iteration)(GMainContext *context, gboolean may_block);
@@ -730,6 +742,7 @@ static struct glibFuncs {
     void (*ptr_g_main_context_pop_thread_default)(GMainContext *context);
     GMainContext* (*ptr_g_main_context_get_thread_default)(void);
     GMainContext* (*ptr_g_main_context_ref_thread_default)(void);
+    GMainLoop* (*ptr_g_main_loop_new)(GMainContext *context, gboolean is_running);
     void (*ptr_g_main_loop_run)(GMainLoop *loop);
     void (*ptr_g_main_loop_quit)(GMainLoop *loop);
     GMainLoop* (*ptr_g_main_loop_ref)(GMainLoop *loop);
@@ -737,6 +750,8 @@ static struct glibFuncs {
     gboolean (*ptr_g_main_loop_is_running)(GMainLoop *loop);
     GMainContext* (*ptr_g_main_loop_get_context)(GMainLoop *loop);
     GSource* (*ptr_g_source_new)(GSourceFuncs *source_funcs, guint struct_size);
+    void (*ptr_g_source_set_dispose_function)(GSource *source, GSourceDisposeFunc dispose);
+    GSource* (*ptr_g_source_ref)(GSource *source);
     void (*ptr_g_source_unref)(GSource *source);
     guint (*ptr_g_source_attach)(GSource *source, GMainContext *context);
     void (*ptr_g_source_destroy)(GSource *source);
@@ -764,10 +779,14 @@ static struct glibFuncs {
     void (*ptr_g_source_remove_poll)(GSource *source, GPollFD *fd);
     void (*ptr_g_source_add_child_source)(GSource *source, GSource *child_source);
     void (*ptr_g_source_remove_child_source)(GSource *source, GSource *child_source);
+    void (*ptr_g_source_get_current_time)(GSource *source, GTimeVal *timeval);
+    gint64 (*ptr_g_source_get_time)(GSource *source);
     GSource* (*ptr_g_idle_source_new)(void);
     GSource* (*ptr_g_child_watch_source_new)(GPid pid);
     GSource* (*ptr_g_timeout_source_new)(guint interval);
     GSource* (*ptr_g_timeout_source_new_seconds)(guint interval);
+    void (*ptr_g_get_current_time)(GTimeVal *result);
+    gint64 (*ptr_g_get_monotonic_time)(void);
     gint64 (*ptr_g_get_real_time)(void);
     gboolean (*ptr_g_source_remove)(guint tag);
     gboolean (*ptr_g_source_remove_by_user_data)(gpointer user_data);
@@ -1232,7 +1251,6 @@ static struct glibFuncs {
     int (*ptr_g_access)(const gchar *filename, int mode);
     gboolean (*ptr_g_close)(gint fd, GError **error);
     // Header /usr/include/glib-2.0/glib/gstrfuncs.h
-    gchar (*ptr_g_ascii_tolower)(gchar c);
     gchar (*ptr_g_ascii_toupper)(gchar c);
     gint (*ptr_g_ascii_digit_value)(gchar c);
     gint (*ptr_g_ascii_xdigit_value)(gchar c);
@@ -1289,6 +1307,7 @@ static struct glibFuncs {
     GQuark (*ptr_g_number_parser_error_quark)(void);
     gboolean (*ptr_g_ascii_string_to_signed)(const gchar *str, guint base, gint64 min, gint64 max, gint64 *out_num, GError **error);
     gboolean (*ptr_g_ascii_string_to_unsigned)(const gchar *str, guint base, guint64 min, guint64 max, guint64 *out_num, GError **error);
+    gchar (*ptr_g_ascii_tolower)(gchar c);
     // Header /usr/include/glib-2.0/glib/gstring.h
     GString* (*ptr_g_string_new_take)(gchar *init);
     GString* (*ptr_g_string_new_len)(const gchar *init, gssize len);
@@ -1363,6 +1382,8 @@ static struct glibFuncs {
     double (*ptr_g_test_timer_last)(void);
     void (*ptr_g_test_queue_free)(gpointer gfree_pointer);
     void (*ptr_g_test_queue_destroy)(GDestroyNotify destroy_func, gpointer destroy_data);
+    gboolean (*ptr_g_test_trap_fork)(guint64 usec_timeout, GTestTrapFlags test_trap_flags);
+    void (*ptr_g_test_trap_subprocess)(const char *test_path, guint64 usec_timeout, GTestSubprocessFlags test_flags);
     void (*ptr_g_test_trap_subprocess_with_envp)(const char *test_path, const char * const *envp, guint64 usec_timeout, GTestSubprocessFlags test_flags);
     gboolean (*ptr_g_test_trap_has_passed)(void);
     gboolean (*ptr_g_test_trap_reached_timeout)(void);
@@ -1467,6 +1488,7 @@ static struct glibFuncs {
     gdouble (*ptr_g_timer_elapsed)(GTimer *timer, gulong *microseconds);
     gboolean (*ptr_g_timer_is_active)(GTimer *timer);
     void (*ptr_g_usleep)(gulong microseconds);
+    void (*ptr_g_time_val_add)(GTimeVal *time_, glong microseconds);
     gboolean (*ptr_g_time_val_from_iso8601)(const gchar *iso_date, GTimeVal *time_);
     gchar* (*ptr_g_time_val_to_iso8601)(GTimeVal *time_);
     GTimer* (*ptr_g_timer_new)(void);
@@ -1488,6 +1510,7 @@ static struct glibFuncs {
     gpointer (*ptr_g_trash_stack_pop)(GTrashStack **stack_p);
     gpointer (*ptr_g_trash_stack_peek)(GTrashStack **stack_p);
     guint (*ptr_g_trash_stack_height)(GTrashStack **stack_p);
+    void (*ptr_g_trash_stack_push)(GTrashStack **stack_p, gpointer data_p);
     // Header /usr/include/glib-2.0/glib/gtree.h
     GTree* (*ptr_g_tree_new_with_data)(GCompareDataFunc key_compare_func, gpointer key_compare_data);
     GTree* (*ptr_g_tree_new_full)(GCompareDataFunc key_compare_func, gpointer key_compare_data, GDestroyNotify key_destroy_func, GDestroyNotify value_destroy_func);
@@ -1627,6 +1650,7 @@ static struct glibFuncs {
     char * (*ptr_g_uri_escape_string)(const char *unescaped, const char *reserved_chars_allowed, gboolean allow_utf8);
     GBytes * (*ptr_g_uri_unescape_bytes)(const char *escaped_string, gssize length, const char *illegal_characters, GError **error);
     char * (*ptr_g_uri_escape_bytes)(const guint8 *unescaped, gsize length, const char *reserved_chars_allowed);
+    GUri * (*ptr_g_uri_ref)(GUri *uri);
     // Header /usr/include/glib-2.0/glib/gutils.h
     const gchar * (*ptr_g_get_real_name)(void);
     const gchar * (*ptr_g_get_home_dir)(void);
@@ -1653,6 +1677,7 @@ static struct glibFuncs {
     gchar* (*ptr_g_format_size_full)(guint64 size, GFormatSizeFlags flags);
     gchar* (*ptr_g_format_size)(guint64 size);
     gchar* (*ptr_g_format_size_for_display)(goffset size);
+    void (*ptr_g_atexit)(GVoidFunc func);
     gchar* (*ptr_g_find_program_in_path)(const gchar *program);
     gint (*ptr_g_bit_nth_lsf)(gulong mask, gint nth_bit);
     gint (*ptr_g_bit_nth_msf)(gulong mask, gint nth_bit);
@@ -1817,6 +1842,7 @@ static struct glibFuncs {
     guint (*ptr_g_unix_fd_add_full)(gint priority, gint fd, GIOCondition condition, GUnixFDSourceFunc function, gpointer user_data, GDestroyNotify notify);
     guint (*ptr_g_unix_fd_add)(gint fd, GIOCondition condition, GUnixFDSourceFunc function, gpointer user_data);
     struct passwd* (*ptr_g_unix_get_passwd_entry)(const gchar *user_name, GError **error);
+    int (*ptr_g_closefrom)(int lowfd);
     int (*ptr_g_fdwalk_set_cloexec)(int lowfd);
     GQuark (*ptr_g_unix_error_quark)(void);
     // Header /usr/include/glib-2.0/gobject/gbinding.h
@@ -1921,6 +1947,7 @@ static struct glibFuncs {
     GType (*ptr_g_key_file_get_type)(void);
     GType (*ptr_g_mapped_file_get_type)(void);
     GType (*ptr_g_thread_get_type)(void);
+    GType (*ptr_g_checksum_get_type)(void);
     GType (*ptr_g_option_group_get_type)(void);
     GType (*ptr_g_uri_get_type)(void);
     GType (*ptr_g_tree_get_type)(void);
@@ -1930,7 +1957,6 @@ static struct glibFuncs {
     GType (*ptr_g_dir_get_type)(void);
     GType (*ptr_g_rand_get_type)(void);
     GType (*ptr_g_strv_builder_get_type)(void);
-    GType (*ptr_g_checksum_get_type)(void);
     GType (*ptr_g_variant_get_gtype)(void);
     // Header /usr/include/glib-2.0/gobject/gmarshal.h
     void (*ptr_g_cclosure_marshal_VOID__VOIDv)(GClosure *closure, GValue *return_value, gpointer instance, va_list args, gpointer marshal_data, int n_params, GType *param_types);
@@ -1988,7 +2014,10 @@ static struct glibFuncs {
     GParamSpec* (*ptr_g_object_interface_find_property)(gpointer g_iface, const gchar *property_name);
     GParamSpec** (*ptr_g_object_interface_list_properties)(gpointer g_iface, guint *n_properties_p);
     GType (*ptr_g_object_get_type)(void);
+    gpointer (*ptr_g_object_new)(GType object_type, const gchar *first_property_name, ...);
     GObject* (*ptr_g_object_new_with_properties)(GType object_type, guint n_properties, const char *names[], const GValue values[]);
+    gpointer (*ptr_g_object_newv)(GType object_type, guint n_parameters, GParameter *parameters);
+    GObject* (*ptr_g_object_new_valist)(GType object_type, const gchar *first_property_name, va_list var_args);
     void (*ptr_g_object_set)(gpointer object, const gchar *first_property_name, ...);
     void (*ptr_g_object_get)(gpointer object, const gchar *first_property_name, ...);
     void (*ptr_g_object_setv)(GObject *object, guint n_properties, const gchar *names[], const GValue values[]);
@@ -2158,7 +2187,9 @@ static struct glibFuncs {
     void (*ptr_g_source_set_dummy_callback)(GSource *source);
     void (*ptr_g_source_set_closure)(GSource *source, GClosure *closure);
     // Header /usr/include/glib-2.0/gobject/gtype.h
+    void (*ptr_g_type_init)(void);
     void (*ptr_g_type_init_with_debug_flags)(GTypeDebugFlags debug_flags);
+    const gchar * (*ptr_g_type_name)(GType type);
     GQuark (*ptr_g_type_qname)(GType type);
     GType (*ptr_g_type_from_name)(const gchar *name);
     GType (*ptr_g_type_parent)(GType type);
@@ -2181,6 +2212,7 @@ static struct glibFuncs {
     gpointer (*ptr_g_type_get_qdata)(GType type, GQuark quark);
     void (*ptr_g_type_query)(GType type, GTypeQuery *query);
     int (*ptr_g_type_get_instance_count)(GType type);
+    GType (*ptr_g_type_register_static)(GType parent_type, const gchar *type_name, const GTypeInfo *info, GTypeFlags flags);
     GType (*ptr_g_type_register_static_simple)(GType parent_type, const gchar *type_name, guint class_size, GClassInitFunc class_init, guint instance_size, GInstanceInitFunc instance_init, GTypeFlags flags);
     GType (*ptr_g_type_register_dynamic)(GType parent_type, const gchar *type_name, GTypePlugin *plugin, GTypeFlags flags);
     GType (*ptr_g_type_register_fundamental)(GType type_id, const gchar *type_name, const GTypeInfo *info, const GTypeFundamentalInfo *finfo, GTypeFlags flags);
@@ -2459,6 +2491,8 @@ static struct glibFuncs {
     GType (*ptr_g_async_initable_get_type)(void);
     void (*ptr_g_async_initable_init_async)(GAsyncInitable *initable, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
     gboolean (*ptr_g_async_initable_init_finish)(GAsyncInitable *initable, GAsyncResult *res, GError **error);
+    void (*ptr_g_async_initable_newv_async)(GType object_type, guint n_parameters, GParameter *parameters, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
+    void (*ptr_g_async_initable_new_valist_async)(GType object_type, const gchar *first_property_name, va_list var_args, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
     GObject* (*ptr_g_async_initable_new_finish)(GAsyncInitable *initable, GAsyncResult *res, GError **error);
     // Header /usr/include/glib-2.0/gio/gasyncresult.h
     GType (*ptr_g_async_result_get_type)(void);
@@ -2908,6 +2942,7 @@ static struct glibFuncs {
     gboolean (*ptr_g_dbus_is_guid)(const gchar *string);
     // Header /usr/include/glib-2.0/gio/gdebugcontroller.h
     GType (*ptr_g_debug_controller_get_type)(void);
+    gboolean (*ptr_g_debug_controller_get_debug_enabled)(GDebugController *self);
     void (*ptr_g_debug_controller_set_debug_enabled)(GDebugController *self, gboolean debug_enabled);
     // Header /usr/include/glib-2.0/gio/gdebugcontrollerdbus.h
     GType (*ptr_g_debug_controller_dbus_get_type)(void);
@@ -2963,7 +2998,9 @@ static struct glibFuncs {
     GTlsCertificateFlags (*ptr_g_dtls_connection_get_peer_certificate_errors)(GDtlsConnection *conn);
     void (*ptr_g_dtls_connection_set_require_close_notify)(GDtlsConnection *conn, gboolean require_close_notify);
     gboolean (*ptr_g_dtls_connection_get_require_close_notify)(GDtlsConnection *conn);
+    void (*ptr_g_dtls_connection_set_rehandshake_mode)(GDtlsConnection *conn, GTlsRehandshakeMode mode);
     GTlsRehandshakeMode (*ptr_g_dtls_connection_get_rehandshake_mode)(GDtlsConnection *conn);
+    gboolean (*ptr_g_dtls_connection_handshake)(GDtlsConnection *conn, GCancellable *cancellable, GError **error);
     void (*ptr_g_dtls_connection_handshake_async)(GDtlsConnection *conn, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
     gboolean (*ptr_g_dtls_connection_handshake_finish)(GDtlsConnection *conn, GAsyncResult *result, GError **error);
     gboolean (*ptr_g_dtls_connection_shutdown)(GDtlsConnection *conn, gboolean shutdown_read, gboolean shutdown_write, GCancellable *cancellable, GError **error);
@@ -2975,6 +3012,8 @@ static struct glibFuncs {
     gboolean (*ptr_g_dtls_connection_emit_accept_certificate)(GDtlsConnection *conn, GTlsCertificate *peer_cert, GTlsCertificateFlags errors);
     void (*ptr_g_dtls_connection_set_advertised_protocols)(GDtlsConnection *conn, const gchar * const *protocols);
     const gchar * (*ptr_g_dtls_connection_get_negotiated_protocol)(GDtlsConnection *conn);
+    gboolean (*ptr_g_dtls_connection_get_channel_binding_data)(GDtlsConnection *conn, GTlsChannelBindingType type, GByteArray *data, GError **error);
+    GTlsProtocolVersion (*ptr_g_dtls_connection_get_protocol_version)(GDtlsConnection *conn);
     gchar * (*ptr_g_dtls_connection_get_ciphersuite_name)(GDtlsConnection *conn);
     // Header /usr/include/glib-2.0/gio/gdtlsserverconnection.h
     GType (*ptr_g_dtls_server_connection_get_type)(void);
@@ -3208,6 +3247,8 @@ static struct glibFuncs {
     GIcon * (*ptr_g_file_info_get_symbolic_icon)(GFileInfo *info);
     const char * (*ptr_g_file_info_get_content_type)(GFileInfo *info);
     goffset (*ptr_g_file_info_get_size)(GFileInfo *info);
+    void (*ptr_g_file_info_get_modification_time)(GFileInfo *info, GTimeVal *result);
+    GDateTime * (*ptr_g_file_info_get_modification_date_time)(GFileInfo *info);
     GDateTime * (*ptr_g_file_info_get_access_date_time)(GFileInfo *info);
     GDateTime * (*ptr_g_file_info_get_creation_date_time)(GFileInfo *info);
     const char * (*ptr_g_file_info_get_symlink_target)(GFileInfo *info);
@@ -3225,6 +3266,8 @@ static struct glibFuncs {
     void (*ptr_g_file_info_set_symbolic_icon)(GFileInfo *info, GIcon *icon);
     void (*ptr_g_file_info_set_content_type)(GFileInfo *info, const char *content_type);
     void (*ptr_g_file_info_set_size)(GFileInfo *info, goffset size);
+    void (*ptr_g_file_info_set_modification_time)(GFileInfo *info, GTimeVal *mtime);
+    void (*ptr_g_file_info_set_modification_date_time)(GFileInfo *info, GDateTime *mtime);
     void (*ptr_g_file_info_set_access_date_time)(GFileInfo *info, GDateTime *atime);
     void (*ptr_g_file_info_set_creation_date_time)(GFileInfo *info, GDateTime *creation_time);
     void (*ptr_g_file_info_set_symlink_target)(GFileInfo *info, const char *symlink_target);
@@ -3328,6 +3371,8 @@ static struct glibFuncs {
     // Header /usr/include/glib-2.0/gio/ginitable.h
     GType (*ptr_g_initable_get_type)(void);
     gboolean (*ptr_g_initable_init)(GInitable *initable, GCancellable *cancellable, GError **error);
+    gpointer (*ptr_g_initable_newv)(GType object_type, guint n_parameters, GParameter *parameters, GCancellable *cancellable, GError **error);
+    GObject* (*ptr_g_initable_new_valist)(GType object_type, const gchar *first_property_name, va_list var_args, GCancellable *cancellable, GError **error);
     // Header /usr/include/glib-2.0/gio/ginputstream.h
     GType (*ptr_g_input_stream_get_type)(void);
     gssize (*ptr_g_input_stream_read)(GInputStream *stream, void *buffer, gsize count, GCancellable *cancellable, GError **error);
@@ -3483,6 +3528,7 @@ static struct glibFuncs {
     // Header /usr/include/glib-2.0/gio/giotypes.h
     // Header /usr/include/glib-2.0/gio/glistmodel.h
     GType (*ptr_g_list_model_get_type)(void);
+    GType (*ptr_g_list_model_get_item_type)(GListModel *list);
     guint (*ptr_g_list_model_get_n_items)(GListModel *list);
     gpointer (*ptr_g_list_model_get_item)(GListModel *list, guint position);
     GObject * (*ptr_g_list_model_get_object)(GListModel *list, guint position);
@@ -3514,6 +3560,7 @@ static struct glibFuncs {
     void (*ptr_g_memory_input_stream_add_bytes)(GMemoryInputStream *stream, GBytes *bytes);
     // Header /usr/include/glib-2.0/gio/gmemorymonitor.h
     GType (*ptr_g_memory_monitor_get_type)(void);
+    GMemoryMonitor* (*ptr_g_memory_monitor_dup_default)(void);
     // Header /usr/include/glib-2.0/gio/gmemoryoutputstream.h
     GType (*ptr_g_memory_output_stream_get_type)(void);
     GOutputStream* (*ptr_g_memory_output_stream_new)(gpointer data, gsize size, GReallocFunc realloc_function, GDestroyNotify destroy_function);
@@ -3741,6 +3788,7 @@ static struct glibFuncs {
     GSource* (*ptr_g_pollable_source_new)(GObject *pollable_stream);
     // Header /usr/include/glib-2.0/gio/gpowerprofilemonitor.h
     GType (*ptr_g_power_profile_monitor_get_type)(void);
+    GPowerProfileMonitor* (*ptr_g_power_profile_monitor_dup_default)(void);
     gboolean (*ptr_g_power_profile_monitor_get_power_saver_enabled)(GPowerProfileMonitor *monitor);
     // Header /usr/include/glib-2.0/gio/gpropertyaction.h
     GType (*ptr_g_property_action_get_type)(void);
@@ -4295,8 +4343,12 @@ static struct glibFuncs {
     GTlsCertificateFlags (*ptr_g_tls_connection_get_peer_certificate_errors)(GTlsConnection *conn);
     void (*ptr_g_tls_connection_set_require_close_notify)(GTlsConnection *conn, gboolean require_close_notify);
     gboolean (*ptr_g_tls_connection_get_require_close_notify)(GTlsConnection *conn);
+    void (*ptr_g_tls_connection_set_rehandshake_mode)(GTlsConnection *conn, GTlsRehandshakeMode mode);
     GTlsRehandshakeMode (*ptr_g_tls_connection_get_rehandshake_mode)(GTlsConnection *conn);
+    void (*ptr_g_tls_connection_set_advertised_protocols)(GTlsConnection *conn, const gchar * const *protocols);
     const gchar * (*ptr_g_tls_connection_get_negotiated_protocol)(GTlsConnection *conn);
+    gboolean (*ptr_g_tls_connection_get_channel_binding_data)(GTlsConnection *conn, GTlsChannelBindingType type, GByteArray *data, GError **error);
+    gboolean (*ptr_g_tls_connection_handshake)(GTlsConnection *conn, GCancellable *cancellable, GError **error);
     void (*ptr_g_tls_connection_handshake_async)(GTlsConnection *conn, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
     gboolean (*ptr_g_tls_connection_handshake_finish)(GTlsConnection *conn, GAsyncResult *result, GError **error);
     GTlsProtocolVersion (*ptr_g_tls_connection_get_protocol_version)(GTlsConnection *conn);
@@ -4549,6 +4601,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_cache_remove = try_find_sym(glib, "g_cache_remove");
     stub_funcs.ptr_g_cache_key_foreach = try_find_sym(glib, "g_cache_key_foreach");
     stub_funcs.ptr_g_cache_value_foreach = try_find_sym(glib, "g_cache_value_foreach");
+    stub_funcs.ptr_g_cache_new = try_find_sym(glib, "g_cache_new");
     // Header /usr/include/glib-2.0/glib/deprecated/gcompletion.h
     stub_funcs.ptr_g_completion_add_items = try_find_sym(glib, "g_completion_add_items");
     stub_funcs.ptr_g_completion_remove_items = try_find_sym(glib, "g_completion_remove_items");
@@ -4570,7 +4623,6 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_tuples_index = try_find_sym(glib, "g_tuples_index");
     stub_funcs.ptr_g_relation_new = try_find_sym(glib, "g_relation_new");
     // Header /usr/include/glib-2.0/glib/deprecated/gthread.h
-    stub_funcs.ptr_g_thread_create = try_find_sym(glib, "g_thread_create");
     stub_funcs.ptr_g_thread_create_full = try_find_sym(glib, "g_thread_create_full");
     stub_funcs.ptr_g_thread_set_priority = try_find_sym(glib, "g_thread_set_priority");
     stub_funcs.ptr_g_thread_foreach = try_find_sym(glib, "g_thread_foreach");
@@ -4584,6 +4636,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_cond_new = try_find_sym(glib, "g_cond_new");
     stub_funcs.ptr_g_cond_free = try_find_sym(glib, "g_cond_free");
     stub_funcs.ptr_g_cond_timed_wait = try_find_sym(glib, "g_cond_timed_wait");
+    stub_funcs.ptr_g_thread_create = try_find_sym(glib, "g_thread_create");
     // Header /usr/include/glib-2.0/glib/galloca.h
     // Header /usr/include/glib-2.0/glib/garray.h
     stub_funcs.ptr_g_array_new_take = try_find_sym(glib, "g_array_new_take");
@@ -4684,6 +4737,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_async_queue_remove_unlocked = try_find_sym(glib, "g_async_queue_remove_unlocked");
     stub_funcs.ptr_g_async_queue_push_front = try_find_sym(glib, "g_async_queue_push_front");
     stub_funcs.ptr_g_async_queue_push_front_unlocked = try_find_sym(glib, "g_async_queue_push_front_unlocked");
+    stub_funcs.ptr_g_async_queue_timed_pop = try_find_sym(glib, "g_async_queue_timed_pop");
     stub_funcs.ptr_g_async_queue_timed_pop_unlocked = try_find_sym(glib, "g_async_queue_timed_pop_unlocked");
     stub_funcs.ptr_g_async_queue_new = try_find_sym(glib, "g_async_queue_new");
     // Header /usr/include/glib-2.0/glib/gatomic.h
@@ -4874,7 +4928,9 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_date_clear = try_find_sym(glib, "g_date_clear");
     stub_funcs.ptr_g_date_set_parse = try_find_sym(glib, "g_date_set_parse");
     stub_funcs.ptr_g_date_set_time_t = try_find_sym(glib, "g_date_set_time_t");
+    stub_funcs.ptr_g_date_set_time_val = try_find_sym(glib, "g_date_set_time_val");
     stub_funcs.ptr_g_date_set_time = try_find_sym(glib, "g_date_set_time");
+    stub_funcs.ptr_g_date_set_month = try_find_sym(glib, "g_date_set_month");
     stub_funcs.ptr_g_date_set_day = try_find_sym(glib, "g_date_set_day");
     stub_funcs.ptr_g_date_set_year = try_find_sym(glib, "g_date_set_year");
     stub_funcs.ptr_g_date_set_dmy = try_find_sym(glib, "g_date_set_dmy");
@@ -4907,7 +4963,9 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_date_time_new_from_unix_utc = try_find_sym(glib, "g_date_time_new_from_unix_utc");
     stub_funcs.ptr_g_date_time_new_from_unix_local_usec = try_find_sym(glib, "g_date_time_new_from_unix_local_usec");
     stub_funcs.ptr_g_date_time_new_from_unix_utc_usec = try_find_sym(glib, "g_date_time_new_from_unix_utc_usec");
+    stub_funcs.ptr_g_date_time_new_from_timeval_local = try_find_sym(glib, "g_date_time_new_from_timeval_local");
     stub_funcs.ptr_g_date_time_new_from_timeval_utc = try_find_sym(glib, "g_date_time_new_from_timeval_utc");
+    stub_funcs.ptr_g_date_time_new_from_iso8601 = try_find_sym(glib, "g_date_time_new_from_iso8601");
     stub_funcs.ptr_g_date_time_new = try_find_sym(glib, "g_date_time_new");
     stub_funcs.ptr_g_date_time_new_local = try_find_sym(glib, "g_date_time_new_local");
     stub_funcs.ptr_g_date_time_new_utc = try_find_sym(glib, "g_date_time_new_utc");
@@ -4939,6 +4997,8 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_date_time_get_seconds = try_find_sym(glib, "g_date_time_get_seconds");
     stub_funcs.ptr_g_date_time_to_unix = try_find_sym(glib, "g_date_time_to_unix");
     stub_funcs.ptr_g_date_time_to_unix_usec = try_find_sym(glib, "g_date_time_to_unix_usec");
+    stub_funcs.ptr_g_date_time_to_timeval = try_find_sym(glib, "g_date_time_to_timeval");
+    stub_funcs.ptr_g_date_time_get_utc_offset = try_find_sym(glib, "g_date_time_get_utc_offset");
     stub_funcs.ptr_g_date_time_get_timezone = try_find_sym(glib, "g_date_time_get_timezone");
     stub_funcs.ptr_g_date_time_get_timezone_abbreviation = try_find_sym(glib, "g_date_time_get_timezone_abbreviation");
     stub_funcs.ptr_g_date_time_is_daylight_savings = try_find_sym(glib, "g_date_time_is_daylight_savings");
@@ -4978,11 +5038,12 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_prefix_error_literal = try_find_sym(glib, "g_prefix_error_literal");
     stub_funcs.ptr_g_error_domain_register_static = try_find_sym(glib, "g_error_domain_register_static");
     // Header /usr/include/glib-2.0/glib/gfileutils.h
-    stub_funcs.ptr_g_file_error_quark = try_find_sym(glib, "g_file_error_quark");
     stub_funcs.ptr_g_file_error_from_errno = try_find_sym(glib, "g_file_error_from_errno");
     stub_funcs.ptr_g_file_test = try_find_sym(glib, "g_file_test");
     stub_funcs.ptr_g_file_get_contents = try_find_sym(glib, "g_file_get_contents");
     stub_funcs.ptr_g_file_set_contents = try_find_sym(glib, "g_file_set_contents");
+    stub_funcs.ptr_g_file_set_contents_full = try_find_sym(glib, "g_file_set_contents_full");
+    stub_funcs.ptr_g_file_read_link = try_find_sym(glib, "g_file_read_link");
     stub_funcs.ptr_g_mkdtemp = try_find_sym(glib, "g_mkdtemp");
     stub_funcs.ptr_g_mkdtemp_full = try_find_sym(glib, "g_mkdtemp_full");
     stub_funcs.ptr_g_mkstemp = try_find_sym(glib, "g_mkstemp");
@@ -5000,6 +5061,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_path_get_basename = try_find_sym(glib, "g_path_get_basename");
     stub_funcs.ptr_g_path_get_dirname = try_find_sym(glib, "g_path_get_dirname");
     stub_funcs.ptr_g_canonicalize_filename = try_find_sym(glib, "g_canonicalize_filename");
+    stub_funcs.ptr_g_file_error_quark = try_find_sym(glib, "g_file_error_quark");
     // Header /usr/include/glib-2.0/glib/ggettext.h
     stub_funcs.ptr_g_dgettext = try_find_sym(glib, "g_dgettext");
     stub_funcs.ptr_g_dcgettext = try_find_sym(glib, "g_dcgettext");
@@ -5228,6 +5290,8 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_list_alloc = try_find_sym(glib, "g_list_alloc");
     // Header /usr/include/glib-2.0/glib/gmacros.h
     // Header /usr/include/glib-2.0/glib/gmain.h
+    stub_funcs.ptr_g_main_context_new_with_flags = try_find_sym(glib, "g_main_context_new_with_flags");
+    stub_funcs.ptr_g_main_context_ref = try_find_sym(glib, "g_main_context_ref");
     stub_funcs.ptr_g_main_context_unref = try_find_sym(glib, "g_main_context_unref");
     stub_funcs.ptr_g_main_context_default = try_find_sym(glib, "g_main_context_default");
     stub_funcs.ptr_g_main_context_iteration = try_find_sym(glib, "g_main_context_iteration");
@@ -5254,6 +5318,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_main_context_pop_thread_default = try_find_sym(glib, "g_main_context_pop_thread_default");
     stub_funcs.ptr_g_main_context_get_thread_default = try_find_sym(glib, "g_main_context_get_thread_default");
     stub_funcs.ptr_g_main_context_ref_thread_default = try_find_sym(glib, "g_main_context_ref_thread_default");
+    stub_funcs.ptr_g_main_loop_new = try_find_sym(glib, "g_main_loop_new");
     stub_funcs.ptr_g_main_loop_run = try_find_sym(glib, "g_main_loop_run");
     stub_funcs.ptr_g_main_loop_quit = try_find_sym(glib, "g_main_loop_quit");
     stub_funcs.ptr_g_main_loop_ref = try_find_sym(glib, "g_main_loop_ref");
@@ -5261,6 +5326,8 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_main_loop_is_running = try_find_sym(glib, "g_main_loop_is_running");
     stub_funcs.ptr_g_main_loop_get_context = try_find_sym(glib, "g_main_loop_get_context");
     stub_funcs.ptr_g_source_new = try_find_sym(glib, "g_source_new");
+    stub_funcs.ptr_g_source_set_dispose_function = try_find_sym(glib, "g_source_set_dispose_function");
+    stub_funcs.ptr_g_source_ref = try_find_sym(glib, "g_source_ref");
     stub_funcs.ptr_g_source_unref = try_find_sym(glib, "g_source_unref");
     stub_funcs.ptr_g_source_attach = try_find_sym(glib, "g_source_attach");
     stub_funcs.ptr_g_source_destroy = try_find_sym(glib, "g_source_destroy");
@@ -5288,10 +5355,14 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_source_remove_poll = try_find_sym(glib, "g_source_remove_poll");
     stub_funcs.ptr_g_source_add_child_source = try_find_sym(glib, "g_source_add_child_source");
     stub_funcs.ptr_g_source_remove_child_source = try_find_sym(glib, "g_source_remove_child_source");
+    stub_funcs.ptr_g_source_get_current_time = try_find_sym(glib, "g_source_get_current_time");
+    stub_funcs.ptr_g_source_get_time = try_find_sym(glib, "g_source_get_time");
     stub_funcs.ptr_g_idle_source_new = try_find_sym(glib, "g_idle_source_new");
     stub_funcs.ptr_g_child_watch_source_new = try_find_sym(glib, "g_child_watch_source_new");
     stub_funcs.ptr_g_timeout_source_new = try_find_sym(glib, "g_timeout_source_new");
     stub_funcs.ptr_g_timeout_source_new_seconds = try_find_sym(glib, "g_timeout_source_new_seconds");
+    stub_funcs.ptr_g_get_current_time = try_find_sym(glib, "g_get_current_time");
+    stub_funcs.ptr_g_get_monotonic_time = try_find_sym(glib, "g_get_monotonic_time");
     stub_funcs.ptr_g_get_real_time = try_find_sym(glib, "g_get_real_time");
     stub_funcs.ptr_g_source_remove = try_find_sym(glib, "g_source_remove");
     stub_funcs.ptr_g_source_remove_by_user_data = try_find_sym(glib, "g_source_remove_by_user_data");
@@ -5756,7 +5827,6 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_access = try_find_sym(glib, "g_access");
     stub_funcs.ptr_g_close = try_find_sym(glib, "g_close");
     // Header /usr/include/glib-2.0/glib/gstrfuncs.h
-    stub_funcs.ptr_g_ascii_tolower = try_find_sym(glib, "g_ascii_tolower");
     stub_funcs.ptr_g_ascii_toupper = try_find_sym(glib, "g_ascii_toupper");
     stub_funcs.ptr_g_ascii_digit_value = try_find_sym(glib, "g_ascii_digit_value");
     stub_funcs.ptr_g_ascii_xdigit_value = try_find_sym(glib, "g_ascii_xdigit_value");
@@ -5813,6 +5883,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_number_parser_error_quark = try_find_sym(glib, "g_number_parser_error_quark");
     stub_funcs.ptr_g_ascii_string_to_signed = try_find_sym(glib, "g_ascii_string_to_signed");
     stub_funcs.ptr_g_ascii_string_to_unsigned = try_find_sym(glib, "g_ascii_string_to_unsigned");
+    stub_funcs.ptr_g_ascii_tolower = try_find_sym(glib, "g_ascii_tolower");
     // Header /usr/include/glib-2.0/glib/gstring.h
     stub_funcs.ptr_g_string_new_take = try_find_sym(glib, "g_string_new_take");
     stub_funcs.ptr_g_string_new_len = try_find_sym(glib, "g_string_new_len");
@@ -5887,6 +5958,8 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_test_timer_last = try_find_sym(glib, "g_test_timer_last");
     stub_funcs.ptr_g_test_queue_free = try_find_sym(glib, "g_test_queue_free");
     stub_funcs.ptr_g_test_queue_destroy = try_find_sym(glib, "g_test_queue_destroy");
+    stub_funcs.ptr_g_test_trap_fork = try_find_sym(glib, "g_test_trap_fork");
+    stub_funcs.ptr_g_test_trap_subprocess = try_find_sym(glib, "g_test_trap_subprocess");
     stub_funcs.ptr_g_test_trap_subprocess_with_envp = try_find_sym(glib, "g_test_trap_subprocess_with_envp");
     stub_funcs.ptr_g_test_trap_has_passed = try_find_sym(glib, "g_test_trap_has_passed");
     stub_funcs.ptr_g_test_trap_reached_timeout = try_find_sym(glib, "g_test_trap_reached_timeout");
@@ -5991,6 +6064,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_timer_elapsed = try_find_sym(glib, "g_timer_elapsed");
     stub_funcs.ptr_g_timer_is_active = try_find_sym(glib, "g_timer_is_active");
     stub_funcs.ptr_g_usleep = try_find_sym(glib, "g_usleep");
+    stub_funcs.ptr_g_time_val_add = try_find_sym(glib, "g_time_val_add");
     stub_funcs.ptr_g_time_val_from_iso8601 = try_find_sym(glib, "g_time_val_from_iso8601");
     stub_funcs.ptr_g_time_val_to_iso8601 = try_find_sym(glib, "g_time_val_to_iso8601");
     stub_funcs.ptr_g_timer_new = try_find_sym(glib, "g_timer_new");
@@ -6012,6 +6086,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_trash_stack_pop = try_find_sym(glib, "g_trash_stack_pop");
     stub_funcs.ptr_g_trash_stack_peek = try_find_sym(glib, "g_trash_stack_peek");
     stub_funcs.ptr_g_trash_stack_height = try_find_sym(glib, "g_trash_stack_height");
+    stub_funcs.ptr_g_trash_stack_push = try_find_sym(glib, "g_trash_stack_push");
     // Header /usr/include/glib-2.0/glib/gtree.h
     stub_funcs.ptr_g_tree_new_with_data = try_find_sym(glib, "g_tree_new_with_data");
     stub_funcs.ptr_g_tree_new_full = try_find_sym(glib, "g_tree_new_full");
@@ -6151,6 +6226,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_uri_escape_string = try_find_sym(glib, "g_uri_escape_string");
     stub_funcs.ptr_g_uri_unescape_bytes = try_find_sym(glib, "g_uri_unescape_bytes");
     stub_funcs.ptr_g_uri_escape_bytes = try_find_sym(glib, "g_uri_escape_bytes");
+    stub_funcs.ptr_g_uri_ref = try_find_sym(glib, "g_uri_ref");
     // Header /usr/include/glib-2.0/glib/gutils.h
     stub_funcs.ptr_g_get_real_name = try_find_sym(glib, "g_get_real_name");
     stub_funcs.ptr_g_get_home_dir = try_find_sym(glib, "g_get_home_dir");
@@ -6177,6 +6253,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_format_size_full = try_find_sym(glib, "g_format_size_full");
     stub_funcs.ptr_g_format_size = try_find_sym(glib, "g_format_size");
     stub_funcs.ptr_g_format_size_for_display = try_find_sym(glib, "g_format_size_for_display");
+    stub_funcs.ptr_g_atexit = try_find_sym(glib, "g_atexit");
     stub_funcs.ptr_g_find_program_in_path = try_find_sym(glib, "g_find_program_in_path");
     stub_funcs.ptr_g_bit_nth_lsf = try_find_sym(glib, "g_bit_nth_lsf");
     stub_funcs.ptr_g_bit_nth_msf = try_find_sym(glib, "g_bit_nth_msf");
@@ -6341,6 +6418,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_unix_fd_add_full = try_find_sym(glib, "g_unix_fd_add_full");
     stub_funcs.ptr_g_unix_fd_add = try_find_sym(glib, "g_unix_fd_add");
     stub_funcs.ptr_g_unix_get_passwd_entry = try_find_sym(glib, "g_unix_get_passwd_entry");
+    stub_funcs.ptr_g_closefrom = try_find_sym(glib, "g_closefrom");
     stub_funcs.ptr_g_fdwalk_set_cloexec = try_find_sym(glib, "g_fdwalk_set_cloexec");
     stub_funcs.ptr_g_unix_error_quark = try_find_sym(glib, "g_unix_error_quark");
     // Header /usr/include/glib-2.0/gobject/gbinding.h
@@ -6445,6 +6523,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_key_file_get_type = try_find_sym(gobject, "g_key_file_get_type");
     stub_funcs.ptr_g_mapped_file_get_type = try_find_sym(gobject, "g_mapped_file_get_type");
     stub_funcs.ptr_g_thread_get_type = try_find_sym(gobject, "g_thread_get_type");
+    stub_funcs.ptr_g_checksum_get_type = try_find_sym(gobject, "g_checksum_get_type");
     stub_funcs.ptr_g_option_group_get_type = try_find_sym(gobject, "g_option_group_get_type");
     stub_funcs.ptr_g_uri_get_type = try_find_sym(gobject, "g_uri_get_type");
     stub_funcs.ptr_g_tree_get_type = try_find_sym(gobject, "g_tree_get_type");
@@ -6454,7 +6533,6 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_dir_get_type = try_find_sym(gobject, "g_dir_get_type");
     stub_funcs.ptr_g_rand_get_type = try_find_sym(gobject, "g_rand_get_type");
     stub_funcs.ptr_g_strv_builder_get_type = try_find_sym(gobject, "g_strv_builder_get_type");
-    stub_funcs.ptr_g_checksum_get_type = try_find_sym(gobject, "g_checksum_get_type");
     stub_funcs.ptr_g_variant_get_gtype = try_find_sym(gobject, "g_variant_get_gtype");
     // Header /usr/include/glib-2.0/gobject/gmarshal.h
     stub_funcs.ptr_g_cclosure_marshal_VOID__VOIDv = try_find_sym(gobject, "g_cclosure_marshal_VOID__VOIDv");
@@ -6512,7 +6590,10 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_object_interface_find_property = try_find_sym(gobject, "g_object_interface_find_property");
     stub_funcs.ptr_g_object_interface_list_properties = try_find_sym(gobject, "g_object_interface_list_properties");
     stub_funcs.ptr_g_object_get_type = try_find_sym(gobject, "g_object_get_type");
+    stub_funcs.ptr_g_object_new = try_find_sym(gobject, "g_object_new");
     stub_funcs.ptr_g_object_new_with_properties = try_find_sym(gobject, "g_object_new_with_properties");
+    stub_funcs.ptr_g_object_newv = try_find_sym(gobject, "g_object_newv");
+    stub_funcs.ptr_g_object_new_valist = try_find_sym(gobject, "g_object_new_valist");
     stub_funcs.ptr_g_object_set = try_find_sym(gobject, "g_object_set");
     stub_funcs.ptr_g_object_get = try_find_sym(gobject, "g_object_get");
     stub_funcs.ptr_g_object_setv = try_find_sym(gobject, "g_object_setv");
@@ -6682,7 +6763,9 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_source_set_dummy_callback = try_find_sym(gobject, "g_source_set_dummy_callback");
     stub_funcs.ptr_g_source_set_closure = try_find_sym(gobject, "g_source_set_closure");
     // Header /usr/include/glib-2.0/gobject/gtype.h
+    stub_funcs.ptr_g_type_init = try_find_sym(gobject, "g_type_init");
     stub_funcs.ptr_g_type_init_with_debug_flags = try_find_sym(gobject, "g_type_init_with_debug_flags");
+    stub_funcs.ptr_g_type_name = try_find_sym(gobject, "g_type_name");
     stub_funcs.ptr_g_type_qname = try_find_sym(gobject, "g_type_qname");
     stub_funcs.ptr_g_type_from_name = try_find_sym(gobject, "g_type_from_name");
     stub_funcs.ptr_g_type_parent = try_find_sym(gobject, "g_type_parent");
@@ -6705,6 +6788,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_type_get_qdata = try_find_sym(gobject, "g_type_get_qdata");
     stub_funcs.ptr_g_type_query = try_find_sym(gobject, "g_type_query");
     stub_funcs.ptr_g_type_get_instance_count = try_find_sym(gobject, "g_type_get_instance_count");
+    stub_funcs.ptr_g_type_register_static = try_find_sym(gobject, "g_type_register_static");
     stub_funcs.ptr_g_type_register_static_simple = try_find_sym(gobject, "g_type_register_static_simple");
     stub_funcs.ptr_g_type_register_dynamic = try_find_sym(gobject, "g_type_register_dynamic");
     stub_funcs.ptr_g_type_register_fundamental = try_find_sym(gobject, "g_type_register_fundamental");
@@ -6983,6 +7067,8 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_async_initable_get_type = try_find_sym(gio, "g_async_initable_get_type");
     stub_funcs.ptr_g_async_initable_init_async = try_find_sym(gio, "g_async_initable_init_async");
     stub_funcs.ptr_g_async_initable_init_finish = try_find_sym(gio, "g_async_initable_init_finish");
+    stub_funcs.ptr_g_async_initable_newv_async = try_find_sym(gio, "g_async_initable_newv_async");
+    stub_funcs.ptr_g_async_initable_new_valist_async = try_find_sym(gio, "g_async_initable_new_valist_async");
     stub_funcs.ptr_g_async_initable_new_finish = try_find_sym(gio, "g_async_initable_new_finish");
     // Header /usr/include/glib-2.0/gio/gasyncresult.h
     stub_funcs.ptr_g_async_result_get_type = try_find_sym(gio, "g_async_result_get_type");
@@ -7432,6 +7518,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_dbus_is_guid = try_find_sym(gio, "g_dbus_is_guid");
     // Header /usr/include/glib-2.0/gio/gdebugcontroller.h
     stub_funcs.ptr_g_debug_controller_get_type = try_find_sym(gio, "g_debug_controller_get_type");
+    stub_funcs.ptr_g_debug_controller_get_debug_enabled = try_find_sym(gio, "g_debug_controller_get_debug_enabled");
     stub_funcs.ptr_g_debug_controller_set_debug_enabled = try_find_sym(gio, "g_debug_controller_set_debug_enabled");
     // Header /usr/include/glib-2.0/gio/gdebugcontrollerdbus.h
     stub_funcs.ptr_g_debug_controller_dbus_get_type = try_find_sym(gio, "g_debug_controller_dbus_get_type");
@@ -7487,7 +7574,9 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_dtls_connection_get_peer_certificate_errors = try_find_sym(gio, "g_dtls_connection_get_peer_certificate_errors");
     stub_funcs.ptr_g_dtls_connection_set_require_close_notify = try_find_sym(gio, "g_dtls_connection_set_require_close_notify");
     stub_funcs.ptr_g_dtls_connection_get_require_close_notify = try_find_sym(gio, "g_dtls_connection_get_require_close_notify");
+    stub_funcs.ptr_g_dtls_connection_set_rehandshake_mode = try_find_sym(gio, "g_dtls_connection_set_rehandshake_mode");
     stub_funcs.ptr_g_dtls_connection_get_rehandshake_mode = try_find_sym(gio, "g_dtls_connection_get_rehandshake_mode");
+    stub_funcs.ptr_g_dtls_connection_handshake = try_find_sym(gio, "g_dtls_connection_handshake");
     stub_funcs.ptr_g_dtls_connection_handshake_async = try_find_sym(gio, "g_dtls_connection_handshake_async");
     stub_funcs.ptr_g_dtls_connection_handshake_finish = try_find_sym(gio, "g_dtls_connection_handshake_finish");
     stub_funcs.ptr_g_dtls_connection_shutdown = try_find_sym(gio, "g_dtls_connection_shutdown");
@@ -7499,6 +7588,8 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_dtls_connection_emit_accept_certificate = try_find_sym(gio, "g_dtls_connection_emit_accept_certificate");
     stub_funcs.ptr_g_dtls_connection_set_advertised_protocols = try_find_sym(gio, "g_dtls_connection_set_advertised_protocols");
     stub_funcs.ptr_g_dtls_connection_get_negotiated_protocol = try_find_sym(gio, "g_dtls_connection_get_negotiated_protocol");
+    stub_funcs.ptr_g_dtls_connection_get_channel_binding_data = try_find_sym(gio, "g_dtls_connection_get_channel_binding_data");
+    stub_funcs.ptr_g_dtls_connection_get_protocol_version = try_find_sym(gio, "g_dtls_connection_get_protocol_version");
     stub_funcs.ptr_g_dtls_connection_get_ciphersuite_name = try_find_sym(gio, "g_dtls_connection_get_ciphersuite_name");
     // Header /usr/include/glib-2.0/gio/gdtlsserverconnection.h
     stub_funcs.ptr_g_dtls_server_connection_get_type = try_find_sym(gio, "g_dtls_server_connection_get_type");
@@ -7732,6 +7823,8 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_file_info_get_symbolic_icon = try_find_sym(gio, "g_file_info_get_symbolic_icon");
     stub_funcs.ptr_g_file_info_get_content_type = try_find_sym(gio, "g_file_info_get_content_type");
     stub_funcs.ptr_g_file_info_get_size = try_find_sym(gio, "g_file_info_get_size");
+    stub_funcs.ptr_g_file_info_get_modification_time = try_find_sym(gio, "g_file_info_get_modification_time");
+    stub_funcs.ptr_g_file_info_get_modification_date_time = try_find_sym(gio, "g_file_info_get_modification_date_time");
     stub_funcs.ptr_g_file_info_get_access_date_time = try_find_sym(gio, "g_file_info_get_access_date_time");
     stub_funcs.ptr_g_file_info_get_creation_date_time = try_find_sym(gio, "g_file_info_get_creation_date_time");
     stub_funcs.ptr_g_file_info_get_symlink_target = try_find_sym(gio, "g_file_info_get_symlink_target");
@@ -7749,6 +7842,8 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_file_info_set_symbolic_icon = try_find_sym(gio, "g_file_info_set_symbolic_icon");
     stub_funcs.ptr_g_file_info_set_content_type = try_find_sym(gio, "g_file_info_set_content_type");
     stub_funcs.ptr_g_file_info_set_size = try_find_sym(gio, "g_file_info_set_size");
+    stub_funcs.ptr_g_file_info_set_modification_time = try_find_sym(gio, "g_file_info_set_modification_time");
+    stub_funcs.ptr_g_file_info_set_modification_date_time = try_find_sym(gio, "g_file_info_set_modification_date_time");
     stub_funcs.ptr_g_file_info_set_access_date_time = try_find_sym(gio, "g_file_info_set_access_date_time");
     stub_funcs.ptr_g_file_info_set_creation_date_time = try_find_sym(gio, "g_file_info_set_creation_date_time");
     stub_funcs.ptr_g_file_info_set_symlink_target = try_find_sym(gio, "g_file_info_set_symlink_target");
@@ -7852,6 +7947,8 @@ void initialize_glib(void) {
     // Header /usr/include/glib-2.0/gio/ginitable.h
     stub_funcs.ptr_g_initable_get_type = try_find_sym(gio, "g_initable_get_type");
     stub_funcs.ptr_g_initable_init = try_find_sym(gio, "g_initable_init");
+    stub_funcs.ptr_g_initable_newv = try_find_sym(gio, "g_initable_newv");
+    stub_funcs.ptr_g_initable_new_valist = try_find_sym(gio, "g_initable_new_valist");
     // Header /usr/include/glib-2.0/gio/ginputstream.h
     stub_funcs.ptr_g_input_stream_get_type = try_find_sym(gio, "g_input_stream_get_type");
     stub_funcs.ptr_g_input_stream_read = try_find_sym(gio, "g_input_stream_read");
@@ -8007,6 +8104,7 @@ void initialize_glib(void) {
     // Header /usr/include/glib-2.0/gio/giotypes.h
     // Header /usr/include/glib-2.0/gio/glistmodel.h
     stub_funcs.ptr_g_list_model_get_type = try_find_sym(gio, "g_list_model_get_type");
+    stub_funcs.ptr_g_list_model_get_item_type = try_find_sym(gio, "g_list_model_get_item_type");
     stub_funcs.ptr_g_list_model_get_n_items = try_find_sym(gio, "g_list_model_get_n_items");
     stub_funcs.ptr_g_list_model_get_item = try_find_sym(gio, "g_list_model_get_item");
     stub_funcs.ptr_g_list_model_get_object = try_find_sym(gio, "g_list_model_get_object");
@@ -8038,6 +8136,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_memory_input_stream_add_bytes = try_find_sym(gio, "g_memory_input_stream_add_bytes");
     // Header /usr/include/glib-2.0/gio/gmemorymonitor.h
     stub_funcs.ptr_g_memory_monitor_get_type = try_find_sym(gio, "g_memory_monitor_get_type");
+    stub_funcs.ptr_g_memory_monitor_dup_default = try_find_sym(gio, "g_memory_monitor_dup_default");
     // Header /usr/include/glib-2.0/gio/gmemoryoutputstream.h
     stub_funcs.ptr_g_memory_output_stream_get_type = try_find_sym(gio, "g_memory_output_stream_get_type");
     stub_funcs.ptr_g_memory_output_stream_new = try_find_sym(gio, "g_memory_output_stream_new");
@@ -8265,6 +8364,7 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_pollable_source_new = try_find_sym(gio, "g_pollable_source_new");
     // Header /usr/include/glib-2.0/gio/gpowerprofilemonitor.h
     stub_funcs.ptr_g_power_profile_monitor_get_type = try_find_sym(gio, "g_power_profile_monitor_get_type");
+    stub_funcs.ptr_g_power_profile_monitor_dup_default = try_find_sym(gio, "g_power_profile_monitor_dup_default");
     stub_funcs.ptr_g_power_profile_monitor_get_power_saver_enabled = try_find_sym(gio, "g_power_profile_monitor_get_power_saver_enabled");
     // Header /usr/include/glib-2.0/gio/gpropertyaction.h
     stub_funcs.ptr_g_property_action_get_type = try_find_sym(gio, "g_property_action_get_type");
@@ -8819,8 +8919,12 @@ void initialize_glib(void) {
     stub_funcs.ptr_g_tls_connection_get_peer_certificate_errors = try_find_sym(gio, "g_tls_connection_get_peer_certificate_errors");
     stub_funcs.ptr_g_tls_connection_set_require_close_notify = try_find_sym(gio, "g_tls_connection_set_require_close_notify");
     stub_funcs.ptr_g_tls_connection_get_require_close_notify = try_find_sym(gio, "g_tls_connection_get_require_close_notify");
+    stub_funcs.ptr_g_tls_connection_set_rehandshake_mode = try_find_sym(gio, "g_tls_connection_set_rehandshake_mode");
     stub_funcs.ptr_g_tls_connection_get_rehandshake_mode = try_find_sym(gio, "g_tls_connection_get_rehandshake_mode");
+    stub_funcs.ptr_g_tls_connection_set_advertised_protocols = try_find_sym(gio, "g_tls_connection_set_advertised_protocols");
     stub_funcs.ptr_g_tls_connection_get_negotiated_protocol = try_find_sym(gio, "g_tls_connection_get_negotiated_protocol");
+    stub_funcs.ptr_g_tls_connection_get_channel_binding_data = try_find_sym(gio, "g_tls_connection_get_channel_binding_data");
+    stub_funcs.ptr_g_tls_connection_handshake = try_find_sym(gio, "g_tls_connection_handshake");
     stub_funcs.ptr_g_tls_connection_handshake_async = try_find_sym(gio, "g_tls_connection_handshake_async");
     stub_funcs.ptr_g_tls_connection_handshake_finish = try_find_sym(gio, "g_tls_connection_handshake_finish");
     stub_funcs.ptr_g_tls_connection_get_protocol_version = try_find_sym(gio, "g_tls_connection_get_protocol_version");
@@ -9024,6 +9128,7 @@ gpointer (g_cache_insert)(GCache *cache, gpointer key) { return stub_funcs.ptr_g
 void (g_cache_remove)(GCache *cache, gconstpointer value) { stub_funcs.ptr_g_cache_remove(cache, value); }
 void (g_cache_key_foreach)(GCache *cache, GHFunc func, gpointer user_data) { stub_funcs.ptr_g_cache_key_foreach(cache, func, user_data); }
 void (g_cache_value_foreach)(GCache *cache, GHFunc func, gpointer user_data) { stub_funcs.ptr_g_cache_value_foreach(cache, func, user_data); }
+GCache* (g_cache_new)(GCacheNewFunc value_new_func, GCacheDestroyFunc value_destroy_func, GCacheDupFunc key_dup_func, GCacheDestroyFunc key_destroy_func, GHashFunc hash_key_func, GHashFunc hash_value_func, GEqualFunc key_equal_func) { return stub_funcs.ptr_g_cache_new(value_new_func, value_destroy_func, key_dup_func, key_destroy_func, hash_key_func, hash_value_func, key_equal_func); }
 void (g_completion_add_items)(GCompletion* cmp, GList* items) { stub_funcs.ptr_g_completion_add_items(cmp, items); }
 void (g_completion_remove_items)(GCompletion* cmp, GList* items) { stub_funcs.ptr_g_completion_remove_items(cmp, items); }
 void (g_completion_clear_items)(GCompletion* cmp) { stub_funcs.ptr_g_completion_clear_items(cmp); }
@@ -9043,7 +9148,6 @@ void (g_relation_print)(GRelation *relation) { stub_funcs.ptr_g_relation_print(r
 void (g_tuples_destroy)(GTuples *tuples) { stub_funcs.ptr_g_tuples_destroy(tuples); }
 gpointer (g_tuples_index)(GTuples *tuples, gint index_, gint field) { return stub_funcs.ptr_g_tuples_index(tuples, index_, field); }
 GRelation* (g_relation_new)(gint fields) { return stub_funcs.ptr_g_relation_new(fields); }
-GThread* (g_thread_create)(GThreadFunc func, gpointer data, gboolean joinable, GError **error) { return stub_funcs.ptr_g_thread_create(func, data, joinable, error); }
 GThread* (g_thread_create_full)(GThreadFunc func, gpointer data, gulong stack_size, gboolean joinable, gboolean bound, GThreadPriority priority, GError **error) { return stub_funcs.ptr_g_thread_create_full(func, data, stack_size, joinable, bound, priority, error); }
 void (g_thread_set_priority)(GThread *thread, GThreadPriority priority) { stub_funcs.ptr_g_thread_set_priority(thread, priority); }
 void (g_thread_foreach)(GFunc thread_func, gpointer user_data) { stub_funcs.ptr_g_thread_foreach(thread_func, user_data); }
@@ -9057,6 +9161,7 @@ void (g_mutex_free)(GMutex *mutex) { stub_funcs.ptr_g_mutex_free(mutex); }
 GCond * (g_cond_new)(void) { return stub_funcs.ptr_g_cond_new(); }
 void (g_cond_free)(GCond *cond) { stub_funcs.ptr_g_cond_free(cond); }
 gboolean (g_cond_timed_wait)(GCond *cond, GMutex *mutex, GTimeVal *abs_time) { return stub_funcs.ptr_g_cond_timed_wait(cond, mutex, abs_time); }
+GThread* (g_thread_create)(GThreadFunc func, gpointer data, gboolean joinable, GError **error) { return stub_funcs.ptr_g_thread_create(func, data, joinable, error); }
 GArray* (g_array_new_take)(gpointer data, gsize len, gboolean clear, gsize element_size) { return stub_funcs.ptr_g_array_new_take(data, len, clear, element_size); }
 GArray* (g_array_new_take_zero_terminated)(gpointer data, gboolean clear, gsize element_size) { return stub_funcs.ptr_g_array_new_take_zero_terminated(data, clear, element_size); }
 gpointer (g_array_steal)(GArray *array, gsize *len) { return stub_funcs.ptr_g_array_steal(array, len); }
@@ -9154,6 +9259,7 @@ gboolean (g_async_queue_remove)(GAsyncQueue *queue, gpointer item) { return stub
 gboolean (g_async_queue_remove_unlocked)(GAsyncQueue *queue, gpointer item) { return stub_funcs.ptr_g_async_queue_remove_unlocked(queue, item); }
 void (g_async_queue_push_front)(GAsyncQueue *queue, gpointer item) { stub_funcs.ptr_g_async_queue_push_front(queue, item); }
 void (g_async_queue_push_front_unlocked)(GAsyncQueue *queue, gpointer item) { stub_funcs.ptr_g_async_queue_push_front_unlocked(queue, item); }
+gpointer (g_async_queue_timed_pop)(GAsyncQueue *queue, GTimeVal *end_time) { return stub_funcs.ptr_g_async_queue_timed_pop(queue, end_time); }
 gpointer (g_async_queue_timed_pop_unlocked)(GAsyncQueue *queue, GTimeVal *end_time) { return stub_funcs.ptr_g_async_queue_timed_pop_unlocked(queue, end_time); }
 GAsyncQueue* (g_async_queue_new)(void) { return stub_funcs.ptr_g_async_queue_new(); }
 void (g_atomic_int_set)(volatile gint *atomic, gint newval) { stub_funcs.ptr_g_atomic_int_set(atomic, newval); }
@@ -9333,7 +9439,9 @@ guint (g_date_get_iso8601_week_of_year)(const GDate *date) { return stub_funcs.p
 void (g_date_clear)(GDate *date, guint n_dates) { stub_funcs.ptr_g_date_clear(date, n_dates); }
 void (g_date_set_parse)(GDate *date, const gchar *str) { stub_funcs.ptr_g_date_set_parse(date, str); }
 void (g_date_set_time_t)(GDate *date, time_t timet) { stub_funcs.ptr_g_date_set_time_t(date, timet); }
+void (g_date_set_time_val)(GDate *date, GTimeVal *timeval) { stub_funcs.ptr_g_date_set_time_val(date, timeval); }
 void (g_date_set_time)(GDate *date, GTime time_) { stub_funcs.ptr_g_date_set_time(date, time_); }
+void (g_date_set_month)(GDate *date, GDateMonth month) { stub_funcs.ptr_g_date_set_month(date, month); }
 void (g_date_set_day)(GDate *date, GDateDay day) { stub_funcs.ptr_g_date_set_day(date, day); }
 void (g_date_set_year)(GDate *date, GDateYear year) { stub_funcs.ptr_g_date_set_year(date, year); }
 void (g_date_set_dmy)(GDate *date, GDateDay day, GDateMonth month, GDateYear y) { stub_funcs.ptr_g_date_set_dmy(date, day, month, y); }
@@ -9365,7 +9473,9 @@ GDateTime * (g_date_time_new_from_unix_local)(gint64 t) { return stub_funcs.ptr_
 GDateTime * (g_date_time_new_from_unix_utc)(gint64 t) { return stub_funcs.ptr_g_date_time_new_from_unix_utc(t); }
 GDateTime * (g_date_time_new_from_unix_local_usec)(gint64 usecs) { return stub_funcs.ptr_g_date_time_new_from_unix_local_usec(usecs); }
 GDateTime * (g_date_time_new_from_unix_utc_usec)(gint64 usecs) { return stub_funcs.ptr_g_date_time_new_from_unix_utc_usec(usecs); }
+GDateTime * (g_date_time_new_from_timeval_local)(const GTimeVal *tv) { return stub_funcs.ptr_g_date_time_new_from_timeval_local(tv); }
 GDateTime * (g_date_time_new_from_timeval_utc)(const GTimeVal *tv) { return stub_funcs.ptr_g_date_time_new_from_timeval_utc(tv); }
+GDateTime * (g_date_time_new_from_iso8601)(const gchar *text, GTimeZone *default_tz) { return stub_funcs.ptr_g_date_time_new_from_iso8601(text, default_tz); }
 GDateTime * (g_date_time_new)(GTimeZone *tz, gint year, gint month, gint day, gint hour, gint minute, gdouble seconds) { return stub_funcs.ptr_g_date_time_new(tz, year, month, day, hour, minute, seconds); }
 GDateTime * (g_date_time_new_local)(gint year, gint month, gint day, gint hour, gint minute, gdouble seconds) { return stub_funcs.ptr_g_date_time_new_local(year, month, day, hour, minute, seconds); }
 GDateTime * (g_date_time_new_utc)(gint year, gint month, gint day, gint hour, gint minute, gdouble seconds) { return stub_funcs.ptr_g_date_time_new_utc(year, month, day, hour, minute, seconds); }
@@ -9397,6 +9507,8 @@ gint (g_date_time_get_microsecond)(GDateTime *datetime) { return stub_funcs.ptr_
 gdouble (g_date_time_get_seconds)(GDateTime *datetime) { return stub_funcs.ptr_g_date_time_get_seconds(datetime); }
 gint64 (g_date_time_to_unix)(GDateTime *datetime) { return stub_funcs.ptr_g_date_time_to_unix(datetime); }
 gint64 (g_date_time_to_unix_usec)(GDateTime *datetime) { return stub_funcs.ptr_g_date_time_to_unix_usec(datetime); }
+gboolean (g_date_time_to_timeval)(GDateTime *datetime, GTimeVal *tv) { return stub_funcs.ptr_g_date_time_to_timeval(datetime, tv); }
+GTimeSpan (g_date_time_get_utc_offset)(GDateTime *datetime) { return stub_funcs.ptr_g_date_time_get_utc_offset(datetime); }
 GTimeZone * (g_date_time_get_timezone)(GDateTime *datetime) { return stub_funcs.ptr_g_date_time_get_timezone(datetime); }
 const gchar * (g_date_time_get_timezone_abbreviation)(GDateTime *datetime) { return stub_funcs.ptr_g_date_time_get_timezone_abbreviation(datetime); }
 gboolean (g_date_time_is_daylight_savings)(GDateTime *datetime) { return stub_funcs.ptr_g_date_time_is_daylight_savings(datetime); }
@@ -9435,11 +9547,12 @@ void (g_clear_error)(GError **err) { stub_funcs.ptr_g_clear_error(err); }
 void (g_prefix_error_literal)(GError **err, const gchar *prefix) { stub_funcs.ptr_g_prefix_error_literal(err, prefix); }
 // Unable to locate va_equiv for g_propagate_prefixed_error
 GQuark (g_error_domain_register_static)(const char *error_type_name, gsize error_type_private_size, GErrorInitFunc error_type_init, GErrorCopyFunc error_type_copy, GErrorClearFunc error_type_clear) { return stub_funcs.ptr_g_error_domain_register_static(error_type_name, error_type_private_size, error_type_init, error_type_copy, error_type_clear); }
-GQuark (g_file_error_quark)(void) { return stub_funcs.ptr_g_file_error_quark(); }
 GFileError (g_file_error_from_errno)(gint err_no) { return stub_funcs.ptr_g_file_error_from_errno(err_no); }
 gboolean (g_file_test)(const gchar *filename, GFileTest test) { return stub_funcs.ptr_g_file_test(filename, test); }
 gboolean (g_file_get_contents)(const gchar *filename, gchar **contents, gsize *length, GError **error) { return stub_funcs.ptr_g_file_get_contents(filename, contents, length, error); }
 gboolean (g_file_set_contents)(const gchar *filename, const gchar *contents, gssize length, GError **error) { return stub_funcs.ptr_g_file_set_contents(filename, contents, length, error); }
+gboolean (g_file_set_contents_full)(const gchar *filename, const gchar *contents, gssize length, GFileSetContentsFlags flags, int mode, GError **error) { return stub_funcs.ptr_g_file_set_contents_full(filename, contents, length, flags, mode, error); }
+gchar* (g_file_read_link)(const gchar *filename, GError **error) { return stub_funcs.ptr_g_file_read_link(filename, error); }
 gchar* (g_mkdtemp)(gchar *tmpl) { return stub_funcs.ptr_g_mkdtemp(tmpl); }
 gchar* (g_mkdtemp_full)(gchar *tmpl, gint mode) { return stub_funcs.ptr_g_mkdtemp_full(tmpl, mode); }
 gint (g_mkstemp)(gchar *tmpl) { return stub_funcs.ptr_g_mkstemp(tmpl); }
@@ -9458,6 +9571,7 @@ gchar* (g_get_current_dir)(void) { return stub_funcs.ptr_g_get_current_dir(); }
 gchar* (g_path_get_basename)(const gchar *file_name) { return stub_funcs.ptr_g_path_get_basename(file_name); }
 gchar* (g_path_get_dirname)(const gchar *file_name) { return stub_funcs.ptr_g_path_get_dirname(file_name); }
 gchar* (g_canonicalize_filename)(const gchar *filename, const gchar *relative_to) { return stub_funcs.ptr_g_canonicalize_filename(filename, relative_to); }
+GQuark (g_file_error_quark)(void) { return stub_funcs.ptr_g_file_error_quark(); }
 const gchar* (g_dgettext)(const gchar *domain, const gchar *msgid) { return stub_funcs.ptr_g_dgettext(domain, msgid); }
 const gchar* (g_dcgettext)(const gchar *domain, const gchar *msgid, gint category) { return stub_funcs.ptr_g_dcgettext(domain, msgid, category); }
 const gchar* (g_dngettext)(const gchar *domain, const gchar *msgid, const gchar *msgid_plural, gulong n) { return stub_funcs.ptr_g_dngettext(domain, msgid, msgid_plural, n); }
@@ -9676,6 +9790,8 @@ GList* (g_list_sort_with_data)(GList *list, GCompareDataFunc compare_func, gpoin
 gpointer (g_list_nth_data)(GList *list, guint n) { return stub_funcs.ptr_g_list_nth_data(list, n); }
 void (g_clear_list)(GList **list_ptr, GDestroyNotify destroy) { stub_funcs.ptr_g_clear_list(list_ptr, destroy); }
 GList* (g_list_alloc)(void) { return stub_funcs.ptr_g_list_alloc(); }
+GMainContext* (g_main_context_new_with_flags)(GMainContextFlags flags) { return stub_funcs.ptr_g_main_context_new_with_flags(flags); }
+GMainContext* (g_main_context_ref)(GMainContext *context) { return stub_funcs.ptr_g_main_context_ref(context); }
 void (g_main_context_unref)(GMainContext *context) { stub_funcs.ptr_g_main_context_unref(context); }
 GMainContext* (g_main_context_default)(void) { return stub_funcs.ptr_g_main_context_default(); }
 gboolean (g_main_context_iteration)(GMainContext *context, gboolean may_block) { return stub_funcs.ptr_g_main_context_iteration(context, may_block); }
@@ -9702,6 +9818,7 @@ void (g_main_context_push_thread_default)(GMainContext *context) { stub_funcs.pt
 void (g_main_context_pop_thread_default)(GMainContext *context) { stub_funcs.ptr_g_main_context_pop_thread_default(context); }
 GMainContext* (g_main_context_get_thread_default)(void) { return stub_funcs.ptr_g_main_context_get_thread_default(); }
 GMainContext* (g_main_context_ref_thread_default)(void) { return stub_funcs.ptr_g_main_context_ref_thread_default(); }
+GMainLoop* (g_main_loop_new)(GMainContext *context, gboolean is_running) { return stub_funcs.ptr_g_main_loop_new(context, is_running); }
 void (g_main_loop_run)(GMainLoop *loop) { stub_funcs.ptr_g_main_loop_run(loop); }
 void (g_main_loop_quit)(GMainLoop *loop) { stub_funcs.ptr_g_main_loop_quit(loop); }
 GMainLoop* (g_main_loop_ref)(GMainLoop *loop) { return stub_funcs.ptr_g_main_loop_ref(loop); }
@@ -9709,6 +9826,8 @@ void (g_main_loop_unref)(GMainLoop *loop) { stub_funcs.ptr_g_main_loop_unref(loo
 gboolean (g_main_loop_is_running)(GMainLoop *loop) { return stub_funcs.ptr_g_main_loop_is_running(loop); }
 GMainContext* (g_main_loop_get_context)(GMainLoop *loop) { return stub_funcs.ptr_g_main_loop_get_context(loop); }
 GSource* (g_source_new)(GSourceFuncs *source_funcs, guint struct_size) { return stub_funcs.ptr_g_source_new(source_funcs, struct_size); }
+void (g_source_set_dispose_function)(GSource *source, GSourceDisposeFunc dispose) { stub_funcs.ptr_g_source_set_dispose_function(source, dispose); }
+GSource* (g_source_ref)(GSource *source) { return stub_funcs.ptr_g_source_ref(source); }
 void (g_source_unref)(GSource *source) { stub_funcs.ptr_g_source_unref(source); }
 guint (g_source_attach)(GSource *source, GMainContext *context) { return stub_funcs.ptr_g_source_attach(source, context); }
 void (g_source_destroy)(GSource *source) { stub_funcs.ptr_g_source_destroy(source); }
@@ -9736,10 +9855,14 @@ void (g_source_add_poll)(GSource *source, GPollFD *fd) { stub_funcs.ptr_g_source
 void (g_source_remove_poll)(GSource *source, GPollFD *fd) { stub_funcs.ptr_g_source_remove_poll(source, fd); }
 void (g_source_add_child_source)(GSource *source, GSource *child_source) { stub_funcs.ptr_g_source_add_child_source(source, child_source); }
 void (g_source_remove_child_source)(GSource *source, GSource *child_source) { stub_funcs.ptr_g_source_remove_child_source(source, child_source); }
+void (g_source_get_current_time)(GSource *source, GTimeVal *timeval) { stub_funcs.ptr_g_source_get_current_time(source, timeval); }
+gint64 (g_source_get_time)(GSource *source) { return stub_funcs.ptr_g_source_get_time(source); }
 GSource* (g_idle_source_new)(void) { return stub_funcs.ptr_g_idle_source_new(); }
 GSource* (g_child_watch_source_new)(GPid pid) { return stub_funcs.ptr_g_child_watch_source_new(pid); }
 GSource* (g_timeout_source_new)(guint interval) { return stub_funcs.ptr_g_timeout_source_new(interval); }
 GSource* (g_timeout_source_new_seconds)(guint interval) { return stub_funcs.ptr_g_timeout_source_new_seconds(interval); }
+void (g_get_current_time)(GTimeVal *result) { stub_funcs.ptr_g_get_current_time(result); }
+gint64 (g_get_monotonic_time)(void) { return stub_funcs.ptr_g_get_monotonic_time(); }
 gint64 (g_get_real_time)(void) { return stub_funcs.ptr_g_get_real_time(); }
 gboolean (g_source_remove)(guint tag) { return stub_funcs.ptr_g_source_remove(tag); }
 gboolean (g_source_remove_by_user_data)(gpointer user_data) { return stub_funcs.ptr_g_source_remove_by_user_data(user_data); }
@@ -10186,7 +10309,6 @@ int (g_unlink)(const gchar *filename) { return stub_funcs.ptr_g_unlink(filename)
 int (g_rmdir)(const gchar *filename) { return stub_funcs.ptr_g_rmdir(filename); }
 int (g_access)(const gchar *filename, int mode) { return stub_funcs.ptr_g_access(filename, mode); }
 gboolean (g_close)(gint fd, GError **error) { return stub_funcs.ptr_g_close(fd, error); }
-gchar (g_ascii_tolower)(gchar c) { return stub_funcs.ptr_g_ascii_tolower(c); }
 gchar (g_ascii_toupper)(gchar c) { return stub_funcs.ptr_g_ascii_toupper(c); }
 gint (g_ascii_digit_value)(gchar c) { return stub_funcs.ptr_g_ascii_digit_value(c); }
 gint (g_ascii_xdigit_value)(gchar c) { return stub_funcs.ptr_g_ascii_xdigit_value(c); }
@@ -10245,6 +10367,7 @@ gboolean (g_strv_equal)(const gchar * const *strv1, const gchar * const *strv2) 
 GQuark (g_number_parser_error_quark)(void) { return stub_funcs.ptr_g_number_parser_error_quark(); }
 gboolean (g_ascii_string_to_signed)(const gchar *str, guint base, gint64 min, gint64 max, gint64 *out_num, GError **error) { return stub_funcs.ptr_g_ascii_string_to_signed(str, base, min, max, out_num, error); }
 gboolean (g_ascii_string_to_unsigned)(const gchar *str, guint base, guint64 min, guint64 max, guint64 *out_num, GError **error) { return stub_funcs.ptr_g_ascii_string_to_unsigned(str, base, min, max, out_num, error); }
+gchar (g_ascii_tolower)(gchar c) { return stub_funcs.ptr_g_ascii_tolower(c); }
 GString* (g_string_new_take)(gchar *init) { return stub_funcs.ptr_g_string_new_take(init); }
 GString* (g_string_new_len)(const gchar *init, gssize len) { return stub_funcs.ptr_g_string_new_len(init, len); }
 GString* (g_string_sized_new)(gsize dfl_size) { return stub_funcs.ptr_g_string_sized_new(dfl_size); }
@@ -10323,6 +10446,8 @@ double (g_test_timer_elapsed)(void) { return stub_funcs.ptr_g_test_timer_elapsed
 double (g_test_timer_last)(void) { return stub_funcs.ptr_g_test_timer_last(); }
 void (g_test_queue_free)(gpointer gfree_pointer) { stub_funcs.ptr_g_test_queue_free(gfree_pointer); }
 void (g_test_queue_destroy)(GDestroyNotify destroy_func, gpointer destroy_data) { stub_funcs.ptr_g_test_queue_destroy(destroy_func, destroy_data); }
+gboolean (g_test_trap_fork)(guint64 usec_timeout, GTestTrapFlags test_trap_flags) { return stub_funcs.ptr_g_test_trap_fork(usec_timeout, test_trap_flags); }
+void (g_test_trap_subprocess)(const char *test_path, guint64 usec_timeout, GTestSubprocessFlags test_flags) { stub_funcs.ptr_g_test_trap_subprocess(test_path, usec_timeout, test_flags); }
 void (g_test_trap_subprocess_with_envp)(const char *test_path, const char * const *envp, guint64 usec_timeout, GTestSubprocessFlags test_flags) { stub_funcs.ptr_g_test_trap_subprocess_with_envp(test_path, envp, usec_timeout, test_flags); }
 gboolean (g_test_trap_has_passed)(void) { return stub_funcs.ptr_g_test_trap_has_passed(); }
 gboolean (g_test_trap_reached_timeout)(void) { return stub_funcs.ptr_g_test_trap_reached_timeout(); }
@@ -10426,6 +10551,7 @@ void (g_timer_continue)(GTimer *timer) { stub_funcs.ptr_g_timer_continue(timer);
 gdouble (g_timer_elapsed)(GTimer *timer, gulong *microseconds) { return stub_funcs.ptr_g_timer_elapsed(timer, microseconds); }
 gboolean (g_timer_is_active)(GTimer *timer) { return stub_funcs.ptr_g_timer_is_active(timer); }
 void (g_usleep)(gulong microseconds) { stub_funcs.ptr_g_usleep(microseconds); }
+void (g_time_val_add)(GTimeVal *time_, glong microseconds) { stub_funcs.ptr_g_time_val_add(time_, microseconds); }
 gboolean (g_time_val_from_iso8601)(const gchar *iso_date, GTimeVal *time_) { return stub_funcs.ptr_g_time_val_from_iso8601(iso_date, time_); }
 gchar* (g_time_val_to_iso8601)(GTimeVal *time_) { return stub_funcs.ptr_g_time_val_to_iso8601(time_); }
 GTimer* (g_timer_new)(void) { return stub_funcs.ptr_g_timer_new(); }
@@ -10445,6 +10571,7 @@ GTimeZone * (g_time_zone_new)(const gchar *identifier) { return stub_funcs.ptr_g
 gpointer (g_trash_stack_pop)(GTrashStack **stack_p) { return stub_funcs.ptr_g_trash_stack_pop(stack_p); }
 gpointer (g_trash_stack_peek)(GTrashStack **stack_p) { return stub_funcs.ptr_g_trash_stack_peek(stack_p); }
 guint (g_trash_stack_height)(GTrashStack **stack_p) { return stub_funcs.ptr_g_trash_stack_height(stack_p); }
+void (g_trash_stack_push)(GTrashStack **stack_p, gpointer data_p) { stub_funcs.ptr_g_trash_stack_push(stack_p, data_p); }
 GTree* (g_tree_new_with_data)(GCompareDataFunc key_compare_func, gpointer key_compare_data) { return stub_funcs.ptr_g_tree_new_with_data(key_compare_func, key_compare_data); }
 GTree* (g_tree_new_full)(GCompareDataFunc key_compare_func, gpointer key_compare_data, GDestroyNotify key_destroy_func, GDestroyNotify value_destroy_func) { return stub_funcs.ptr_g_tree_new_full(key_compare_func, key_compare_data, key_destroy_func, value_destroy_func); }
 GTreeNode* (g_tree_node_first)(GTree *tree) { return stub_funcs.ptr_g_tree_node_first(tree); }
@@ -10580,6 +10707,7 @@ const char* (g_uri_peek_scheme)(const char *uri) { return stub_funcs.ptr_g_uri_p
 char * (g_uri_escape_string)(const char *unescaped, const char *reserved_chars_allowed, gboolean allow_utf8) { return stub_funcs.ptr_g_uri_escape_string(unescaped, reserved_chars_allowed, allow_utf8); }
 GBytes * (g_uri_unescape_bytes)(const char *escaped_string, gssize length, const char *illegal_characters, GError **error) { return stub_funcs.ptr_g_uri_unescape_bytes(escaped_string, length, illegal_characters, error); }
 char * (g_uri_escape_bytes)(const guint8 *unescaped, gsize length, const char *reserved_chars_allowed) { return stub_funcs.ptr_g_uri_escape_bytes(unescaped, length, reserved_chars_allowed); }
+GUri * (g_uri_ref)(GUri *uri) { return stub_funcs.ptr_g_uri_ref(uri); }
 const gchar * (g_get_real_name)(void) { return stub_funcs.ptr_g_get_real_name(); }
 const gchar * (g_get_home_dir)(void) { return stub_funcs.ptr_g_get_home_dir(); }
 const gchar * (g_get_tmp_dir)(void) { return stub_funcs.ptr_g_get_tmp_dir(); }
@@ -10605,6 +10733,7 @@ void (g_nullify_pointer)(gpointer *nullify_location) { stub_funcs.ptr_g_nullify_
 gchar* (g_format_size_full)(guint64 size, GFormatSizeFlags flags) { return stub_funcs.ptr_g_format_size_full(size, flags); }
 gchar* (g_format_size)(guint64 size) { return stub_funcs.ptr_g_format_size(size); }
 gchar* (g_format_size_for_display)(goffset size) { return stub_funcs.ptr_g_format_size_for_display(size); }
+void (g_atexit)(GVoidFunc func) { stub_funcs.ptr_g_atexit(func); }
 gchar* (g_find_program_in_path)(const gchar *program) { return stub_funcs.ptr_g_find_program_in_path(program); }
 gint (g_bit_nth_lsf)(gulong mask, gint nth_bit) { return stub_funcs.ptr_g_bit_nth_lsf(mask, nth_bit); }
 gint (g_bit_nth_msf)(gulong mask, gint nth_bit) { return stub_funcs.ptr_g_bit_nth_msf(mask, nth_bit); }
@@ -10775,6 +10904,7 @@ GSource* (g_unix_fd_source_new)(gint fd, GIOCondition condition) { return stub_f
 guint (g_unix_fd_add_full)(gint priority, gint fd, GIOCondition condition, GUnixFDSourceFunc function, gpointer user_data, GDestroyNotify notify) { return stub_funcs.ptr_g_unix_fd_add_full(priority, fd, condition, function, user_data, notify); }
 guint (g_unix_fd_add)(gint fd, GIOCondition condition, GUnixFDSourceFunc function, gpointer user_data) { return stub_funcs.ptr_g_unix_fd_add(fd, condition, function, user_data); }
 struct passwd* (g_unix_get_passwd_entry)(const gchar *user_name, GError **error) { return stub_funcs.ptr_g_unix_get_passwd_entry(user_name, error); }
+int (g_closefrom)(int lowfd) { return stub_funcs.ptr_g_closefrom(lowfd); }
 int (g_fdwalk_set_cloexec)(int lowfd) { return stub_funcs.ptr_g_fdwalk_set_cloexec(lowfd); }
 GQuark (g_unix_error_quark)(void) { return stub_funcs.ptr_g_unix_error_quark(); }
 GType (g_binding_flags_get_type)(void) { return stub_funcs.ptr_g_binding_flags_get_type(); }
@@ -10872,6 +11002,7 @@ GType (g_markup_parse_context_get_type)(void) { return stub_funcs.ptr_g_markup_p
 GType (g_key_file_get_type)(void) { return stub_funcs.ptr_g_key_file_get_type(); }
 GType (g_mapped_file_get_type)(void) { return stub_funcs.ptr_g_mapped_file_get_type(); }
 GType (g_thread_get_type)(void) { return stub_funcs.ptr_g_thread_get_type(); }
+GType (g_checksum_get_type)(void) { return stub_funcs.ptr_g_checksum_get_type(); }
 GType (g_option_group_get_type)(void) { return stub_funcs.ptr_g_option_group_get_type(); }
 GType (g_uri_get_type)(void) { return stub_funcs.ptr_g_uri_get_type(); }
 GType (g_tree_get_type)(void) { return stub_funcs.ptr_g_tree_get_type(); }
@@ -10881,7 +11012,6 @@ GType (g_hmac_get_type)(void) { return stub_funcs.ptr_g_hmac_get_type(); }
 GType (g_dir_get_type)(void) { return stub_funcs.ptr_g_dir_get_type(); }
 GType (g_rand_get_type)(void) { return stub_funcs.ptr_g_rand_get_type(); }
 GType (g_strv_builder_get_type)(void) { return stub_funcs.ptr_g_strv_builder_get_type(); }
-GType (g_checksum_get_type)(void) { return stub_funcs.ptr_g_checksum_get_type(); }
 GType (g_variant_get_gtype)(void) { return stub_funcs.ptr_g_variant_get_gtype(); }
 void (g_cclosure_marshal_VOID__VOIDv)(GClosure *closure, GValue *return_value, gpointer instance, va_list args, gpointer marshal_data, int n_params, GType *param_types) { stub_funcs.ptr_g_cclosure_marshal_VOID__VOIDv(closure, return_value, instance, args, marshal_data, n_params, param_types); }
 void (g_cclosure_marshal_VOID__BOOLEAN)(GClosure *closure, GValue *return_value, guint n_param_values, const GValue *param_values, gpointer invocation_hint, gpointer marshal_data) { stub_funcs.ptr_g_cclosure_marshal_VOID__BOOLEAN(closure, return_value, n_param_values, param_values, invocation_hint, marshal_data); }
@@ -10937,8 +11067,23 @@ void (g_object_interface_install_property)(gpointer g_iface, GParamSpec *pspec) 
 GParamSpec* (g_object_interface_find_property)(gpointer g_iface, const gchar *property_name) { return stub_funcs.ptr_g_object_interface_find_property(g_iface, property_name); }
 GParamSpec** (g_object_interface_list_properties)(gpointer g_iface, guint *n_properties_p) { return stub_funcs.ptr_g_object_interface_list_properties(g_iface, n_properties_p); }
 GType (g_object_get_type)(void) { return stub_funcs.ptr_g_object_get_type(); }
-// Unable to locate va_equiv for g_object_new
+gpointer g_object_new(GType object_type, const gchar *first_property_name, ...) {
+    GObject *object;
+    va_list var_args;
+
+    /* short circuit for calls supplying no properties */
+    if (!first_property_name)
+        return stub_funcs.ptr_g_object_new_with_properties(object_type, 0, NULL, NULL);
+
+    va_start(var_args, first_property_name);
+    object = stub_funcs.ptr_g_object_new_valist(object_type, first_property_name, var_args);
+    va_end(var_args);
+
+    return object;
+}
 GObject* (g_object_new_with_properties)(GType object_type, guint n_properties, const char *names[], const GValue values[]) { return stub_funcs.ptr_g_object_new_with_properties(object_type, n_properties, names, values); }
+gpointer (g_object_newv)(GType object_type, guint n_parameters, GParameter *parameters) { return stub_funcs.ptr_g_object_newv(object_type, n_parameters, parameters); }
+GObject* (g_object_new_valist)(GType object_type, const gchar *first_property_name, va_list var_args) { return stub_funcs.ptr_g_object_new_valist(object_type, first_property_name, var_args); }
 void (g_object_set)(gpointer object, const gchar *first_property_name, ...) { va_list vaargs; va_start(vaargs, first_property_name); stub_funcs.ptr_g_object_set_valist(object, first_property_name, vaargs); va_end(vaargs); }
 void (g_object_get)(gpointer object, const gchar *first_property_name, ...) { va_list vaargs; va_start(vaargs, first_property_name); stub_funcs.ptr_g_object_get_valist(object, first_property_name, vaargs); va_end(vaargs); }
 // Unable to locate va_equiv for g_object_connect
@@ -11107,7 +11252,9 @@ void (g_signal_group_connect_after)(GSignalGroup *self, const gchar *detailed_si
 void (g_signal_group_connect_swapped)(GSignalGroup *self, const gchar *detailed_signal, GCallback c_handler, gpointer data) { stub_funcs.ptr_g_signal_group_connect_swapped(self, detailed_signal, c_handler, data); }
 void (g_source_set_dummy_callback)(GSource *source) { stub_funcs.ptr_g_source_set_dummy_callback(source); }
 void (g_source_set_closure)(GSource *source, GClosure *closure) { stub_funcs.ptr_g_source_set_closure(source, closure); }
+void (g_type_init)(void) { stub_funcs.ptr_g_type_init(); }
 void (g_type_init_with_debug_flags)(GTypeDebugFlags debug_flags) { stub_funcs.ptr_g_type_init_with_debug_flags(debug_flags); }
+const gchar * (g_type_name)(GType type) { return stub_funcs.ptr_g_type_name(type); }
 GQuark (g_type_qname)(GType type) { return stub_funcs.ptr_g_type_qname(type); }
 GType (g_type_from_name)(const gchar *name) { return stub_funcs.ptr_g_type_from_name(name); }
 GType (g_type_parent)(GType type) { return stub_funcs.ptr_g_type_parent(type); }
@@ -11130,6 +11277,7 @@ void (g_type_set_qdata)(GType type, GQuark quark, gpointer data) { stub_funcs.pt
 gpointer (g_type_get_qdata)(GType type, GQuark quark) { return stub_funcs.ptr_g_type_get_qdata(type, quark); }
 void (g_type_query)(GType type, GTypeQuery *query) { stub_funcs.ptr_g_type_query(type, query); }
 int (g_type_get_instance_count)(GType type) { return stub_funcs.ptr_g_type_get_instance_count(type); }
+GType (g_type_register_static)(GType parent_type, const gchar *type_name, const GTypeInfo *info, GTypeFlags flags) { return stub_funcs.ptr_g_type_register_static(parent_type, type_name, info, flags); }
 GType (g_type_register_static_simple)(GType parent_type, const gchar *type_name, guint class_size, GClassInitFunc class_init, guint instance_size, GInstanceInitFunc instance_init, GTypeFlags flags) { return stub_funcs.ptr_g_type_register_static_simple(parent_type, type_name, class_size, class_init, instance_size, instance_init, flags); }
 GType (g_type_register_dynamic)(GType parent_type, const gchar *type_name, GTypePlugin *plugin, GTypeFlags flags) { return stub_funcs.ptr_g_type_register_dynamic(parent_type, type_name, plugin, flags); }
 GType (g_type_register_fundamental)(GType type_id, const gchar *type_name, const GTypeInfo *info, const GTypeFundamentalInfo *finfo, GTypeFlags flags) { return stub_funcs.ptr_g_type_register_fundamental(type_id, type_name, info, finfo, flags); }
@@ -11397,6 +11545,8 @@ GType (g_async_initable_get_type)(void) { return stub_funcs.ptr_g_async_initable
 void (g_async_initable_init_async)(GAsyncInitable *initable, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data) { stub_funcs.ptr_g_async_initable_init_async(initable, io_priority, cancellable, callback, user_data); }
 gboolean (g_async_initable_init_finish)(GAsyncInitable *initable, GAsyncResult *res, GError **error) { return stub_funcs.ptr_g_async_initable_init_finish(initable, res, error); }
 // Unable to locate va_equiv for g_async_initable_new_async
+void (g_async_initable_newv_async)(GType object_type, guint n_parameters, GParameter *parameters, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data) { stub_funcs.ptr_g_async_initable_newv_async(object_type, n_parameters, parameters, io_priority, cancellable, callback, user_data); }
+void (g_async_initable_new_valist_async)(GType object_type, const gchar *first_property_name, va_list var_args, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data) { stub_funcs.ptr_g_async_initable_new_valist_async(object_type, first_property_name, var_args, io_priority, cancellable, callback, user_data); }
 GObject* (g_async_initable_new_finish)(GAsyncInitable *initable, GAsyncResult *res, GError **error) { return stub_funcs.ptr_g_async_initable_new_finish(initable, res, error); }
 GType (g_async_result_get_type)(void) { return stub_funcs.ptr_g_async_result_get_type(); }
 gpointer (g_async_result_get_user_data)(GAsyncResult *res) { return stub_funcs.ptr_g_async_result_get_user_data(res); }
@@ -11809,6 +11959,7 @@ gchar* (g_dbus_escape_object_path)(const gchar *s) { return stub_funcs.ptr_g_dbu
 guint8* (g_dbus_unescape_object_path)(const gchar *s) { return stub_funcs.ptr_g_dbus_unescape_object_path(s); }
 gboolean (g_dbus_is_guid)(const gchar *string) { return stub_funcs.ptr_g_dbus_is_guid(string); }
 GType (g_debug_controller_get_type)(void) { return stub_funcs.ptr_g_debug_controller_get_type(); }
+gboolean (g_debug_controller_get_debug_enabled)(GDebugController *self) { return stub_funcs.ptr_g_debug_controller_get_debug_enabled(self); }
 void (g_debug_controller_set_debug_enabled)(GDebugController *self, gboolean debug_enabled) { stub_funcs.ptr_g_debug_controller_set_debug_enabled(self, debug_enabled); }
 GType (g_debug_controller_dbus_get_type)(void) { return stub_funcs.ptr_g_debug_controller_dbus_get_type(); }
 GDebugControllerDBus* (g_debug_controller_dbus_new)(GDBusConnection *connection, GCancellable *cancellable, GError **error) { return stub_funcs.ptr_g_debug_controller_dbus_new(connection, cancellable, error); }
@@ -11860,7 +12011,9 @@ GTlsCertificate* (g_dtls_connection_get_peer_certificate)(GDtlsConnection *conn)
 GTlsCertificateFlags (g_dtls_connection_get_peer_certificate_errors)(GDtlsConnection *conn) { return stub_funcs.ptr_g_dtls_connection_get_peer_certificate_errors(conn); }
 void (g_dtls_connection_set_require_close_notify)(GDtlsConnection *conn, gboolean require_close_notify) { stub_funcs.ptr_g_dtls_connection_set_require_close_notify(conn, require_close_notify); }
 gboolean (g_dtls_connection_get_require_close_notify)(GDtlsConnection *conn) { return stub_funcs.ptr_g_dtls_connection_get_require_close_notify(conn); }
+void (g_dtls_connection_set_rehandshake_mode)(GDtlsConnection *conn, GTlsRehandshakeMode mode) { stub_funcs.ptr_g_dtls_connection_set_rehandshake_mode(conn, mode); }
 GTlsRehandshakeMode (g_dtls_connection_get_rehandshake_mode)(GDtlsConnection *conn) { return stub_funcs.ptr_g_dtls_connection_get_rehandshake_mode(conn); }
+gboolean (g_dtls_connection_handshake)(GDtlsConnection *conn, GCancellable *cancellable, GError **error) { return stub_funcs.ptr_g_dtls_connection_handshake(conn, cancellable, error); }
 void (g_dtls_connection_handshake_async)(GDtlsConnection *conn, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data) { stub_funcs.ptr_g_dtls_connection_handshake_async(conn, io_priority, cancellable, callback, user_data); }
 gboolean (g_dtls_connection_handshake_finish)(GDtlsConnection *conn, GAsyncResult *result, GError **error) { return stub_funcs.ptr_g_dtls_connection_handshake_finish(conn, result, error); }
 gboolean (g_dtls_connection_shutdown)(GDtlsConnection *conn, gboolean shutdown_read, gboolean shutdown_write, GCancellable *cancellable, GError **error) { return stub_funcs.ptr_g_dtls_connection_shutdown(conn, shutdown_read, shutdown_write, cancellable, error); }
@@ -11872,6 +12025,8 @@ gboolean (g_dtls_connection_close_finish)(GDtlsConnection *conn, GAsyncResult *r
 gboolean (g_dtls_connection_emit_accept_certificate)(GDtlsConnection *conn, GTlsCertificate *peer_cert, GTlsCertificateFlags errors) { return stub_funcs.ptr_g_dtls_connection_emit_accept_certificate(conn, peer_cert, errors); }
 void (g_dtls_connection_set_advertised_protocols)(GDtlsConnection *conn, const gchar * const *protocols) { stub_funcs.ptr_g_dtls_connection_set_advertised_protocols(conn, protocols); }
 const gchar * (g_dtls_connection_get_negotiated_protocol)(GDtlsConnection *conn) { return stub_funcs.ptr_g_dtls_connection_get_negotiated_protocol(conn); }
+gboolean (g_dtls_connection_get_channel_binding_data)(GDtlsConnection *conn, GTlsChannelBindingType type, GByteArray *data, GError **error) { return stub_funcs.ptr_g_dtls_connection_get_channel_binding_data(conn, type, data, error); }
+GTlsProtocolVersion (g_dtls_connection_get_protocol_version)(GDtlsConnection *conn) { return stub_funcs.ptr_g_dtls_connection_get_protocol_version(conn); }
 gchar * (g_dtls_connection_get_ciphersuite_name)(GDtlsConnection *conn) { return stub_funcs.ptr_g_dtls_connection_get_ciphersuite_name(conn); }
 GType (g_dtls_server_connection_get_type)(void) { return stub_funcs.ptr_g_dtls_server_connection_get_type(); }
 GDatagramBased* (g_dtls_server_connection_new)(GDatagramBased *base_socket, GTlsCertificate *certificate, GError **error) { return stub_funcs.ptr_g_dtls_server_connection_new(base_socket, certificate, error); }
@@ -12098,6 +12253,8 @@ GIcon * (g_file_info_get_icon)(GFileInfo *info) { return stub_funcs.ptr_g_file_i
 GIcon * (g_file_info_get_symbolic_icon)(GFileInfo *info) { return stub_funcs.ptr_g_file_info_get_symbolic_icon(info); }
 const char * (g_file_info_get_content_type)(GFileInfo *info) { return stub_funcs.ptr_g_file_info_get_content_type(info); }
 goffset (g_file_info_get_size)(GFileInfo *info) { return stub_funcs.ptr_g_file_info_get_size(info); }
+void (g_file_info_get_modification_time)(GFileInfo *info, GTimeVal *result) { stub_funcs.ptr_g_file_info_get_modification_time(info, result); }
+GDateTime * (g_file_info_get_modification_date_time)(GFileInfo *info) { return stub_funcs.ptr_g_file_info_get_modification_date_time(info); }
 GDateTime * (g_file_info_get_access_date_time)(GFileInfo *info) { return stub_funcs.ptr_g_file_info_get_access_date_time(info); }
 GDateTime * (g_file_info_get_creation_date_time)(GFileInfo *info) { return stub_funcs.ptr_g_file_info_get_creation_date_time(info); }
 const char * (g_file_info_get_symlink_target)(GFileInfo *info) { return stub_funcs.ptr_g_file_info_get_symlink_target(info); }
@@ -12115,6 +12272,8 @@ void (g_file_info_set_icon)(GFileInfo *info, GIcon *icon) { stub_funcs.ptr_g_fil
 void (g_file_info_set_symbolic_icon)(GFileInfo *info, GIcon *icon) { stub_funcs.ptr_g_file_info_set_symbolic_icon(info, icon); }
 void (g_file_info_set_content_type)(GFileInfo *info, const char *content_type) { stub_funcs.ptr_g_file_info_set_content_type(info, content_type); }
 void (g_file_info_set_size)(GFileInfo *info, goffset size) { stub_funcs.ptr_g_file_info_set_size(info, size); }
+void (g_file_info_set_modification_time)(GFileInfo *info, GTimeVal *mtime) { stub_funcs.ptr_g_file_info_set_modification_time(info, mtime); }
+void (g_file_info_set_modification_date_time)(GFileInfo *info, GDateTime *mtime) { stub_funcs.ptr_g_file_info_set_modification_date_time(info, mtime); }
 void (g_file_info_set_access_date_time)(GFileInfo *info, GDateTime *atime) { stub_funcs.ptr_g_file_info_set_access_date_time(info, atime); }
 void (g_file_info_set_creation_date_time)(GFileInfo *info, GDateTime *creation_time) { stub_funcs.ptr_g_file_info_set_creation_date_time(info, creation_time); }
 void (g_file_info_set_symlink_target)(GFileInfo *info, const char *symlink_target) { stub_funcs.ptr_g_file_info_set_symlink_target(info, symlink_target); }
@@ -12206,7 +12365,8 @@ guint32 (g_inet_socket_address_get_flowinfo)(GInetSocketAddress *address) { retu
 guint32 (g_inet_socket_address_get_scope_id)(GInetSocketAddress *address) { return stub_funcs.ptr_g_inet_socket_address_get_scope_id(address); }
 GType (g_initable_get_type)(void) { return stub_funcs.ptr_g_initable_get_type(); }
 gboolean (g_initable_init)(GInitable *initable, GCancellable *cancellable, GError **error) { return stub_funcs.ptr_g_initable_init(initable, cancellable, error); }
-// Unable to locate va_equiv for g_initable_new
+gpointer (g_initable_newv)(GType object_type, guint n_parameters, GParameter *parameters, GCancellable *cancellable, GError **error) { return stub_funcs.ptr_g_initable_newv(object_type, n_parameters, parameters, cancellable, error); }
+GObject* (g_initable_new_valist)(GType object_type, const gchar *first_property_name, va_list var_args, GCancellable *cancellable, GError **error) { return stub_funcs.ptr_g_initable_new_valist(object_type, first_property_name, var_args, cancellable, error); }
 GType (g_input_stream_get_type)(void) { return stub_funcs.ptr_g_input_stream_get_type(); }
 gssize (g_input_stream_read)(GInputStream *stream, void *buffer, gsize count, GCancellable *cancellable, GError **error) { return stub_funcs.ptr_g_input_stream_read(stream, buffer, count, cancellable, error); }
 gboolean (g_input_stream_read_all)(GInputStream *stream, void *buffer, gsize count, gsize *bytes_read, GCancellable *cancellable, GError **error) { return stub_funcs.ptr_g_input_stream_read_all(stream, buffer, count, bytes_read, cancellable, error); }
@@ -12353,6 +12513,7 @@ gboolean (g_io_stream_has_pending)(GIOStream *stream) { return stub_funcs.ptr_g_
 gboolean (g_io_stream_set_pending)(GIOStream *stream, GError **error) { return stub_funcs.ptr_g_io_stream_set_pending(stream, error); }
 void (g_io_stream_clear_pending)(GIOStream *stream) { stub_funcs.ptr_g_io_stream_clear_pending(stream); }
 GType (g_list_model_get_type)(void) { return stub_funcs.ptr_g_list_model_get_type(); }
+GType (g_list_model_get_item_type)(GListModel *list) { return stub_funcs.ptr_g_list_model_get_item_type(list); }
 guint (g_list_model_get_n_items)(GListModel *list) { return stub_funcs.ptr_g_list_model_get_n_items(list); }
 gpointer (g_list_model_get_item)(GListModel *list, guint position) { return stub_funcs.ptr_g_list_model_get_item(list, position); }
 GObject * (g_list_model_get_object)(GListModel *list, guint position) { return stub_funcs.ptr_g_list_model_get_object(list, position); }
@@ -12380,6 +12541,7 @@ GInputStream * (g_memory_input_stream_new_from_bytes)(GBytes *bytes) { return st
 void (g_memory_input_stream_add_data)(GMemoryInputStream *stream, const void *data, gssize len, GDestroyNotify destroy) { stub_funcs.ptr_g_memory_input_stream_add_data(stream, data, len, destroy); }
 void (g_memory_input_stream_add_bytes)(GMemoryInputStream *stream, GBytes *bytes) { stub_funcs.ptr_g_memory_input_stream_add_bytes(stream, bytes); }
 GType (g_memory_monitor_get_type)(void) { return stub_funcs.ptr_g_memory_monitor_get_type(); }
+GMemoryMonitor* (g_memory_monitor_dup_default)(void) { return stub_funcs.ptr_g_memory_monitor_dup_default(); }
 GType (g_memory_output_stream_get_type)(void) { return stub_funcs.ptr_g_memory_output_stream_get_type(); }
 GOutputStream* (g_memory_output_stream_new)(gpointer data, gsize size, GReallocFunc realloc_function, GDestroyNotify destroy_function) { return stub_funcs.ptr_g_memory_output_stream_new(data, size, realloc_function, destroy_function); }
 GOutputStream* (g_memory_output_stream_new_resizable)(void) { return stub_funcs.ptr_g_memory_output_stream_new_resizable(); }
@@ -12594,6 +12756,7 @@ gssize (g_pollable_stream_write)(GOutputStream *stream, const void *buffer, gsiz
 gboolean (g_pollable_stream_write_all)(GOutputStream *stream, const void *buffer, gsize count, gboolean blocking, gsize *bytes_written, GCancellable *cancellable, GError **error) { return stub_funcs.ptr_g_pollable_stream_write_all(stream, buffer, count, blocking, bytes_written, cancellable, error); }
 GSource* (g_pollable_source_new)(GObject *pollable_stream) { return stub_funcs.ptr_g_pollable_source_new(pollable_stream); }
 GType (g_power_profile_monitor_get_type)(void) { return stub_funcs.ptr_g_power_profile_monitor_get_type(); }
+GPowerProfileMonitor* (g_power_profile_monitor_dup_default)(void) { return stub_funcs.ptr_g_power_profile_monitor_dup_default(); }
 gboolean (g_power_profile_monitor_get_power_saver_enabled)(GPowerProfileMonitor *monitor) { return stub_funcs.ptr_g_power_profile_monitor_get_power_saver_enabled(monitor); }
 GType (g_property_action_get_type)(void) { return stub_funcs.ptr_g_property_action_get_type(); }
 GPropertyAction * (g_property_action_new)(const gchar *name, gpointer object, const gchar *property_name) { return stub_funcs.ptr_g_property_action_new(name, object, property_name); }
@@ -13117,8 +13280,12 @@ GTlsCertificate* (g_tls_connection_get_peer_certificate)(GTlsConnection *conn) {
 GTlsCertificateFlags (g_tls_connection_get_peer_certificate_errors)(GTlsConnection *conn) { return stub_funcs.ptr_g_tls_connection_get_peer_certificate_errors(conn); }
 void (g_tls_connection_set_require_close_notify)(GTlsConnection *conn, gboolean require_close_notify) { stub_funcs.ptr_g_tls_connection_set_require_close_notify(conn, require_close_notify); }
 gboolean (g_tls_connection_get_require_close_notify)(GTlsConnection *conn) { return stub_funcs.ptr_g_tls_connection_get_require_close_notify(conn); }
+void (g_tls_connection_set_rehandshake_mode)(GTlsConnection *conn, GTlsRehandshakeMode mode) { stub_funcs.ptr_g_tls_connection_set_rehandshake_mode(conn, mode); }
 GTlsRehandshakeMode (g_tls_connection_get_rehandshake_mode)(GTlsConnection *conn) { return stub_funcs.ptr_g_tls_connection_get_rehandshake_mode(conn); }
+void (g_tls_connection_set_advertised_protocols)(GTlsConnection *conn, const gchar * const *protocols) { stub_funcs.ptr_g_tls_connection_set_advertised_protocols(conn, protocols); }
 const gchar * (g_tls_connection_get_negotiated_protocol)(GTlsConnection *conn) { return stub_funcs.ptr_g_tls_connection_get_negotiated_protocol(conn); }
+gboolean (g_tls_connection_get_channel_binding_data)(GTlsConnection *conn, GTlsChannelBindingType type, GByteArray *data, GError **error) { return stub_funcs.ptr_g_tls_connection_get_channel_binding_data(conn, type, data, error); }
+gboolean (g_tls_connection_handshake)(GTlsConnection *conn, GCancellable *cancellable, GError **error) { return stub_funcs.ptr_g_tls_connection_handshake(conn, cancellable, error); }
 void (g_tls_connection_handshake_async)(GTlsConnection *conn, int io_priority, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data) { stub_funcs.ptr_g_tls_connection_handshake_async(conn, io_priority, cancellable, callback, user_data); }
 gboolean (g_tls_connection_handshake_finish)(GTlsConnection *conn, GAsyncResult *result, GError **error) { return stub_funcs.ptr_g_tls_connection_handshake_finish(conn, result, error); }
 GTlsProtocolVersion (g_tls_connection_get_protocol_version)(GTlsConnection *conn) { return stub_funcs.ptr_g_tls_connection_get_protocol_version(conn); }
