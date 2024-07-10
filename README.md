@@ -12,6 +12,8 @@ If you use Clangd, a script to generate `compile_flags.txt`, `gen_compile_flags.
 ## Generating the Stub
 `generate.lua` in the scripts directory of this repository was used to generate the stub. If you can manage to make it work you can generate them yourself too. This requires lua >= 5.2 (for use of the goto keyword) and [luafilesystem](https://github.com/lunarmodules/luafilesystem).
 
+The only real configurable option is `set_guard_function_calls` in `scripts/generate.lua`. By changing the value in the function call to true, it will generate every function call with a null check, printing a message to stderr if it is null This does not prevent a segfault, it just makes debugging a little bit easier. Do not use this option for a release binary as it nearly doubles the size of the compiled binary.
+
 As a warning, generating the stub will print a little under 50000 lines to your terminal, you may want to redirect them to a file, especially if something goes wrong.
 
 ## Dependencies

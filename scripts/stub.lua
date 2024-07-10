@@ -185,10 +185,24 @@ function M:set_skip_funcs(fs)
     return self
 end
 
+function M:set_guard_function_calls(guard)
+    self.guard_function_calls = guard
+    return self
+end
+
 --- @private
 --- @param header string
 function M:process_header(header)
     local function get_sig(func) return string.format("%s (%s)(%s)", func.ret, func.name, func.args) end
+
+    local function make_guard(func, va_equiv)
+        return string.format(
+            'if (!stub_funcs.ptr_%s) fprintf(stderr, "Error calling function %s, ptr_%s was null!\\n"); ',
+            func.name,
+            func.name,
+            va_equiv or func.name
+        )
+    end
 
     -- TODO: I still don't like this section very much. Kind of ugly still.
     local function handle_function(func, impl)
@@ -209,7 +223,8 @@ function M:process_header(header)
             self.c_func_impls,
             impl
                 or string.format(
-                    sig .. " { %sstub_funcs.ptr_%s(%s);%s }",
+                    sig .. " { %s%sstub_funcs.ptr_%s(%s);%s }",
+                    self.guard_function_calls and make_guard(func) or "",
                     func.ret ~= "void" and "return " or "",
                     name,
                     utils.tbl_join(arg_names, ", "),
@@ -250,7 +265,8 @@ function M:process_header(header)
             handle_function(
                 func,
                 string.format(
-                    sig .. " { %sva_list vaargs; va_start(vaargs, %s); %sstub_funcs.ptr_%s(%s); va_end(vaargs); %s}",
+                    sig .. " { %s%sva_list vaargs; va_start(vaargs, %s); %sstub_funcs.ptr_%s(%s); va_end(vaargs); %s}",
+                    self.guard_function_calls and make_guard(func, va_equiv) or "",
                     nonvoid and (ret .. " ret; ") or "",
                     arg_names[#arg_names],
                     nonvoid and "ret = " or "",

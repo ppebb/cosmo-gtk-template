@@ -44,6 +44,7 @@ local _ = stub.new(stubs_root, "gtk4")
         "/usr/include/wayland-version.h",
         "/usr/include/X11",
     }, extra_headers_dir)
+    :set_guard_function_calls(false)
     :set_trim_prefix(false)
     :set_match_access({ "GDK_[A-Z0-9_]+" })
     :set_prefix("gtk_")
@@ -74,6 +75,7 @@ local _ = stub.new(stubs_root, "glib")
         "/usr/include/ffi.h",
         "/usr/include/ffitarget.h",
     }, extra_headers_dir)
+    :set_guard_function_calls(false)
     :set_prefix("g_")
     :set_trim_prefix(false)
     :use_shared_object("glib")
