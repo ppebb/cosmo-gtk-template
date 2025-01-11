@@ -1,5 +1,7 @@
 # cosmo-gtk-template - Maximal GTK sample for Cosmopolitan
 
+This repository has been superceded by a general purpose tool, [cosmo-stub-generator](https://github.com/ppebb/cosmo-stub-generator). Use it instead.
+
 This repository contains a full[^1] stub for GTK (and GSK, GDK), GLib, GIO, GObject, GModule, and GIRepository
 
 ## Using the Stubs
